@@ -11,16 +11,14 @@ El formulario completo es un solo **Scrollable Screen (Vertical)** con las sigui
 | Sección | Contenido |
 |---------|-----------|
 | **Header** | Logo PUCE + Título del informe + Código |
-| **1. Datos Generales** | 14 campos informativos del proyecto + articulación investigación con dropdowns condicionales |
-| **2. Alcance, Grupos Prioritarios y Presupuesto** | Comunidad, beneficiarios, grupos de atención prioritaria, personas atendidas (H/M), presupuesto |
-| **3. Organización Contraparte** | Información general de la institución contraparte + Aporte al Proyecto (checkmarks) |
-| **4. Componentes** | Intersedes, interculturalidad, interdisciplinariedad, internacionalización, posgrados — con subcampos condicionales SI/NO |
-| **5. Diagnóstico, Problema y Actores** | 7 variables cuantitativas + 2 variables cualitativas para diagnóstico de proyectos sociales |
-| **6. Estudiantes e Impacto** | N° estudiantes, articulación funciones sustantivas con dropdowns condicionales, impactos |
-| **7. Matriz de Resultados** | Tabla de 4 columnas (Cadena/Indicadores/Fuentes/Avance) |
-| **8. Participantes** | Tabla horizontal escroleable de 10 columnas |
-| **9. Firmas** | Elaborado / Revisado / Aprobado |
-| **10. Anexos** | Checklist de documentos adjuntos |
+| **1. Datos Generales** | 14 campos informativos del proyecto |
+| **2. Alcance y Presupuesto** | Comunidad, beneficiarios, presupuesto |
+| **3. Componentes** | Intersedes, interculturalidad, interdisciplinariedad, posgrados |
+| **4. Estudiantes e Impacto** | N° estudiantes, articulación, impactos |
+| **5. Matriz de Resultados** | Tabla de 4 columnas (Cadena/Indicadores/Fuentes/Avance) |
+| **6. Participantes** | Tabla horizontal escroleable de 10 columnas |
+| **7. Firmas** | Elaborado / Revisado / Aprobado |
+| **8. Anexos** | Checklist de documentos adjuntos |
 | **Footer** | Dirección PUCE + fecha |
 
 ---
@@ -56,10 +54,10 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 │ │ Proyecto:    │  │ Estado:      │                  │
 │ │ [____________]│  │ [▼ Seleccionar]                │
 │ └──────────────┘  └──────────────┘                  │
-│ ┌──────────────┐  ┌──────────────┐                  │
-│ │ Unidad Resp.:│  │ Carrera:     │                  │
-│ │ [____________]│  │ [____________]                  │
-│ └──────────────┘  └──────────────┘                  │
+│ ┌──────────────────────────────────┐  ┌──────────────┐   │
+│ │ Unidad:                          │  │ Carrera:     │   │
+│ │ [▼ Seleccionar unidad...]        │  │ [____________]   │
+│ └──────────────────────────────────┘  └──────────────┘   │
 │ ┌─────────────────────────────────┐                 │
 │ │ Docente responsable:            │                 │
 │ │ [______________________________]│                 │
@@ -83,18 +81,6 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 │ ┌─────────────────────────────────┐                 │
 │ │ ¿Articulación con investigación PUCE?             │
 │ │ ○ Sí   ○ No                                      │
-│ ├─────────────────────────────────┤                 │
-│ │ ⚠ SOLO VISIBLE SI ELIGE "SÍ":                    │
-│ │ ┌─────────────────────────────────┐              │
-│ │ │ Línea de investigación:         │              │
-│ │ │ [▼ Seleccionar línea...]        │              │
-│ │ ├─────────────────────────────────┤              │
-│ │ │ Red académica articulada:       │              │
-│ │ │ [▼ Seleccionar red...]          │              │
-│ │ ├─────────────────────────────────┤              │
-│ │ │ Grupo de investigación:         │              │
-│ │ │ [▼ Seleccionar grupo...]        │              │
-│ │ └─────────────────────────────────┘              │
 │ └─────────────────────────────────┘                 │
 └─────────────────────────────────────────────────────┘
 ```
@@ -104,14 +90,6 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 - Fechas con **DatePicker** de PowerApps
 - Dropdown para Estado en vez de input libre
 - Inputs con **borde inferior** (línea) en vez de cuadro completo (estilo moderno)
-
-**Lógica condicional — Articulación con investigación PUCE:**
-- Si el usuario selecciona **No** → se ocultan los 3 dropdowns
-- Si el usuario selecciona **Sí** → se muestran los siguientes dropdowns (obligatorios):
-  - **Línea de investigación** — Dropdown con datos de líneas PUCE registradas
-  - **Red académica articulada** — Dropdown con redes académicas disponibles
-  - **Grupo de investigación** — Dropdown con grupos de investigación registrados
-- Propiedad `Visible` de cada dropdown = `rdbInvestigacion.Selected.Value = "Sí"`
 
 ---
 
@@ -158,39 +136,46 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 │ └─────────────────────────────────┘                 │
 ```
 
-**Presupuesto (5 campos con formato moneda):**
+**💰 PRESUPUESTO (3 secciones: Estimado, Avance, Final):**
+*Los campos marcados con * son obligatorios. Seleccione Avance o Final para habilitar edición.*
 
 ```
 │ 💰 PRESUPUESTO                                      │
-│ ┌──────────────┬──────────────┬──────────────┬──────┐│
-│ │ Planificado  │ Interno Ejec.│ Externo Asig. │      ││
-│ │ $ [_______]  │ $ [_______]  │ $ [_______]   │      ││
-│ ├──────────────┼──────────────┼──────────────┤      ││
-│ │ Externo Ejec.│ Gasto no     │              │      ││
-│ │ $ [_______]  │ contemplado  │              │      ││
-│ │              │ $ [_______]  │              │      ││
-│ └──────────────┴──────────────┴──────────────┴──────┘│
+│ * = Campos obligatorios                              │
+│                                                     │
+│ Estado presupuestario:                              │
+│ ● Estimado (activo)   ○ Avance   ○ Final            │
+│ (Avance y Final se habilitan al seleccionarlos)      │
+│ ┌────────────────────┬────────────────────┬─────────┐│
+│ │ 📋 ESTIMADO        │ 📋 AVANCE          │📋 FINAL ││
+│ │ (Siempre activo)   │ (Se activa al      │(Se acti-││
+│ │                    │  elegir "Avance")  │va al    ││
+│ │                    │                    │elegir   ││
+│ │                    │                    │"Final") ││
+│ ├────────────────────┼────────────────────┼─────────┤│
+│ │ [▼ Cuenta contable]*│ [▼ Cuenta contable]│ [▼ Cta] ││
+│ │ $ [____________]   │ $ [____________]   │$ [____] ││
+│ ├────────────────────┼────────────────────┼─────────┤│
+│ │ [▼ Cuenta contable]│ [▼ Cuenta contable]│ [▼ Cta] ││
+│ │ $ [____________]   │ $ [____________]   │$ [____] ││
+│ ├────────────────────┼────────────────────┼─────────┤│
+│ │ [+ Agregar cuenta] │                    │         ││
+│ ├────────────────────┼────────────────────┼─────────┤│
+│ │ TOTAL: $ [______]  │ TOTAL: $ [______]  │TOTAL:   ││
+│ │                    │                    │$ [____] ││
+│ └────────────────────┴────────────────────┴─────────┘│
 ```
 
+**Nota:** Las cuentas contables se cargan desde el catálogo institucional en dropdowns.
+
 **Mejoras UI:**
+- Selector de estado (Estimado/Avance/Final) con radiobuttons
+- Columnas de Avance y Final deshabilitadas hasta seleccionar su estado
+- Cuentas contables con **dropdown (desplegable)** desde catálogo institucional
 - Campos monetarios con **formato de número** (separador de miles, 2 decimales)
 - Inputs con prefijo `$` automático
 - Tarjeta de presupuesto con fondo sombreado para distinguirla
-
-**Lógica — Grupos de atención prioritaria:**
-- Componente: **Combobox** con búsqueda por texto (searchable)
-- Opciones: lista predefinida de grupos de atención prioritaria (p.ej. Adultos mayores, Personas con discapacidad, Niñez y adolescencia, Mujeres gestantes, Pueblos indígenas, Personas en movilidad humana, etc.)
-- Reglas:
-  - **Mínimo 1 grupo** seleccionado obligatorio
-  - **Máximo 3 grupos** seleccionables
-  - Los chips/pills seleccionados se muestran debajo del combobox con botón [×] para remover
-- Validación: `Count(SelectedGroups) >= 1 && Count(SelectedGroups) <= 3`
-
-**Lógica — Número de personas atendidas:**
-- `txtHombres` + `txtMujeres` → campos numéricos de entrada manual (estimados)
-- `txtTotalEstimado` = `txtHombres.Text + txtMujeres.Text` (suma automática, solo lectura)
-- `txtTotalReal` = campo numérico libre para registrar el total real al cierre del proyecto (editable)
-- La tabla de 4 columnas usa etiquetas y text inputs alineados
+- Nota * para campos obligatorios
 
 ---
 
@@ -237,6 +222,7 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 
 **Lógica — Aporte al Proyecto:**
 - Componente: **Checkboxes** (6 opciones) dispuestos en 2 columnas
+- Debe poder añadirse más contrapartes
 - Valores:
   1. Materiales
   2. Infraestructura
@@ -252,7 +238,43 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 
 ---
 
-### SECCIÓN 4 — Componentes
+### SECCIÓN 4 — Estudiantes e Impacto
+
+```
+┌─────────────────────────────────────────────────────┐
+│  👥 ESTUDIANTES E IMPACTO                           │
+├─────────────────────────────────────────────────────┤
+│ ┌─────────────────────────────────┐                 │
+│ │ ESTUDIANTES VINCULADOS AL PROYECTO                 │
+│ │ * Por semestre, género y total                     │
+│ │ ┌──────────┬──────────┬──────────┬──────────┐      │
+│ │ │ Semestre │ Hombres  │ Mujeres  │  Total   │      │
+│ │ ├──────────┼──────────┼──────────┼──────────┤      │
+│ │ │ [____]   │ [____]   │ [____]   │ [____]   │      │
+│ │ │ [____]   │ [____]   │ [____]   │ [____]   │      │
+│ │ │ ... (+ Agregar fila)│           │           │      │
+│ │ └──────────┴──────────┴──────────┴──────────┘      │
+│ └─────────────────────────────────┘                 │
+│ ┌─────────────────────────────────┐                 │
+│ │ Articulación funciones sustantivas:               │
+│ │ [______________________________]│                 │
+│ └─────────────────────────────────┘                 │
+│ ┌─────────────────────────────────┐                 │
+│ │ Impactos:                       │                 │
+│ │ [______________________________]│                 │
+│ │ [______________________________]│                 │
+│ │ [______________________________]│                 │
+│ └─────────────────────────────────┘                 │
+└─────────────────────────────────────────────────────┘
+```
+
+**Mejoras UI:**
+- Impactos como **multilínea** (TextArea / Multiline Input)
+- Contador de caracteres opcional
+
+---
+
+### SECCIÓN 5 — Componentes
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -326,7 +348,9 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 
 ---
 
-### SECCIÓN 5 — Diagnóstico, Problema y Actores Involucrados
+---
+
+### SECCIÓN 6 — Diagnóstico, Problema y Actores Involucrados
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -371,19 +395,9 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 │ │    [________] %                                   │
 │ └─────────────────────────────────┘                 │
 │                                                     │
-│ 📝 VARIABLES CUALITATIVAS (2)                        │
+│ 📝 RESUMEN PROBLEMA ATACAR                         │
 │ ┌─────────────────────────────────┐                 │
-│ │ 1. Percepción de la comunidad   │                 │
-│ │    sobre la problemática:       │                 │
-│ │    [______________________________]│              │
-│ │    [______________________________]│              │
-│ │    [______________________________]│              │
-│ ├─────────────────────────────────┤                 │
-│ │ 2. Factores socio-culturales    │                 │
-│ │    que inciden en el problema:  │                 │
-│ │    [______________________________]│              │
-│ │    [______________________________]│              │
-│ │    [______________________________]│              │
+│ │  Descripción                    │                 │
 │ └─────────────────────────────────┘                 │
 └─────────────────────────────────────────────────────┘
 ```
@@ -396,54 +410,6 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 **Validaciones:**
 - Las 7 variables cuantitativas: **campos obligatorios**, numéricos (enteros o decimales según corresponda), rango 0-100 para porcentajes
 - Las 2 variables cualitativas: **campos obligatorios**, mínimo 50 caracteres cada una
-
----
-
-### SECCIÓN 6 — Estudiantes e Impacto
-
-```
-┌─────────────────────────────────────────────────────┐
-│  👥 ESTUDIANTES E IMPACTO                           │
-├─────────────────────────────────────────────────────┤
-│ ┌─────────────────────────────────┐                 │
-│ │ N° estudiantes vinculados:      │                 │
-│ │ [______]                        │                 │
-│ └─────────────────────────────────┘                 │
-│ ┌─────────────────────────────────┐                 │
-│ │ Articulación de funciones sustantivas:            │
-│ │ ┌─────────────────────────────────┐              │
-│ │ │ ¿Se articula con Investigación? ○ Sí  ○ No    │
-│ │ ├─────────────────────────────────┤              │
-│ │ │ ⚠ VISIBLE SOLO SI ELIGE "SÍ":                 │
-│ │ │ Línea de investigación:         │              │
-│ │ │ [▼ Seleccionar línea...]        │              │
-│ │ │ Red académica articulada:       │              │
-│ │ │ [▼ Seleccionar red...]          │              │
-│ │ │ Grupo de investigación:         │              │
-│ │ │ [▼ Seleccionar grupo...]        │              │
-│ │ └─────────────────────────────────┘              │
-│ └─────────────────────────────────┘                 │
-│ ┌─────────────────────────────────┐                 │
-│ │ Impactos:                       │                 │
-│ │ [______________________________]│                 │
-│ │ [______________________________]│                 │
-│ │ [______________________________]│                 │
-│ └─────────────────────────────────┘                 │
-└─────────────────────────────────────────────────────┘
-```
-
-**Mejoras UI:**
-- Impactos como **multilínea** (TextArea / Multiline Input)
-- Contador de caracteres opcional
-
-**Lógica — Articulación de funciones sustantivas:**
-- Radio buttons **Sí/No** para determinar si el proyecto se articula con investigación
-- Si **"Sí"** → se muestran 3 dropdowns condicionales obligatorios:
-  - **Línea de investigación** — Dropdown con líneas activas PUCE
-  - **Red académica articulada** — Dropdown con redes disponibles
-  - **Grupo de investigación** — Dropdown con grupos registrados
-- Si **"No"** → los dropdowns permanecen ocultos
-- Propiedad `Visible` = `rdbArticulacionInv.Selected.Value = "Sí"`
 
 ---
 
@@ -491,17 +457,143 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 │  [Docentes, Administrativos, Alumni]                │
 ├─────────────────────────────────────────────────────┤
 │ ← Deslizar horizontalmente →                        │
-│ ┌────────┬────────┬──────┬────────┬────────┬──...──┐│
-│ │ Tipo   │Nac.    │Horas │Fecha   │Fecha   │      ││
-│ │ Partic.│        │      │Inicio  │Final   │      ││
-│ ├────────┼────────┼──────┼────────┼────────┼──...──┤│
-│ │ [____] │ [____] │[____]│[______]│[______]│      ││
-│ │ [____] │ [____] │[____]│[______]│[______]│      ││
-│ │ [____] │ [____] │[____]│[______]│[______]│      ││
+│ ┌────────┬────────┬─────────┬────────┬────────┬──...──┐│
+│ │ Tipo   │Nac.    │Horas    │Fecha   │Fecha   │      ││
+│ │ │ Partic.│        │(prog.)  │Inicio  │Final   │      ││
+│ ├────────┼────────┼─────────┼────────┼────────┼──...──┤│
+│ │ [____] │ [____] │ [_____] │[______]│[______]│      ││
+│ │ [____] │ [____] │ [_____] │[______]│[______]│      ││
+│ │ [____] │ [____] │ [_____] │[______]│[______]│      ││
 │ │ ...     (filas dinámicas con +AGREGAR)          ││
-│ └────────┴────────┴──────┴────────┴────────┴──...──┘│
+│ └────────┴────────┴─────────┴────────┴────────┴──...──┘│
 │                                                    │
-│ Columnas: Tipo participante | Nacionalidad | Horas  │
+│ Columnas: Tipo participante | Nacionalidad | Horas (programadas)  │
+│ Fecha inicio | Fecha fin | Tipo documento | N° doc  │
+│ Apellidos y nombres | Carrera | Firma               │
+└─────────────────────────────────────────────────────┘
+```
+ 
+**Mejoras UI:**
+- Botón **"+ Agregar participante"** que añade filas dinámicamente
+- Tabla horizontal con **scroll lateral** (Horizontal Gallery)
+- Indicador visual de "deslizar para ver más columnas" (flechas)
+- Botón **🗑 Eliminar** por fila
+- Fecha con **DatePicker** en lugar de input manual
+- Validación de campos obligatorios antes de guardar fila
+
+
+---
+
+### SECCIÓN 9 — Estudiantes e Impacto
+
+```
+┌─────────────────────────────────────────────────────┐
+│  👥 ESTUDIANTES E IMPACTO                           │
+├─────────────────────────────────────────────────────┤
+│ ┌─────────────────────────────────┐                 │
+│ │ ESTUDIANTES VINCULADOS AL PROYECTO                 │
+│ │ * Por semestre, género y total                     │
+│ │ ┌──────────┬──────────┬──────────┬──────────┐      │
+│ │ │ Semestre │ Hombres  │ Mujeres  │  Total   │      │
+│ │ ├──────────┼──────────┼──────────┼──────────┤      │
+│ │ │ [____]   │ [____]   │ [____]   │ [____]   │      │
+│ │ │ [____]   │ [____]   │ [____]   │ [____]   │      │
+│ │ │ ... (+ Agregar fila)│           │           │      │
+│ │ └──────────┴──────────┴──────────┴──────────┘      │
+│ └─────────────────────────────────┘                 │
+│ ┌─────────────────────────────────┐                 │
+│ │ Articulación de funciones sustantivas:            │
+│ │ ┌─────────────────────────────────┐              │
+│ │ │ ¿Se articula con Investigación? ○ Sí  ○ No    │
+│ │ ├─────────────────────────────────┤              │
+│ │ │ ⚠ VISIBLE SOLO SI ELIGE "SÍ":                 │
+│ │ │ Línea de investigación:         │              │
+│ │ │ [▼ Seleccionar línea...]        │              │
+│ │ │ Red académica articulada:       │              │
+│ │ │ [▼ Seleccionar red...]          │              │
+│ │ │ Grupo de investigación:         │              │
+│ │ │ [▼ Seleccionar grupo...]        │              │
+│ │ └─────────────────────────────────┘              │
+│ └─────────────────────────────────┘                 │
+│ ┌─────────────────────────────────┐                 │
+│ │ Impactos:                       │                 │
+│ │ [______________________________]│                 │
+│ │ [______________________________]│                 │
+│ │ [______________________________]│                 │
+│ └─────────────────────────────────┘                 │
+└─────────────────────────────────────────────────────┘
+```
+
+**Mejoras UI:**
+- Impactos como **multilínea** (TextArea / Multiline Input)
+- Contador de caracteres opcional
+
+**Lógica — Articulación de funciones sustantivas:**
+- Radio buttons **Sí/No** para determinar si el proyecto se articula con investigación
+- Si **"Sí"** → se muestran 3 dropdowns condicionales obligatorios:
+  - **Línea de investigación** — Dropdown con líneas activas PUCE
+  - **Red académica articulada** — Dropdown con redes disponibles
+  - **Grupo de investigación** — Dropdown con grupos registrados
+- Si **"No"** → los dropdowns permanecen ocultos
+- Propiedad `Visible` = `rdbArticulacionInv.Selected.Value = "Sí"`
+
+---
+
+### SECCIÓN 10 — Matriz de Marco Lógico (Tabla)
+
+```
+┌─────────────────────────────────────────────────────┐
+│  📊 RESULTADOS DEL PROYECTO                         │
+├─────────────────────────────────────────────────────┤
+│ ┌─────────────┬──────────┬──────────┬──────────────┐│
+│ │ Cadena de   │Indicadores│Fuentes y │ Avance de la ││
+│ │ Resultados  │          │Medios de │ Actividad y  ││
+│ │             │          │Verificac.│ Actores Part.││
+│ ├─────────────┼──────────┼──────────┼──────────────┤│
+│ │ OBJETIVO    │          │          │              ││
+│ │ GENERAL     │          │          │              ││
+│ │ [________]  │[________]│[________]│[___________] ││
+│ ├─────────────┼──────────┼──────────┼──────────────┤│
+│ │ OBJETIVO    │          │          │              ││
+│ │ ESPECÍFICO  │          │          │              ││
+│ │ [________]  │[________]│[________]│[___________] ││
+│ ├─────────────┼──────────┼──────────┼──────────────┤│
+│ │ RESULTADOS  │          │          │              ││
+│ │ [________]  │[________]│[________]│              ││
+│ ├─────────────┼──────────┼──────────┼──────────────┤│
+│ │ ACTIVIDADES │          │          │ Ejecución    ││
+│ │ [________]  │[________]│[________]│ [________]   ││
+│ └─────────────┴──────────┴──────────┴──────────────┘│
+└─────────────────────────────────────────────────────┘
+```
+
+**Mejoras UI:**
+- Encabezados de fila (OBJETIVO GENERAL, etc.) con **background de color** y texto bold
+- Cada celda es un input multilínea
+- La columna "Cadena de Resultados" más ancha (40% del ancho)
+- Bordes sutiles, **alternancia de color** en filas (zebra striping)
+
+---
+
+### SECCIÓN 11 — Participantes (Tabla Horizontal Escroleable)
+
+```
+┌─────────────────────────────────────────────────────┐
+│  👤 LISTA DE PARTICIPANTES                          │
+│  [Docentes, Administrativos, Alumni]                │
+├─────────────────────────────────────────────────────┤
+│ ← Deslizar horizontalmente →                        │
+│ ┌────────┬────────┬─────────┬────────┬────────┬──...──┐│
+│ │ Tipo   │Nac.    │Horas    │Fecha   │Fecha   │      ││
+│ │ │ Partic.│        │(prog.)  │Inicio  │Final   │      ││
+│ ├────────┼────────┼─────────┼────────┼────────┼──...──┤│
+│ │ [____] │ [____] │ [_____] │[______]│[______]│      ││
+│ │ [____] │ [____] │ [_____] │[______]│[______]│      ││
+│ │ [____] │ [____] │ [_____] │[______]│[______]│      ││
+│ │ ...     (filas dinámicas con +AGREGAR)          ││
+│ └────────┴────────┴─────────┴────────┴────────┴──...──┘│
+│                                                    │
+│ Columnas: Tipo participante | Nacionalidad | Horas (programadas)  │
 │ Fecha inicio | Fecha fin | Tipo documento | N° doc  │
 │ Apellidos y nombres | Carrera | Firma               │
 └─────────────────────────────────────────────────────┘
@@ -517,7 +609,7 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 
 ---
 
-### SECCIÓN 9 — Firmas (Footer del Informe)
+### SECCIÓN 12 — Firmas (Footer del Informe)
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -535,23 +627,31 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 
 ---
 
-### SECCIÓN 10 — Anexos (Checklist)
+### SECCIÓN 13 — Anexos (Checklist)
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│  📎 ANEXOS                                         │
+│  📎 ANEXOS  *Campos obligatorios                    │
 ├─────────────────────────────────────────────────────┤
-│ ☐ Acta de entrega-recepción de productos            │
-│ ☐ Reporte banner de estudiantes                     │
-│ ☐ Convenio / Carta de compromiso                    │
+│ * ☐ Acta de entrega-recepción de productos          │
+│ * ☐ Reporte banner de estudiantes                   │
+│ * ☐ Convenio internacional                          │
+│     (Requerido si aplica componente de               │
+│      internacionalización)                          │
+│   ☐ Convenio / Carta de compromiso                  │
+│   ☐ Otros documentos                                │
 │                                                     │
-│ [📎 Adjuntar archivos...]                           │
+│ [📎 Adjuntar archivos...]  *Adjunto obligatorio      │
+│                                                     │
+│ ⚠ Los documentos con * son obligatorios             │
 └─────────────────────────────────────────────────────┘
 ```
 
 **Mejoras UI:**
 - Checkboxes + botón de **subir archivo** (PowerApps Attachment Control)
 - Indicador de "archivo adjunto" con nombre y tamaño
+- Validación: si el componente de internacionalización está activo, el convenio internacional es obligatorio
+- Distinción visual entre adjuntos obligatorios (*) y opcionales
 
 ---
 
@@ -559,17 +659,6 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 
 Dado que es un canvas único escroleable, agregar un **menú de navegación rápida** lateral o superior:
 
-```
-┌─────────────────────────────────────────────────────┐
-│ [🏠] [📋 Datos] [🎯 Alcance] [🏢 Contraparte]      │
-│ [🔗 Comp.] [🔍 Diagnóstico] [👥 Est.]              │
-│ [📊 Resultados] [👤 Particip.] [✍️ Firmas] [📎 Anexos]│
-├─────────────────────────────────────────────────────┤
-│                                                     │
-│  (contenido de la sección activa)                   │
-│                                                     │
-└─────────────────────────────────────────────────────┘
-```
 
 **Opción alternativa:** Usar un **Sidebar navegable** o **Tab List** horizontal que haga scroll automático a cada sección.
 
@@ -612,20 +701,17 @@ Fuente: **Segoe UI** (estándar PowerApps) o **Inter** si se importa.
 | Campo | Validación |
 |-------|-----------|
 | Código | Requerido, formato `XXXX-XXX` |
+| Unidad | Requerido, selección desde desplegable |
 | Correo | Formato email válido |
 | Teléfono | Solo dígitos, mínimo 7 |
 | Fechas | Fecha inicio ≤ Fecha cierre |
-| Presupuestos | Solo números positivos |
-| N° estudiantes | Entero positivo |
-| Participantes | Al menos 1 fila completa |
-| Grupos de atención prioritaria | Mínimo 1, máximo 3 seleccionados (Combobox) |
-| Personas atendidas (H/M) | Enteros positivos, obligatorios |
-| Total estimado | Calculado automáticamente (solo lectura) |
-| Aporte al proyecto | Mínimo 1 checkmark seleccionado, sin máximo |
-| Articulación investigación | Si "Sí" → Línea, Red, Grupo obligatorios (dropdowns) |
-| Componentes condicionales | Si "Sí" en Intersedes/Internacionalización/Posgrados → subcampos obligatorios |
-| Variables cuantitativas (7) | Obligatorias, numéricas, 0-100 para porcentajes |
-| Variables cualitativas (2) | Obligatorias, mínimo 50 caracteres cada una |
+| Presupuesto (Estimado) | Requerido, solo números positivos |
+| Presupuesto (Avance/Final) | Requerido solo si ese estado está seleccionado |
+| Cuenta contable | Requerido, selección desde desplegable del catálogo |
+| Estudiantes vinculados | Al menos 1 fila completa (semestre, hombres, mujeres, total) |
+| Participantes | Al menos 1 fila completa, Horas (programadas) requerido |
+| Adjuntos obligatorios (*) | Convenio internacional requerido si aplica |
+| Anexos | Los marcados con * son obligatorios |
 
 **Botón Guardar:** Bottom fijo con:
 - 💾 **Guardar Borrador** (guarda estado actual)
@@ -654,46 +740,16 @@ Screen: Frm_InformeComunitario (Scrollable)
 │   ├── lblTitulo
 │   └── txtCodigo
 ├── NavBar (Horizontal Gallery / TabList)
-│   └── [Items: Datos, Alcance, Contraparte, Componentes, Diagnóstico, Estudiantes, Resultados, Participantes, Firmas, Anexos]
+│   └── [Items: Datos, Alcance, Componentes, ...]
 ├── Section_DatosGenerales (Container)
-│   ├── [2-column grid of Label + TextInput/DatePicker/Dropdown]
-│   └── Card_ArticulacionInv (Container condicional)
-│       └── [Dropdown Línea investig. + Dropdown Red académica + Dropdown Grupo investig.]
-├── Section_AlcancePrioritariosPresupuesto (Container)
+│   └── [2-column grid of Label + TextInput/DatePicker/Dropdown]
+├── Section_AlcancePresupuesto (Container)
 │   ├── [TextInput fields]
-│   ├── Card_GruposPrioritarios (Container)
-│   │   └── [Combobox searchable + chips de seleccionados]
-│   ├── Card_PersonasAtendidas (Container)
-│   │   └── [4-column: Hombres | Mujeres | Total Est. (auto) | Total Real]
-│   └── Card_Presupuesto (Container with 5 inputs)
-├── Section_Contraparte (Container)
-│   ├── [2-column grid of Label + TextInput]
-│   └── Card_AporteProyecto (Container)
-│       └── [6 Checkboxes + chips de seleccionados]
+│   └── Card_Presupuesto (Container with 4 inputs)
 ├── Section_Componentes (Container)
-│   ├── Card_Interculturalidad (Radio Sí/No)
-│   ├── Card_Interdisciplinariedad (Radio Sí/No)
-│   ├── Card_Intersedes (Container condicional)
-│   │   ├── rdbIntersedes (Radio Sí/No)
-│   │   └── [Dropdown Sede + TextInput Carreras] (Visible=Sí)
-│   ├── Card_Internacionalizacion (Container condicional)
-│   │   ├── rdbInternacionalizacion (Radio Sí/No)
-│   │   └── [Dropdown Convenio + TextInput Institución + Dropdown País] (Visible=Sí)
-│   └── Card_Posgrados (Container condicional)
-│       ├── rdbPosgrados (Radio Sí/No)
-│       └── [Dropdown Programa + TextInput N° estudiantes + TextInput Coordinador] (Visible=Sí)
-├── Section_Diagnostico (Container)
-│   ├── [TextArea multilínea: Descripción del problema + Actores]
-│   ├── Card_VariablesCuantitativas (Container)
-│   │   └── [7 TextInput numéricos con label de unidad]
-│   └── Card_VariablesCualitativas (Container)
-│       └── [2 TextArea multilínea]
+│   └── [Checkbox list x4]
 ├── Section_Estudiantes (Container)
-│   ├── [TextInput N° estudiantes]
-│   ├── Card_ArticulacionFunciones (Container condicional)
-│   │   ├── rdbArticulacion (Radio Sí/No)
-│   │   └── [Dropdown Línea + Dropdown Red + Dropdown Grupo] (Visible=Sí)
-│   └── [3 TextArea multilínea: Impactos]
+│   └── [TextInput + TextArea multiline]
 ├── Section_MatrizResultados (Container)
 │   └── Table (Gallery with 4 columns)
 ├── Section_Participantes (Container)
@@ -753,15 +809,8 @@ Envío:
 | Responsive | No aplica | Adaptable a tablet/desktop |
 | Autoguardado | No | Timer de autoguardado |
 | Adjuntos | No | Attachment Control |
-| Articulación investigación | Campo de texto libre | Radio Sí/No + dropdowns condicionales (Línea, Red, Grupo) |
-| Grupos prioritarios | No existe | Combobox searchable (mín 1, máx 3) |
-| Personas atendidas | Un solo número | División Hombres/Mujeres + Total estimado automático + Total real |
-| Contraparte | Solo nombre | Datos completos + Aporte al Proyecto con checkmarks (mín 1) |
-| Componentes | 4 checkboxes planos | Radio Sí/No con subcampos condicionales para Intersedes, Internacionalización, Posgrados |
-| Diagnóstico | No existe | 7 variables cuantitativas + 2 cualitativas para proyectos sociales |
-| Articulación funs. sustantivas | Texto libre | Radio Sí/No + dropdowns condicionales (Línea, Red, Grupo) |
 
 ---
 
 *Documento generado como boceto para implementación en Microsoft PowerApps.*
-*Versión: 2.0 — Fecha: 2026-06-15*
+*Versión: 1.0 — Fecha: 2026-06-02*
