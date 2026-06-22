@@ -15,6 +15,21 @@ interface Participant {
   carrera: string;
 }
 
+interface StudentRow {
+  id: string;
+  semestre: string;
+  hombres: number;
+  mujeres: number;
+}
+
+interface PresupuestoRow {
+  id: string;
+  cuenta: string;
+  monto: number;
+}
+
+type EstadoPresupuestario = 'estimado' | 'avance' | 'final';
+
 interface FollowUpReportProps {
   onBack?: () => void;
   onSave?: () => void;
@@ -97,6 +112,41 @@ const APORTES_OPCIONES = [
   'RREE (Relaciones Externas)',
   'Transporte',
   'Alimentación',
+];
+
+const UNIDADES_PUCE = [
+  'Facultad de Ingeniería',
+  'Facultad de Medicina',
+  'Facultad de Arquitectura, Diseño y Artes',
+  'Facultad de Ciencias Administrativas y Contables',
+  'Facultad de Ciencias Humanas',
+  'Facultad de Ciencias Exactas y Naturales',
+  'Facultad de Comunicación, Lingüística y Literatura',
+  'Facultad de Economía',
+  'Facultad de Enfermería',
+  'Facultad de Jurisprudencia',
+  'Facultad de Psicología',
+  'Facultad de Ciencias de la Educación',
+  'Facultad de Ciencias Filosófico-Teológicas',
+];
+
+const CUENTAS_CONTABLES = [
+  '530101 - Sueldos y Salarios',
+  '530102 - Honorarios Profesionales',
+  '530201 - Materiales de Oficina',
+  '530202 - Insumos Didácticos',
+  '530203 - Materiales de Construcción',
+  '530301 - Transporte y Movilización',
+  '530401 - Alimentación',
+  '530402 - Hospedaje',
+  '530501 - Servicios Básicos',
+  '530502 - Arrendamientos',
+  '530601 - Equipamiento',
+  '530602 - Infraestructura',
+  '530701 - Difusión y Publicaciones',
+  '530702 - Capacitación',
+  '530801 - Gastos Administrativos',
+  '530802 - Imprevistos',
 ];
 
 /* ───────── Componente: Combobox multiselección con búsqueda ───────── */
@@ -211,6 +261,40 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
   const [totalReal, setTotalReal] = useState<number>(0);
   const totalEstimado = hombres + mujeres;
 
+  /* ── Sección 2b: Presupuesto ── */
+  const [estadoPresupuestario, setEstadoPresupuestario] = useState<EstadoPresupuestario>('estimado');
+  const [presupuestoEstimado, setPresupuestoEstimado] = useState<PresupuestoRow[]>([
+    { id: 'e1', cuenta: '', monto: 0 },
+  ]);
+  const [presupuestoAvance, setPresupuestoAvance] = useState<PresupuestoRow[]>([
+    { id: 'a1', cuenta: '', monto: 0 },
+  ]);
+  const [presupuestoFinal, setPresupuestoFinal] = useState<PresupuestoRow[]>([
+    { id: 'f1', cuenta: '', monto: 0 },
+  ]);
+
+  const totalEstimadoPresup = presupuestoEstimado.reduce((sum, r) => sum + (r.monto || 0), 0);
+  const totalAvancePresup = presupuestoAvance.reduce((sum, r) => sum + (r.monto || 0), 0);
+  const totalFinalPresup = presupuestoFinal.reduce((sum, r) => sum + (r.monto || 0), 0);
+
+  const addCuentaEstimado = () => setPresupuestoEstimado([...presupuestoEstimado, { id: Date.now().toString(), cuenta: '', monto: 0 }]);
+  const removeCuentaEstimado = (id: string) => setPresupuestoEstimado(presupuestoEstimado.filter((r) => r.id !== id));
+  const updateCuentaEstimado = (id: string, field: 'cuenta' | 'monto', value: string | number) => {
+    setPresupuestoEstimado(presupuestoEstimado.map((r) => r.id === id ? { ...r, [field]: value } : r));
+  };
+
+  const addCuentaAvance = () => setPresupuestoAvance([...presupuestoAvance, { id: Date.now().toString(), cuenta: '', monto: 0 }]);
+  const removeCuentaAvance = (id: string) => setPresupuestoAvance(presupuestoAvance.filter((r) => r.id !== id));
+  const updateCuentaAvance = (id: string, field: 'cuenta' | 'monto', value: string | number) => {
+    setPresupuestoAvance(presupuestoAvance.map((r) => r.id === id ? { ...r, [field]: value } : r));
+  };
+
+  const addCuentaFinal = () => setPresupuestoFinal([...presupuestoFinal, { id: Date.now().toString(), cuenta: '', monto: 0 }]);
+  const removeCuentaFinal = (id: string) => setPresupuestoFinal(presupuestoFinal.filter((r) => r.id !== id));
+  const updateCuentaFinal = (id: string, field: 'cuenta' | 'monto', value: string | number) => {
+    setPresupuestoFinal(presupuestoFinal.map((r) => r.id === id ? { ...r, [field]: value } : r));
+  };
+
   /* ── Sección 3: Aporte al proyecto ── */
   const [aportes, setAportes] = useState<Record<string, boolean>>(
     Object.fromEntries(APORTES_OPCIONES.map((a) => [a, false]))
@@ -240,6 +324,20 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
   const [lineaF, setLineaF] = useState('');
   const [redF, setRedF] = useState('');
   const [grupoF, setGrupoF] = useState('');
+
+  /* ── Sección 6b: Estudiantes por semestre ── */
+  const [studentRows, setStudentRows] = useState<StudentRow[]>([
+    { id: 's1', semestre: '', hombres: 0, mujeres: 0 },
+  ]);
+
+  const addStudentRow = () => {
+    setStudentRows([...studentRows, { id: Date.now().toString(), semestre: '', hombres: 0, mujeres: 0 }]);
+  };
+  const removeStudentRow = (id: string) => setStudentRows(studentRows.filter((r) => r.id !== id));
+  const updateStudentRow = (id: string, field: keyof StudentRow, value: string | number) => {
+    setStudentRows(studentRows.map((r) => r.id === id ? { ...r, [field]: value } : r));
+  };
+  const totalEstudiantesVinculados = studentRows.reduce((sum, r) => sum + (r.hombres || 0) + (r.mujeres || 0), 0);
 
   /* ── Archivos adjuntos por sección ── */
   type SectionKey = 'alcance' | 'contraparte' | 'componentes' | 'estudiantes' | 'participantes' | 'firmas';
@@ -508,7 +606,10 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
 
               <div>
                 <label className="block text-[#344054] font-medium mb-2 text-sm">Unidad responsable <span className="text-red-500">*</span></label>
-                <input type="text" className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                <select className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] bg-white">
+                  <option value="">Seleccionar unidad...</option>
+                  {UNIDADES_PUCE.map((u) => <option key={u} value={u}>{u}</option>)}
+                </select>
               </div>
 
               <div>
@@ -620,19 +721,183 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
 
               <InputField label="Institución contraparte" value="" onChange={() => {}} />
 
-              {/* Presupuesto */}
+              {/* Presupuesto — Sistema de 3 estados */}
               <div className="bg-[#F5F7FA] rounded-lg p-6 border border-[#D0D5DD]">
                 <h3 className="text-[#003366] font-semibold mb-4 flex items-center gap-2">💰 PRESUPUESTO</h3>
+                <p className="text-xs text-[#344054] mb-4">* = Campos obligatorios. Seleccione Avance o Final para habilitar edición.</p>
+
+                {/* Selector de estado presupuestario */}
+                <div className="mb-6">
+                  <label className="block text-[#344054] font-medium mb-3 text-sm">Estado presupuestario:</label>
+                  <div className="flex gap-3">
+                    {([
+                      { value: 'estimado' as EstadoPresupuestario, icon: '📋', label: 'Estimado' },
+                      { value: 'avance' as EstadoPresupuestario, icon: '📈', label: 'Avance' },
+                      { value: 'final' as EstadoPresupuestario, icon: '✅', label: 'Final' },
+                    ]).map(({ value, icon, label }) => (
+                      <button
+                        key={value}
+                        type="button"
+                        onClick={() => setEstadoPresupuestario(value)}
+                        className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg border-2 font-semibold text-sm transition-colors ${
+                          estadoPresupuestario === value
+                            ? 'border-[#003366] bg-[#003366] text-white'
+                            : value === 'estimado'
+                              ? 'border-[#003366] bg-white text-[#003366]'
+                              : 'border-[#D0D5DD] bg-white text-[#344054] hover:border-[#003366] opacity-60'
+                        }`}
+                      >
+                        <span>{icon}</span> {label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Columnas de presupuesto */}
                 <div className="grid md:grid-cols-3 gap-4">
-                  {['Planificado', 'Interno ejecutado', 'Externo asignado', 'Externo ejecutado', 'Gasto no contemplado'].map((label) => (
-                    <div key={label}>
-                      <label className="block text-[#344054] font-medium mb-2 text-sm">{label}</label>
-                      <div className="relative">
-                        <span className="absolute left-4 top-3 text-[#344054]">$</span>
-                        <input type="number" step="0.01" className="w-full pl-8 pr-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] bg-white" />
+                  {/* Columna: Estimado (siempre activo) */}
+                  <div className="bg-white rounded-lg border border-[#D0D5DD] p-4">
+                    <h4 className="text-[#003366] font-semibold text-sm mb-3 flex items-center gap-1">📋 ESTIMADO</h4>
+                    <p className="text-xs text-[#344054] mb-3">Siempre activo</p>
+                    {presupuestoEstimado.map((row) => (
+                      <div key={row.id} className="flex gap-2 mb-3">
+                        <div className="flex-1">
+                          <select
+                            value={row.cuenta}
+                            onChange={(e) => updateCuentaEstimado(row.id, 'cuenta', e.target.value)}
+                            className="w-full px-3 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm"
+                          >
+                            <option value="">▼ Cuenta contable</option>
+                            {CUENTAS_CONTABLES.map((c) => <option key={c} value={c}>{c}</option>)}
+                          </select>
+                        </div>
+                        <div className="w-32 relative">
+                          <span className="absolute left-3 top-2 text-[#344054] text-sm">$</span>
+                          <input
+                            type="number"
+                            step="0.01"
+                            min={0}
+                            value={row.monto || ''}
+                            onChange={(e) => updateCuentaEstimado(row.id, 'monto', Number(e.target.value))}
+                            className="w-full pl-7 pr-2 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm"
+                            placeholder="0.00"
+                          />
+                        </div>
+                        {presupuestoEstimado.length > 1 && (
+                          <button onClick={() => removeCuentaEstimado(row.id)} className="text-red-500 hover:bg-red-50 rounded p-1">
+                            <X size={16} />
+                          </button>
+                        )}
                       </div>
+                    ))}
+                    <button onClick={addCuentaEstimado} className="flex items-center gap-1 text-xs text-[#003366] hover:text-[#0056B3] font-medium mt-2">
+                      <Plus size={14} /> Agregar cuenta
+                    </button>
+                    <div className="mt-3 pt-3 border-t border-[#D0D5DD] flex justify-between">
+                      <span className="text-sm font-semibold text-[#344054]">TOTAL:</span>
+                      <span className="text-sm font-bold text-[#003366]">$ {totalEstimadoPresup.toLocaleString('es-EC', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                     </div>
-                  ))}
+                  </div>
+
+                  {/* Columna: Avance */}
+                  <div className={`bg-white rounded-lg border p-4 ${estadoPresupuestario === 'avance' ? 'border-[#003366] ring-2 ring-[#003366]/20' : 'border-[#D0D5DD] opacity-60'}`}>
+                    <h4 className="text-[#003366] font-semibold text-sm mb-3 flex items-center gap-1">📈 AVANCE</h4>
+                    <p className="text-xs text-[#344054] mb-3">Se activa al elegir "Avance"</p>
+                    {estadoPresupuestario === 'avance' ? (
+                      <>
+                        {presupuestoAvance.map((row) => (
+                          <div key={row.id} className="flex gap-2 mb-3">
+                            <div className="flex-1">
+                              <select
+                                value={row.cuenta}
+                                onChange={(e) => updateCuentaAvance(row.id, 'cuenta', e.target.value)}
+                                className="w-full px-3 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm"
+                              >
+                                <option value="">▼ Cuenta contable</option>
+                                {CUENTAS_CONTABLES.map((c) => <option key={c} value={c}>{c}</option>)}
+                              </select>
+                            </div>
+                            <div className="w-32 relative">
+                              <span className="absolute left-3 top-2 text-[#344054] text-sm">$</span>
+                              <input
+                                type="number"
+                                step="0.01"
+                                min={0}
+                                value={row.monto || ''}
+                                onChange={(e) => updateCuentaAvance(row.id, 'monto', Number(e.target.value))}
+                                className="w-full pl-7 pr-2 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm"
+                                placeholder="0.00"
+                              />
+                            </div>
+                            {presupuestoAvance.length > 1 && (
+                              <button onClick={() => removeCuentaAvance(row.id)} className="text-red-500 hover:bg-red-50 rounded p-1">
+                                <X size={16} />
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                        <button onClick={addCuentaAvance} className="flex items-center gap-1 text-xs text-[#003366] hover:text-[#0056B3] font-medium mt-2">
+                          <Plus size={14} /> Agregar cuenta
+                        </button>
+                        <div className="mt-3 pt-3 border-t border-[#D0D5DD] flex justify-between">
+                          <span className="text-sm font-semibold text-[#344054]">TOTAL:</span>
+                          <span className="text-sm font-bold text-[#003366]">$ {totalAvancePresup.toLocaleString('es-EC', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                        </div>
+                      </>
+                    ) : (
+                      <p className="text-sm text-[#344054] italic text-center py-8">Seleccione "Avance" para habilitar la edición</p>
+                    )}
+                  </div>
+
+                  {/* Columna: Final */}
+                  <div className={`bg-white rounded-lg border p-4 ${estadoPresupuestario === 'final' ? 'border-[#003366] ring-2 ring-[#003366]/20' : 'border-[#D0D5DD] opacity-60'}`}>
+                    <h4 className="text-[#003366] font-semibold text-sm mb-3 flex items-center gap-1">✅ FINAL</h4>
+                    <p className="text-xs text-[#344054] mb-3">Se activa al elegir "Final"</p>
+                    {estadoPresupuestario === 'final' ? (
+                      <>
+                        {presupuestoFinal.map((row) => (
+                          <div key={row.id} className="flex gap-2 mb-3">
+                            <div className="flex-1">
+                              <select
+                                value={row.cuenta}
+                                onChange={(e) => updateCuentaFinal(row.id, 'cuenta', e.target.value)}
+                                className="w-full px-3 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm"
+                              >
+                                <option value="">▼ Cuenta contable</option>
+                                {CUENTAS_CONTABLES.map((c) => <option key={c} value={c}>{c}</option>)}
+                              </select>
+                            </div>
+                            <div className="w-32 relative">
+                              <span className="absolute left-3 top-2 text-[#344054] text-sm">$</span>
+                              <input
+                                type="number"
+                                step="0.01"
+                                min={0}
+                                value={row.monto || ''}
+                                onChange={(e) => updateCuentaFinal(row.id, 'monto', Number(e.target.value))}
+                                className="w-full pl-7 pr-2 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm"
+                                placeholder="0.00"
+                              />
+                            </div>
+                            {presupuestoFinal.length > 1 && (
+                              <button onClick={() => removeCuentaFinal(row.id)} className="text-red-500 hover:bg-red-50 rounded p-1">
+                                <X size={16} />
+                              </button>
+                            )}
+                          </div>
+                        ))}
+                        <button onClick={addCuentaFinal} className="flex items-center gap-1 text-xs text-[#003366] hover:text-[#0056B3] font-medium mt-2">
+                          <Plus size={14} /> Agregar cuenta
+                        </button>
+                        <div className="mt-3 pt-3 border-t border-[#D0D5DD] flex justify-between">
+                          <span className="text-sm font-semibold text-[#344054]">TOTAL:</span>
+                          <span className="text-sm font-bold text-[#003366]">$ {totalFinalPresup.toLocaleString('es-EC', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                        </div>
+                      </>
+                    ) : (
+                      <p className="text-sm text-[#344054] italic text-center py-8">Seleccione "Final" para habilitar la edición</p>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -785,7 +1050,96 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
           <section id="estudiantes" className="bg-white rounded-lg border border-[#E1E4E8] p-8 shadow-sm">
             <h2 className="text-[#003366] text-xl font-semibold mb-6 flex items-center gap-2">👥 ESTUDIANTES E IMPACTO</h2>
             <div className="space-y-6">
-              <InputField label="N° de estudiantes vinculados" value={0} onChange={() => {}} type="number" required />
+              {/* Estudiantes vinculados al proyecto — tabla dinámica */}
+              <div className="bg-[#F5F7FA] rounded-lg p-5 border border-[#D0D5DD]">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[#003366] font-semibold text-sm flex items-center gap-2">🎓 ESTUDIANTES VINCULADOS AL PROYECTO</h3>
+                  <button onClick={addStudentRow} className="flex items-center gap-1 px-3 py-2 bg-[#003366] text-white text-xs rounded-lg hover:bg-[#002952] transition-colors">
+                    <Plus size={14} /> Agregar fila
+                  </button>
+                </div>
+                <p className="text-xs text-[#344054] mb-4">* Por semestre, género y total</p>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="bg-[#003366] text-white">
+                        <th className="border border-[#D0D5DD] px-4 py-3 text-left text-sm font-semibold w-[20%]">Semestre</th>
+                        <th className="border border-[#D0D5DD] px-4 py-3 text-left text-sm font-semibold w-[25%]">Hombres</th>
+                        <th className="border border-[#D0D5DD] px-4 py-3 text-left text-sm font-semibold w-[25%]">Mujeres</th>
+                        <th className="border border-[#D0D5DD] px-4 py-3 text-left text-sm font-semibold w-[20%]">Total</th>
+                        <th className="border border-[#D0D5DD] px-4 py-3 text-center text-sm font-semibold w-[10%]">Acción</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {studentRows.map((row, i) => {
+                        const rowTotal = (row.hombres || 0) + (row.mujeres || 0);
+                        return (
+                          <tr key={row.id} className={i % 2 === 0 ? 'bg-white' : 'bg-[#F5F7FA]'}>
+                            <td className="border border-[#D0D5DD] px-3 py-2">
+                              <input
+                                type="text"
+                                value={row.semestre}
+                                onChange={(e) => updateStudentRow(row.id, 'semestre', e.target.value)}
+                                placeholder="Ej: 2026-1"
+                                className="w-full px-3 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm"
+                              />
+                            </td>
+                            <td className="border border-[#D0D5DD] px-3 py-2">
+                              <input
+                                type="number"
+                                min={0}
+                                value={row.hombres || ''}
+                                onChange={(e) => updateStudentRow(row.id, 'hombres', Number(e.target.value))}
+                                placeholder="0"
+                                className="w-full px-3 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm"
+                              />
+                            </td>
+                            <td className="border border-[#D0D5DD] px-3 py-2">
+                              <input
+                                type="number"
+                                min={0}
+                                value={row.mujeres || ''}
+                                onChange={(e) => updateStudentRow(row.id, 'mujeres', Number(e.target.value))}
+                                placeholder="0"
+                                className="w-full px-3 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm"
+                              />
+                            </td>
+                            <td className="border border-[#D0D5DD] px-3 py-2">
+                              <div className="w-full px-3 py-2 bg-gray-100 rounded text-sm font-semibold text-[#003366] text-center">
+                                {rowTotal}
+                              </div>
+                            </td>
+                            <td className="border border-[#D0D5DD] px-3 py-2 text-center">
+                              {studentRows.length > 1 && (
+                                <button onClick={() => removeStudentRow(row.id)} className="text-red-500 hover:bg-red-50 rounded p-1.5">
+                                  <Trash2 size={16} />
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                    <tfoot>
+                      <tr className="bg-[#E8EDF2]">
+                        <td className="border border-[#D0D5DD] px-4 py-3 text-sm font-semibold text-[#003366]">TOTAL GENERAL</td>
+                        <td className="border border-[#D0D5DD] px-4 py-3 text-sm font-semibold text-[#003366]">
+                          {studentRows.reduce((sum, r) => sum + (r.hombres || 0), 0)}
+                        </td>
+                        <td className="border border-[#D0D5DD] px-4 py-3 text-sm font-semibold text-[#003366]">
+                          {studentRows.reduce((sum, r) => sum + (r.mujeres || 0), 0)}
+                        </td>
+                        <td className="border border-[#D0D5DD] px-4 py-3 text-sm font-bold text-[#003366]">
+                          {totalEstudiantesVinculados}
+                        </td>
+                        <td className="border border-[#D0D5DD]"></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+                <p className="text-xs text-[#344054] mt-2">Total de estudiantes vinculados: <span className="font-semibold text-[#003366]">{totalEstudiantesVinculados}</span></p>
+              </div>
 
               {/* Articulación de funciones sustantivas */}
               <div className="bg-[#F5F7FA] rounded-lg p-5 border border-[#D0D5DD]">
