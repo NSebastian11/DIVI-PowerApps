@@ -30,6 +30,24 @@ interface PresupuestoRow {
 
 type EstadoPresupuestario = 'estimado' | 'avance' | 'final';
 
+interface Contraparte {
+  id: string;
+  nombre: string;
+  ruc: string;
+  telefono: string;
+  direccion: string;
+  representanteLegal: string;
+  aportes: Record<string, boolean>;
+}
+
+interface VariableCuantitativa {
+  id: string;
+  label: string;
+  unidad: string;
+  valor: number;
+  obligatoria: boolean;
+}
+
 interface FollowUpReportProps {
   onBack?: () => void;
   onSave?: () => void;
@@ -89,7 +107,6 @@ const CONVENIOS_INTERNACIONALES = [
   'Convenio Marco PUCE-UNESCO',
   'Convenio PUCE-OEI',
   'Convenio PUCE-AECID',
-  'Convenio Erasmus+',
 ];
 
 const PAISES = [
@@ -103,6 +120,17 @@ const PROGRAMAS_POSGRADO = [
   'Maestría en Salud Pública',
   'Especialización en Derechos Humanos',
   'Diplomado en Desarrollo Comunitario',
+];
+
+const COORDINADORES_POSGRADO = [
+  'Dr. Carlos Andrade',
+  'Dra. María Fernanda López',
+  'Dr. Juan Pablo Ruiz',
+  'Dra. Ana María Torres',
+  'Dr. Pedro González',
+  'Dra. Carmen Vásquez',
+  'Dr. Fernando Mera',
+  'Dra. Lucía Paredes',
 ];
 
 const APORTES_OPCIONES = [
@@ -295,11 +323,55 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
     setPresupuestoFinal(presupuestoFinal.map((r) => r.id === id ? { ...r, [field]: value } : r));
   };
 
-  /* ── Sección 3: Aporte al proyecto ── */
-  const [aportes, setAportes] = useState<Record<string, boolean>>(
-    Object.fromEntries(APORTES_OPCIONES.map((a) => [a, false]))
-  );
-  const aportesCount = Object.values(aportes).filter(Boolean).length;
+  /* ── Sección 3b: Contrapartes dinámicas ── */
+  const [contrapartes, setContrapartes] = useState<Contraparte[]>([
+    { id: 'c1', nombre: '', ruc: '', telefono: '', direccion: '', representanteLegal: '', aportes: Object.fromEntries(APORTES_OPCIONES.map((a) => [a, false])) },
+  ]);
+
+  const addContraparte = () => {
+    setContrapartes([...contrapartes, {
+      id: Date.now().toString(),
+      nombre: '', ruc: '', telefono: '', direccion: '', representanteLegal: '',
+      aportes: Object.fromEntries(APORTES_OPCIONES.map((a) => [a, false])),
+    }]);
+  };
+
+  const removeContraparte = (id: string) => setContrapartes(contrapartes.filter((c) => c.id !== id));
+
+  const updateContraparte = (id: string, field: keyof Omit<Contraparte, 'aportes'>, value: string) => {
+    setContrapartes(contrapartes.map((c) => c.id === id ? { ...c, [field]: value } : c));
+  };
+
+  const toggleAporteContraparte = (id: string, aporte: string) => {
+    setContrapartes(contrapartes.map((c) => c.id === id ? {
+      ...c,
+      aportes: { ...c.aportes, [aporte]: !c.aportes[aporte] },
+    } : c));
+  };
+
+  /* ── Sección 5: Variables cuantitativas dinámicas ── */
+  const [varsCuantitativas, setVarsCuantitativas] = useState<VariableCuantitativa[]>([
+    { id: 'v1', label: 'Población total afectada', unidad: 'personas', valor: 0, obligatoria: true },
+    { id: 'v2', label: 'N° de familias beneficiarias', unidad: 'familias', valor: 0, obligatoria: true },
+  ]);
+
+  const addVarCuantitativa = () => {
+    setVarsCuantitativas([...varsCuantitativas, {
+      id: Date.now().toString(),
+      label: '',
+      unidad: '',
+      valor: 0,
+      obligatoria: false,
+    }]);
+  };
+
+  const removeVarCuantitativa = (id: string) => {
+    setVarsCuantitativas(varsCuantitativas.filter((v) => v.id !== id));
+  };
+
+  const updateVarCuantitativa = (id: string, field: keyof VariableCuantitativa, value: string | number) => {
+    setVarsCuantitativas(varsCuantitativas.map((v) => v.id === id ? { ...v, [field]: value } : v));
+  };
 
   /* ── Sección 4: Componentes ── */
   const [interculturalidad, setInterculturalidad] = useState<SiNo | null>(null);
@@ -474,6 +546,31 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
       </select>
     </div>
   );
+
+  const ComboboxField = ({ label, value, onChange, options, placeholder, required }: {
+    label: string; value: string; onChange: (v: string) => void;
+    options: string[]; placeholder?: string; required?: boolean;
+  }) => {
+    const listId = `list-${label.replace(/\s+/g, '-').toLowerCase()}`;
+    return (
+      <div>
+        <label className="block text-[#344054] font-medium mb-2 text-sm">
+          {label} {required && <span className="text-red-500">*</span>}
+        </label>
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder || `Escribir o seleccionar ${label.toLowerCase()}...`}
+          list={listId}
+          className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]"
+        />
+        <datalist id={listId}>
+          {options.map((o) => <option key={o} value={o} />)}
+        </datalist>
+      </div>
+    );
+  };
 
   const InputField = ({ label, value, onChange, type, placeholder, required, className }: {
     label: string; value: string | number; onChange: (v: any) => void;
@@ -907,44 +1004,80 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
 
           {/* ═══════════════ SECCIÓN 3 — ORGANIZACIÓN CONTRAPARTE ═══════════════ */}
           <section id="contraparte" className="bg-white rounded-lg border border-[#E1E4E8] p-8 shadow-sm">
-            <h2 className="text-[#003366] text-xl font-semibold mb-6 flex items-center gap-2">🏢 INFORMACIÓN GENERAL DE LA ORGANIZACIÓN O INSTITUCIÓN CONTRAPARTE DE LA PUCE</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="md:col-span-2">
-                <InputField label="Nombre de la institución" value="" onChange={() => {}} required />
-              </div>
-              <InputField label="RUC" value="" onChange={() => {}} required />
-              <InputField label="Teléfono" value="" onChange={() => {}} required />
-              <div className="md:col-span-2">
-                <InputField label="Dirección" value="" onChange={() => {}} required />
-              </div>
-              <div className="md:col-span-2">
-                <InputField label="Representante legal" value="" onChange={() => {}} required />
-              </div>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-[#003366] text-xl font-semibold flex items-center gap-2">🏢 INFORMACIÓN GENERAL DE LA ORGANIZACIÓN O INSTITUCIÓN CONTRAPARTE DE LA PUCE</h2>
+              <button onClick={addContraparte} className="flex items-center gap-1 px-4 py-2 bg-[#003366] text-white text-sm rounded-lg hover:bg-[#002952] transition-colors">
+                <Plus size={16} /> Agregar contraparte
+              </button>
             </div>
 
-            {/* Aporte al proyecto */}
-            <div className="mt-6 bg-[#F5F7FA] rounded-lg p-5 border border-[#D0D5DD]">
-              <h3 className="text-[#003366] font-semibold mb-3 flex items-center gap-2 text-sm">📦 APORTE AL PROYECTO (mínimo 1 obligatorio)</h3>
-              <div className="grid md:grid-cols-3 gap-4">
-                {APORTES_OPCIONES.map((a) => (
-                  <label key={a} className="flex items-center gap-3 p-3 border border-[#D0D5DD] rounded-lg bg-white hover:bg-[#F5F7FA] cursor-pointer transition-colors">
-                    <input
-                      type="checkbox"
-                      checked={aportes[a]}
-                      onChange={() => setAportes({ ...aportes, [a]: !aportes[a] })}
-                      className="w-5 h-5 text-[#003366] rounded focus:ring-[#003366]"
-                    />
-                    <span className="text-[#344054] text-sm">{a}</span>
-                  </label>
-                ))}
+            {contrapartes.map((ct, idx) => (
+              <div key={ct.id} className={`${idx > 0 ? 'mt-6 pt-6 border-t-2 border-dashed border-[#D0D5DD]' : ''}`}>
+                {contrapartes.length > 1 && (
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-[#003366] font-semibold text-sm">Contraparte #{idx + 1}</h3>
+                    <button onClick={() => removeContraparte(ct.id)} className="flex items-center gap-1 px-3 py-1.5 text-red-500 hover:bg-red-50 rounded-lg text-sm transition-colors">
+                      <Trash2 size={14} /> Eliminar
+                    </button>
+                  </div>
+                )}
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="md:col-span-2">
+                    <label className="block text-[#344054] font-medium mb-2 text-sm">Nombre de la institución <span className="text-red-500">*</span></label>
+                    <input type="text" value={ct.nombre} onChange={(e) => updateContraparte(ct.id, 'nombre', e.target.value)}
+                      className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                  </div>
+                  <div>
+                    <label className="block text-[#344054] font-medium mb-2 text-sm">RUC <span className="text-red-500">*</span></label>
+                    <input type="text" value={ct.ruc} onChange={(e) => updateContraparte(ct.id, 'ruc', e.target.value)}
+                      className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                  </div>
+                  <div>
+                    <label className="block text-[#344054] font-medium mb-2 text-sm">Teléfono <span className="text-red-500">*</span></label>
+                    <input type="text" value={ct.telefono} onChange={(e) => updateContraparte(ct.id, 'telefono', e.target.value)}
+                      className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-[#344054] font-medium mb-2 text-sm">Dirección <span className="text-red-500">*</span></label>
+                    <input type="text" value={ct.direccion} onChange={(e) => updateContraparte(ct.id, 'direccion', e.target.value)}
+                      className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-[#344054] font-medium mb-2 text-sm">Representante legal <span className="text-red-500">*</span></label>
+                    <input type="text" value={ct.representanteLegal} onChange={(e) => updateContraparte(ct.id, 'representanteLegal', e.target.value)}
+                      className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                  </div>
+                </div>
+
+                {/* Aporte al proyecto */}
+                <div className="mt-6 bg-[#F5F7FA] rounded-lg p-5 border border-[#D0D5DD]">
+                  <h3 className="text-[#003366] font-semibold mb-3 flex items-center gap-2 text-sm">📦 APORTE AL PROYECTO (mínimo 1 obligatorio)</h3>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    {APORTES_OPCIONES.map((a) => (
+                      <label key={a} className="flex items-center gap-3 p-3 border border-[#D0D5DD] rounded-lg bg-white hover:bg-[#F5F7FA] cursor-pointer transition-colors">
+                        <input
+                          type="checkbox"
+                          checked={ct.aportes[a] || false}
+                          onChange={() => toggleAporteContraparte(ct.id, a)}
+                          className="w-5 h-5 text-[#003366] rounded focus:ring-[#003366]"
+                        />
+                        <span className="text-[#344054] text-sm">{a}</span>
+                      </label>
+                    ))}
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {APORTES_OPCIONES.filter((a) => ct.aportes[a]).map((a) => (
+                      <span key={a} className="px-3 py-1.5 bg-[#003366] text-white text-sm rounded-full">{a}</span>
+                    ))}
+                  </div>
+                  <p className="text-xs text-[#344054] mt-2">
+                    Seleccionados: {Object.values(ct.aportes).filter(Boolean).length}
+                    {Object.values(ct.aportes).filter(Boolean).length === 0 && <span className="text-red-500"> (mínimo 1 requerido)</span>}
+                  </p>
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2 mt-4">
-                {APORTES_OPCIONES.filter((a) => aportes[a]).map((a) => (
-                  <span key={a} className="px-3 py-1.5 bg-[#003366] text-white text-sm rounded-full">{a}</span>
-                ))}
-              </div>
-              <p className="text-xs text-[#344054] mt-2">Seleccionados: {aportesCount} {aportesCount === 0 && <span className="text-red-500">(mínimo 1 requerido)</span>}</p>
-            </div>
+            ))}
 
             <FileUploadBtn section="contraparte" label="📎 Adjuntar convenio / carta de compromiso" />
           </section>
@@ -1001,9 +1134,9 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
                 </div>
                 {posgrados === 'si' && (
                   <div className="mt-4 grid md:grid-cols-3 gap-4 p-4 bg-white rounded-lg border border-[#D0D5DD]">
-                    <SelectField label="Programa de posgrado vinculado" value={programaPosgrado} onChange={setProgramaPosgrado} options={PROGRAMAS_POSGRADO} required />
-                    <InputField label="N° estudiantes de posgrado" value={numEstPosgrado} onChange={setNumEstPosgrado} type="number" required />
-                    <InputField label="Coordinador del posgrado" value={coordPosgrado} onChange={setCoordPosgrado} required />
+                    <ComboboxField label="Programa de posgrado vinculado" value={programaPosgrado} onChange={setProgramaPosgrado} options={PROGRAMAS_POSGRADO} required />
+                    <InputField label="N° estudiantes de posgrado" value={numEstPosgrado} onChange={setNumEstPosgrado} type="number" />
+                    <ComboboxField label="Coordinador del posgrado" value={coordPosgrado} onChange={setCoordPosgrado} options={COORDINADORES_POSGRADO} />
                   </div>
                 )}
               </div>
@@ -1020,29 +1153,58 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
           <section id="diagnostico" className="bg-white rounded-lg border border-[#E1E4E8] p-8 shadow-sm">
             <h2 className="text-[#003366] text-xl font-semibold mb-6 flex items-center gap-2">🔍 DIAGNÓSTICO, PROBLEMA Y ACTORES INVOLUCRADOS</h2>
             <div className="space-y-6">
-              <TextAreaField label="Descripción del problema" value="" onChange={() => {}} rows={4} required />
-              <TextAreaField label="Actores involucrados" value="" onChange={() => {}} rows={3} required />
 
+              {/* Variables cuantitativas dinámicas */}
               <div className="bg-[#F5F7FA] rounded-lg p-5 border border-[#D0D5DD]">
-                <h3 className="text-[#003366] font-semibold mb-4 flex items-center gap-2 text-sm">📊 VARIABLES CUANTITATIVAS (7)</h3>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <InputField label="1. Población total afectada (personas)" value={0} onChange={() => {}} type="number" required />
-                  <InputField label="2. N° de familias beneficiarias" value={0} onChange={() => {}} type="number" required />
-                  <InputField label="3. Índice de pobreza NBI (%)" value={0} onChange={() => {}} type="number" required />
-                  <InputField label="4. Tasa de desempleo local (%)" value={0} onChange={() => {}} type="number" required />
-                  <InputField label="5. N° de organizaciones comunitarias" value={0} onChange={() => {}} type="number" required />
-                  <InputField label="6. Cobertura de servicios básicos (%)" value={0} onChange={() => {}} type="number" required />
-                  <InputField label="7. Tasa de escolaridad (%)" value={0} onChange={() => {}} type="number" required />
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-[#003366] font-semibold text-sm flex items-center gap-2">📊 VARIABLES CUANTITATIVAS</h3>
+                  <button onClick={addVarCuantitativa} className="flex items-center gap-1 px-3 py-2 bg-[#003366] text-white text-xs rounded-lg hover:bg-[#002952] transition-colors">
+                    <Plus size={14} /> Agregar variable
+                  </button>
+                </div>
+                <p className="text-xs text-[#344054] mb-4">Las primeras 2 variables son obligatorias. Puede añadir más según sea necesario.</p>
+
+                <div className="space-y-3">
+                  {varsCuantitativas.map((v) => (
+                    <div key={v.id} className="flex items-center gap-3 bg-white rounded-lg border border-[#D0D5DD] p-3">
+                      <span className="text-xs font-bold text-[#003366] w-6 text-center">{v.obligatoria ? '*' : ''}</span>
+                      <input
+                        type="text"
+                        value={v.label}
+                        onChange={(e) => updateVarCuantitativa(v.id, 'label', e.target.value)}
+                        placeholder="Nombre de la variable..."
+                        readOnly={v.obligatoria}
+                        className={`flex-1 px-3 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm ${v.obligatoria ? 'bg-gray-100 text-[#344054]' : ''}`}
+                      />
+                      <input
+                        type="number"
+                        min={0}
+                        value={v.valor || ''}
+                        onChange={(e) => updateVarCuantitativa(v.id, 'valor', Number(e.target.value))}
+                        placeholder="0"
+                        className="w-28 px-3 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm"
+                      />
+                      <input
+                        type="text"
+                        value={v.unidad}
+                        onChange={(e) => updateVarCuantitativa(v.id, 'unidad', e.target.value)}
+                        placeholder="Unidad"
+                        readOnly={v.obligatoria}
+                        className={`w-28 px-3 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm ${v.obligatoria ? 'bg-gray-100 text-[#344054]' : ''}`}
+                      />
+                      {!v.obligatoria && (
+                        <button onClick={() => removeVarCuantitativa(v.id)} className="text-red-500 hover:bg-red-50 rounded p-1.5">
+                          <Trash2 size={16} />
+                        </button>
+                      )}
+                      {v.obligatoria && <div className="w-9" />}
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              <div className="bg-[#F5F7FA] rounded-lg p-5 border border-[#D0D5DD]">
-                <h3 className="text-[#003366] font-semibold mb-4 flex items-center gap-2 text-sm">📝 VARIABLES CUALITATIVAS (2)</h3>
-                <div className="space-y-4">
-                  <TextAreaField label="1. Percepción de la comunidad sobre la problemática" value="" onChange={() => {}} rows={3} required />
-                  <TextAreaField label="2. Factores socio-culturales que inciden en el problema" value="" onChange={() => {}} rows={3} required />
-                </div>
-              </div>
+              {/* Descripción del problema (obligatorio) */}
+              <TextAreaField label="Descripción del problema" value="" onChange={() => {}} rows={5} required placeholder="Describa detalladamente el problema que aborda el proyecto..." />
             </div>
           </section>
 
@@ -1218,7 +1380,7 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
                 <div className="grid grid-cols-10 gap-2 mb-2 bg-[#003366] text-white p-3 rounded-t-lg">
                   <div className="text-sm font-semibold">Tipo</div>
                   <div className="text-sm font-semibold">Nacionalidad</div>
-                  <div className="text-sm font-semibold">Horas</div>
+                  <div className="text-sm font-semibold">Horas estimadas</div>
                   <div className="text-sm font-semibold">Fecha inicio</div>
                   <div className="text-sm font-semibold">Fecha fin</div>
                   <div className="text-sm font-semibold">Tipo doc.</div>

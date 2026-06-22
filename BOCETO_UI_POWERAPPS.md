@@ -12,13 +12,15 @@ El formulario completo es un solo **Scrollable Screen (Vertical)** con las sigui
 |---------|-----------|
 | **Header** | Logo PUCE + Título del informe + Código |
 | **1. Datos Generales** | 14 campos informativos del proyecto |
-| **2. Alcance y Presupuesto** | Comunidad, beneficiarios, presupuesto |
-| **3. Componentes** | Intersedes, interculturalidad, interdisciplinariedad, posgrados |
-| **4. Estudiantes e Impacto** | N° estudiantes, articulación, impactos |
-| **5. Matriz de Resultados** | Tabla de 4 columnas (Cadena/Indicadores/Fuentes/Avance) |
-| **6. Participantes** | Tabla horizontal escroleable de 10 columnas |
-| **7. Firmas** | Elaborado / Revisado / Aprobado |
-| **8. Anexos** | Checklist de documentos adjuntos |
+| **2. Alcance y Presupuesto** | Comunidad, beneficiarios, presupuesto (3 estados: Estimado/Avance/Final con cuentas contables) |
+| **3. Contraparte** | Múltiples contrapartes dinámicas con nombre, RUC, teléfono, dirección, rep. legal y aporte al proyecto |
+| **4. Componentes** | Intersedes, interculturalidad, interdisciplinariedad, internacionalización, posgrados |
+| **5. Diagnóstico** | Variables cuantitativas dinámicas (2 obligatorias) + Descripción del problema |
+| **6. Estudiantes e Impacto** | Tabla de estudiantes por semestre, articulación, impactos |
+| **7. Matriz de Resultados** | Tabla de 4 columnas (Cadena/Indicadores/Fuentes/Avance) |
+| **8. Participantes** | Tabla horizontal escroleable de 10 columnas |
+| **9. Firmas** | Elaborado / Revisado / Aprobado |
+| **10. Anexos** | Checklist de documentos adjuntos |
 | **Footer** | Dirección PUCE + fecha |
 
 ---
@@ -179,62 +181,52 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 
 ---
 
-### SECCIÓN 3 — Información General de la Organización / Institución Contraparte
+### SECCIÓN 3 — Información General de la Organización / Institución Contraparte (Dinámica)
 
 ```
 ┌─────────────────────────────────────────────────────┐
 │  🏢 INFORMACIÓN GENERAL DE LA ORGANIZACIÓN           │
 │     O INSTITUCIÓN CONTRAPARTE DE LA PUCE            │
+│     [+ Agregar contraparte]                         │
 ├─────────────────────────────────────────────────────┤
-│ ┌─────────────────────────────────┐                 │
-│ │ Nombre de la institución:       │                 │
-│ │ [______________________________]│                 │
-│ └─────────────────────────────────┘                 │
-│ ┌──────────────┐  ┌──────────────┐                  │
-│ │ RUC:         │  │ Teléfono:    │                  │
-│ │ [____________]│  │ [____________]                  │
-│ └──────────────┘  └──────────────┘                  │
-│ ┌─────────────────────────────────┐                 │
-│ │ Dirección:                      │                 │
-│ │ [______________________________]│                 │
-│ └─────────────────────────────────┘                 │
-│ ┌─────────────────────────────────┐                 │
-│ │ Representante legal:            │                 │
-│ │ [______________________________]│                 │
-│ └─────────────────────────────────┘                 │
-│                                                     │
-│ ┌─────────────────────────────────┐                 │
-│ │ 📦 APORTE AL PROYECTO (mínimo 1 obligatorio)     │
-│ │                                                     │
-│ │ ☐ Materiales          ☐ RREE (Relaciones Externas) │
-│ │ ☐ Infraestructura     ☐ Transporte                │
-│ │ ☐ Hospedaje           ☐ Alimentación              │
-│ │                                                     │
-│ │ Seleccionados: [___________________________]       │
-│ │ (etiquetas/chips de los ítems marcados)            │
-│ └─────────────────────────────────┘                 │
+│                                                      │
+│  ┌─ Contraparte #1 ──────────────────── [× Eliminar]─┐│
+│  │ ┌─────────────────────────────────┐               ││
+│  │ │ Nombre de la institución:       │               ││
+│  │ │ [______________________________]│               ││
+│  │ └─────────────────────────────────┘               ││
+│  │ ┌──────────────┐  ┌──────────────┐                ││
+│  │ │ RUC:         │  │ Teléfono:    │                ││
+│  │ │ [____________]│  │ [____________]                ││
+│  │ └──────────────┘  └──────────────┘                ││
+│  │ ┌─────────────────────────────────┐               ││
+│  │ │ Dirección:                      │               ││
+│  │ │ [______________________________]│               ││
+│  │ └─────────────────────────────────┘               ││
+│  │ ┌─────────────────────────────────┐               ││
+│  │ │ Representante legal:            │               ││
+│  │ │ [______________________________]│               ││
+│  │ └─────────────────────────────────┘               ││
+│  │                                                    ││
+│  │ ┌─────────────────────────────────┐               ││
+│  │ │ 📦 APORTE AL PROYECTO (mínimo 1 obligatorio)   ││
+│  │ │ ☐ Materiales    ☐ RREE    ☐ Infraestructura    ││
+│  │ │ ☐ Transporte    ☐ Hospedaje  ☐ Alimentación    ││
+│  │ │ Seleccionados: [■■ Materiales] [■■ Transporte]  ││
+│  │ └─────────────────────────────────┘               ││
+│  └──────────────────────────────────────────────────┘│
+│                                                      │
+│  ┌─ Contraparte #2 ──────────────────── [× Eliminar]─┐│
+│  │ ... (mismos campos)                               ││
+│  └──────────────────────────────────────────────────┘│
 └─────────────────────────────────────────────────────┘
 ```
 
-**Mejoras UI:**
-- Datos de la contraparte en formato card de 2 columnas
-- Sección de **Aporte al Proyecto** con fondo ligeramente sombreado para destacar
-
-**Lógica — Aporte al Proyecto:**
-- Componente: **Checkboxes** (6 opciones) dispuestos en 2 columnas
-- Debe poder añadirse más contrapartes
-- Valores:
-  1. Materiales
-  2. Infraestructura
-  3. Hospedaje
-  4. RREE (Relaciones Externas)
-  5. Transporte
-  6. Alimentación
-- Reglas:
-  - **Mínimo 1 checkmark obligatorio** — si no hay ninguno, mostrar error de validación
-  - **Sin máximo** — se pueden seleccionar todos
-  - Cada checkbox guarda su valor booleano individual en la fuente de datos
-- Validación: `Count(colAportesSeleccionados) >= 1`
+**Lógica — Contrapartes dinámicas:**
+- Botón **"+ Agregar contraparte"** añade un nuevo bloque completo de contraparte
+- Cada contraparte tiene sus propios datos (Nombre, RUC, Teléfono, Dirección, Representante legal) y su propio Aporte al Proyecto
+- Se puede eliminar cualquier contraparte excepto si solo queda una
+- Cada contraparte debe tener al menos 1 checkmark en Aporte al proyecto
 
 ---
 
@@ -306,6 +298,8 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 │ │ ┌─────────────────────────────────┐              │
 │ │ │ Convenio internacional:         │              │
 │ │ │ [▼ Seleccionar convenio...]     │              │
+│ │ │ (Convenio PUCE-UNESCO,          │              │
+│ │ │  PUCE-OEI, PUCE-AECID)          │              │
 │ │ ├─────────────────────────────────┤              │
 │ │ │ Institución extranjera:         │              │
 │ │ │ [______________________________]│              │
@@ -321,13 +315,16 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 │ │ ⚠ VISIBLE SOLO SI ELIGE "SÍ":                   │
 │ │ ┌─────────────────────────────────┐              │
 │ │ │ Programa de posgrado vinculado: │              │
-│ │ │ [▼ Seleccionar programa...]     │              │
+│ │ │ [▼ Escribir o seleccionar...]   │              │
+│ │ │ (Combobox: escribe y selecciona)│              │
 │ │ ├─────────────────────────────────┤              │
 │ │ │ N° estudiantes de posgrado:     │              │
-│ │ │ [____]                          │              │
+│ │ │ [____] (opcional)               │              │
 │ │ ├─────────────────────────────────┤              │
 │ │ │ Coordinador del posgrado:       │              │
-│ │ │ [______________________________]│              │
+│ │ │ [▼ Escribir o seleccionar...]   │              │
+│ │ │ (Combobox: escribe y selecciona)│              │
+│ │ │ (opcional)                      │              │
 │ │ └─────────────────────────────────┘              │
 │ └─────────────────────────────────┘                 │
 └─────────────────────────────────────────────────────┘
@@ -341,10 +338,10 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 | **Interdisciplinariedad** | Radio buttons Sí/No. Si "Sí" → se registra el check (sin subcampos adicionales) |
 | **Intersedes** | Radio buttons Sí/No. Si **"No"** → no pasa nada (campos ocultos). Si **"Sí"** → se muestran: Sede PUCE participante (dropdown), Carreras intersedes vinculadas (texto) |
 | **Internacionalización** | Radio buttons Sí/No. Si **"No"** → no pasa nada. Si **"Sí"** → se muestran: Convenio internacional (dropdown), Institución extranjera (texto), País (dropdown) |
-| **Posgrados** | Radio buttons Sí/No. Si **"No"** → no pasa nada. Si **"Sí"** → se muestran: Programa de posgrado vinculado (dropdown), N° estudiantes de posgrado (numérico), Coordinador del posgrado (texto) |
+| **Posgrados** | Radio buttons Sí/No. Si "No" → no pasa nada. Si "Sí" → se muestran: Programa de posgrado vinculado (combobox: escribir+seleccionar), N° estudiantes de posgrado (numérico, opcional), Coordinador del posgrado (combobox, opcional) |
 
 - Propiedad `Visible` de cada grupo de subcampos = `rdbIntersedes.Selected.Value = "Sí"` (y análogo para los otros)
-- Los subcampos visibles por condicionalidad son **obligatorios** cuando se muestran
+- Los subcampos visibles por condicionalidad son **obligatorios** cuando se muestran (excepto N° estudiantes y Coordinador en Posgrados, que son opcionales)
 
 ---
 
@@ -356,60 +353,42 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 ┌─────────────────────────────────────────────────────┐
 │  🔍 DIAGNÓSTICO, PROBLEMA Y ACTORES INVOLUCRADOS    │
 ├─────────────────────────────────────────────────────┤
-│ ┌─────────────────────────────────┐                 │
-│ │ Descripción del problema:       │                 │
-│ │ [______________________________]│                 │
-│ │ [______________________________]│                 │
-│ │ [______________________________]│                 │
-│ └─────────────────────────────────┘                 │
+│                                                     │
+│ 📊 VARIABLES CUANTITATIVAS  [+ Agregar variable]    │
+│ ┌─────────────────────────────────────────────────┐ │
+│ │ * | [Población total afectada] [0] [personas]   │ │
+│ │ * | [N° de familias beneficiarias] [0] [familias]│ │
+│ │   | [__________________________] [0] [_______] [×]│
+│ │   | [+ Agregar variable]                         │ │
+│ │                                                 │ │
+│ │ * Obligatorias (mínimo 2: Población afectada    │ │
+│ │   y N° de familias beneficiarias)               │ │
+│ │ Las variables marcadas con * no se pueden       │ │
+│ │ eliminar. El resto son opcionales y editables.   │ │
+│ └─────────────────────────────────────────────────┘ │
 │                                                     │
 │ ┌─────────────────────────────────┐                 │
-│ │ Actores involucrados:           │                 │
+│ │ * Descripción del problema:     │                 │
 │ │ [______________________________]│                 │
 │ │ [______________________________]│                 │
-│ └─────────────────────────────────┘                 │
-│                                                     │
-│ 📊 VARIABLES CUANTITATIVAS (7)                       │
-│ ┌─────────────────────────────────┐                 │
-│ │ 1. Población total afectada:    │                 │
-│ │    [________] personas                           │
-│ ├─────────────────────────────────┤                 │
-│ │ 2. N° de familias beneficiarias:│                 │
-│ │    [________] familias                           │
-│ ├─────────────────────────────────┤                 │
-│ │ 3. Índice de pobreza (NBI) %:   │                 │
-│ │    [________] %                                   │
-│ ├─────────────────────────────────┤                 │
-│ │ 4. Tasa de desempleo local %:   │                 │
-│ │    [________] %                                   │
-│ ├─────────────────────────────────┤                 │
-│ │ 5. N° de organizaciones         │                 │
-│ │    comunitarias existentes:     │                 │
-│ │    [________]                                     │
-│ ├─────────────────────────────────┤                 │
-│ │ 6. Cobertura de servicios       │                 │
-│ │    básicos %:                   │                 │
-│ │    [________] %                                   │
-│ ├─────────────────────────────────┤                 │
-│ │ 7. Tasa de escolaridad %:       │                 │
-│ │    [________] %                                   │
-│ └─────────────────────────────────┘                 │
-│                                                     │
-│ 📝 RESUMEN PROBLEMA ATACAR                         │
-│ ┌─────────────────────────────────┐                 │
-│ │  Descripción                    │                 │
+│ │ [______________________________]│                 │
+│ │ (Obligatorio)                   │                 │
 │ └─────────────────────────────────┘                 │
 └─────────────────────────────────────────────────────┘
 ```
 
-**Mejoras UI:**
-- Variables cuantitativas: inputs numéricos con unidad de medida visible (personas, familias, %)
-- Variables cualitativas: TextArea multilínea (mínimo 50 caracteres cada una)
-- Sección de diagnóstico con fondo ligeramente diferenciado (gris muy claro `#F5F7FA`) para separar visualmente
+**Lógica — Variables Cuantitativas:**
+- Lista dinámica de variables cuantitativas con 3 campos por fila: **Nombre**, **Valor numérico**, **Unidad**
+- Las primeras 2 variables son **obligatorias** y predefinidas:
+  1. Población total afectada (personas)
+  2. N° de familias beneficiarias (familias)
+- Las variables obligatorias no se pueden eliminar ni renombrar
+- Se pueden añadir más variables libremente con el botón **"+ Agregar variable"**
+- Las variables adicionales se pueden eliminar con el botón **×**
 
 **Validaciones:**
-- Las 7 variables cuantitativas: **campos obligatorios**, numéricos (enteros o decimales según corresponda), rango 0-100 para porcentajes
-- Las 2 variables cualitativas: **campos obligatorios**, mínimo 50 caracteres cada una
+- Las 2 variables cuantitativas obligatorias deben tener valor
+- Descripción del problema: **campo obligatorio**, multilínea
 
 ---
 
@@ -458,7 +437,7 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 ├─────────────────────────────────────────────────────┤
 │ ← Deslizar horizontalmente →                        │
 │ ┌────────┬────────┬─────────┬────────┬────────┬──...──┐│
-│ │ Tipo   │Nac.    │Horas    │Fecha   │Fecha   │      ││
+│ │ Tipo   │Nac.    │ Horas estim.│Fecha   │Fecha   │      ││
 │ │ │ Partic.│        │(prog.)  │Inicio  │Final   │      ││
 │ ├────────┼────────┼─────────┼────────┼────────┼──...──┤│
 │ │ [____] │ [____] │ [_____] │[______]│[______]│      ││
@@ -467,12 +446,12 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 │ │ ...     (filas dinámicas con +AGREGAR)          ││
 │ └────────┴────────┴─────────┴────────┴────────┴──...──┘│
 │                                                    │
-│ Columnas: Tipo participante | Nacionalidad | Horas (programadas)  │
+│ Columnas: Tipo participante | Nacionalidad | Horas estimadas  │
 │ Fecha inicio | Fecha fin | Tipo documento | N° doc  │
 │ Apellidos y nombres | Carrera | Firma               │
 └─────────────────────────────────────────────────────┘
 ```
- 
+  
 **Mejoras UI:**
 - Botón **"+ Agregar participante"** que añade filas dinámicamente
 - Tabla horizontal con **scroll lateral** (Horizontal Gallery)
@@ -584,8 +563,8 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 ├─────────────────────────────────────────────────────┤
 │ ← Deslizar horizontalmente →                        │
 │ ┌────────┬────────┬─────────┬────────┬────────┬──...──┐│
-│ │ Tipo   │Nac.    │Horas    │Fecha   │Fecha   │      ││
-│ │ │ Partic.│        │(prog.)  │Inicio  │Final   │      ││
+│ │ Tipo   │Nac.    │ Horas estim.│Fecha   │Fecha   │      ││
+│ │ │ Partic.│        │Estimadas│Inicio  │Final   │      ││
 │ ├────────┼────────┼─────────┼────────┼────────┼──...──┤│
 │ │ [____] │ [____] │ [_____] │[______]│[______]│      ││
 │ │ [____] │ [____] │ [_____] │[______]│[______]│      ││
@@ -593,7 +572,7 @@ Distribución en **2 columnas** (label arriba, input abajo) para desktop, pero e
 │ │ ...     (filas dinámicas con +AGREGAR)          ││
 │ └────────┴────────┴─────────┴────────┴────────┴──...──┘│
 │                                                    │
-│ Columnas: Tipo participante | Nacionalidad | Horas (programadas)  │
+│ Columnas: Tipo participante | Nacionalidad | Horas estimadas  │
 │ Fecha inicio | Fecha fin | Tipo documento | N° doc  │
 │ Apellidos y nombres | Carrera | Firma               │
 └─────────────────────────────────────────────────────┘
@@ -708,9 +687,12 @@ Fuente: **Segoe UI** (estándar PowerApps) o **Inter** si se importa.
 | Presupuesto (Estimado) | Requerido, solo números positivos |
 | Presupuesto (Avance/Final) | Requerido solo si ese estado está seleccionado |
 | Cuenta contable | Requerido, selección desde desplegable del catálogo |
+| Variables cuantitativas | Mínimo 2 obligatorias (población afectada + familias beneficiarias), resto opcionales |
+| Descripción del problema | Requerido, multilínea |
+| Contraparte | Al menos 1 contraparte, cada una con mínimo 1 aporte |
 | Estudiantes vinculados | Al menos 1 fila completa (semestre, hombres, mujeres, total) |
-| Participantes | Al menos 1 fila completa, Horas (programadas) requerido |
-| Adjuntos obligatorios (*) | Convenio internacional requerido si aplica |
+| Participantes | Al menos 1 fila completa, Horas estimadas requerido |
+| Adjuntos obligatorios | Convenio internacional requerido si aplica |
 | Anexos | Los marcados con * son obligatorios |
 
 **Botón Guardar:** Bottom fijo con:
