@@ -50,7 +50,7 @@ interface VariableCuantitativa {
 
 interface FollowUpReportProps {
   onBack?: () => void;
-  onSave?: () => void;
+  onSave?: (tipoInforme: 'avance' | 'cierre' | null) => void;
   mode?: 'create' | 'edit';
 }
 
@@ -389,7 +389,7 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
   const [coordPosgrado, setCoordPosgrado] = useState('');
 
   /* ── Tipo de informe ── */
-  const [tipoInforme, setTipoInforme] = useState<'avance' | 'finalizacion' | null>(null);
+  const [tipoInforme, setTipoInforme] = useState<'avance' | 'cierre' | null>(null);
 
   /* ── Sección 6: Articulación funciones sustantivas ── */
   const [articulacionF, setArticulacionF] = useState<SiNo | null>(null);
@@ -656,6 +656,32 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
       <main className="flex-1 overflow-y-auto">
         <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
 
+          {/* ═══════════════ TIPO DE INFORME — al inicio del documento, solo al editar ═══════════════ */}
+          {mode === 'edit' && (
+            <section className="bg-[#003366] rounded-lg p-6 shadow-sm">
+              <label className="block text-white font-semibold mb-3 text-sm">Tipo de informe <span className="text-red-300">*</span></label>
+              <div className="flex gap-3 max-w-md">
+                {([
+                  { value: 'avance', icon: '📈', label: 'Avance' },
+                  { value: 'cierre', icon: '✅', label: 'Cierre' },
+                ] as const).map(({ value, icon, label }) => (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setTipoInforme(value)}
+                    className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg border-2 font-semibold text-sm transition-colors ${
+                      tipoInforme === value
+                        ? 'border-white bg-white text-[#003366]'
+                        : 'border-white/40 bg-transparent text-white hover:border-white'
+                    }`}
+                  >
+                    <span>{icon}</span> {label}
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
+
           {/* ═══════════════ SECCIÓN 1 — DATOS GENERALES ═══════════════ */}
           <section id="datos" className="bg-white rounded-lg border border-[#E1E4E8] p-8 shadow-sm">
             <h2 className="text-[#003366] text-xl font-semibold mb-6 flex items-center gap-2">📋 DATOS GENERALES</h2>
@@ -670,36 +696,10 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
                 <select className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] bg-white">
                   <option value="">Seleccionar estado</option>
                   <option>En ejecución</option>
-                  <option>Finalizado</option>
+                  <option>Cierre</option>
                   <option>Suspendido</option>
                 </select>
               </div>
-
-              {/* Tipo de informe — solo al editar */}
-              {mode === 'edit' && (
-                <div>
-                  <label className="block text-[#344054] font-medium mb-3 text-sm">Tipo de informe <span className="text-red-500">*</span></label>
-                  <div className="flex gap-3">
-                    {([
-                      { value: 'avance', icon: '📈', label: 'Avance' },
-                      { value: 'finalizacion', icon: '✅', label: 'Finalización' },
-                    ] as const).map(({ value, icon, label }) => (
-                      <button
-                        key={value}
-                        type="button"
-                        onClick={() => setTipoInforme(value)}
-                        className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg border-2 font-semibold text-sm transition-colors ${
-                          tipoInforme === value
-                            ? 'border-[#003366] bg-[#003366] text-white'
-                            : 'border-[#D0D5DD] bg-white text-[#344054] hover:border-[#003366]'
-                        }`}
-                      >
-                        <span>{icon}</span> {label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
 
               <div>
                 <label className="block text-[#344054] font-medium mb-2 text-sm">Unidad responsable <span className="text-red-500">*</span></label>
@@ -1510,10 +1510,10 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
               Volver
             </button>
             <div className="flex gap-3">
-              <button onClick={onSave} className="flex items-center gap-2 px-6 py-3 bg-[#F5F7FA] text-[#344054] border border-[#D0D5DD] rounded-lg font-semibold hover:bg-[#E1E4E8] transition-colors">
+              <button onClick={() => onSave?.(tipoInforme)} className="flex items-center gap-2 px-6 py-3 bg-[#F5F7FA] text-[#344054] border border-[#D0D5DD] rounded-lg font-semibold hover:bg-[#E1E4E8] transition-colors">
                 <Save size={20} /> Guardar borrador
               </button>
-              <button onClick={onSave} className="flex items-center gap-2 px-6 py-3 bg-[#12B76A] text-white rounded-lg font-semibold hover:bg-[#0F9C5A] transition-colors">
+              <button onClick={() => onSave?.(tipoInforme)} className="flex items-center gap-2 px-6 py-3 bg-[#12B76A] text-white rounded-lg font-semibold hover:bg-[#0F9C5A] transition-colors">
                 <Send size={20} /> Enviar informe
               </button>
             </div>

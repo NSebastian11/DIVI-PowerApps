@@ -26,10 +26,6 @@ export default function App() {
     setView('welcome');
   };
 
-  const finalizeProject = (id: string) => {
-    setProjects((prev) => prev.map((p) => (p.id === id ? { ...p, status: 'finalizado' } : p)));
-  };
-
   const handleReportSave = (tipoInforme: 'avance' | 'cierre' | null) => {
     setProjects((prev) =>
       prev.map((p) => {
@@ -77,7 +73,6 @@ export default function App() {
       projects={projects}
       onStartReport={startReport}
       onModifyReport={modifyReport}
-      onFinalizeProject={finalizeProject}
       onProposeProject={() => setView('propose')}
     />
   );

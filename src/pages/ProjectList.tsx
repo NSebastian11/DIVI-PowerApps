@@ -14,11 +14,10 @@ interface ProjectListProps {
   projects: Project[];
   onStartReport: (id: string) => void;
   onModifyReport: (id: string) => void;
-  onFinalizeProject: (id: string) => void;
   onProposeProject: () => void;
 }
 
-export default function ProjectList({ projects, onStartReport, onModifyReport, onFinalizeProject, onProposeProject }: ProjectListProps) {
+export default function ProjectList({ projects, onStartReport, onModifyReport, onProposeProject }: ProjectListProps) {
   const [yearFilter, setYearFilter] = useState<'todos' | number>(CURRENT_YEAR);
 
   const byYear = (p: Project) => yearFilter === 'todos' || p.year === yearFilter;
@@ -160,21 +159,12 @@ export default function ProjectList({ projects, onStartReport, onModifyReport, o
                           Ver informe
                         </button>
                       ) : (
-                        <>
-                          <button
-                            onClick={() => onModifyReport(project.id)}
-                            className="flex-1 bg-[#0056B3] text-white px-4 py-2.5 rounded-md font-semibold text-sm hover:bg-[#004494] transition-colors"
-                          >
-                            Modificar informe
-                          </button>
-                          <button
-                            onClick={() => onFinalizeProject(project.id)}
-                            title="Acción de administrador: bloquea el proyecto de forma permanente"
-                            className="flex items-center gap-1.5 bg-[#0A2540] text-white px-3 py-2.5 rounded-md font-semibold text-sm hover:bg-[#003366] transition-colors"
-                          >
-                            <Lock size={14} /> Finalizar
-                          </button>
-                        </>
+                        <button
+                          onClick={() => onModifyReport(project.id)}
+                          className="flex-1 bg-[#0056B3] text-white px-4 py-2.5 rounded-md font-semibold text-sm hover:bg-[#004494] transition-colors"
+                        >
+                          Modificar informe
+                        </button>
                       )}
                     </div>
                   </div>
