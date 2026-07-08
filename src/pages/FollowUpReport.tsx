@@ -13,6 +13,7 @@ interface Participant {
   numeroDoc: string;
   nombres: string;
   carrera: string;
+  firma: string;
 }
 
 interface StudentRow {
@@ -38,14 +39,6 @@ interface Contraparte {
   direccion: string;
   representanteLegal: string;
   aportes: Record<string, boolean>;
-}
-
-interface VariableCuantitativa {
-  id: string;
-  label: string;
-  unidad: string;
-  valor: number;
-  obligatoria: boolean;
 }
 
 interface FollowUpReportProps {
@@ -272,15 +265,16 @@ function GrupoSearchable({
 /* ============================================================ */
 export default function FollowUpReport({ onBack, onSave, mode = 'create' }: FollowUpReportProps) {
   const [activeSection, setActiveSection] = useState('datos');
-  const [participants, setParticipants] = useState<Participant[]>([
-    { id: '1', tipo: '', nacionalidad: '', horas: '', fechaInicio: '', fechaFin: '', tipoDoc: '', numeroDoc: '', nombres: '', carrera: '' },
-  ]);
+  const [codigoProyecto, setCodigoProyecto] = useState('');
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
-  /* ── Sección 1: Articulación investigación ── */
-  const [articulacionInv, setArticulacionInv] = useState<SiNo | null>(null);
-  const [lineaInv, setLineaInv] = useState('');
-  const [redAcademica, setRedAcademica] = useState('');
-  const [grupoInv, setGrupoInv] = useState('');
+  const setError = (field: string, msg: string) => setFormErrors((prev) => ({ ...prev, [field]: msg }));
+  const clearError = (field: string) => setFormErrors((prev) => { const { [field]: _, ...rest } = prev; return rest; });
+  const getError = (field: string) => formErrors[field];
+
+  const [participants, setParticipants] = useState<Participant[]>([
+    { id: '1', tipo: '', nacionalidad: '', horas: '', fechaInicio: '', fechaFin: '', tipoDoc: '', numeroDoc: '', nombres: '', carrera: '', firma: '' },
+  ]);
 
   /* ── Sección 2: Grupos prioritarios ── */
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
@@ -347,30 +341,6 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
       ...c,
       aportes: { ...c.aportes, [aporte]: !c.aportes[aporte] },
     } : c));
-  };
-
-  /* ── Sección 5: Variables cuantitativas dinámicas ── */
-  const [varsCuantitativas, setVarsCuantitativas] = useState<VariableCuantitativa[]>([
-    { id: 'v1', label: 'Población total afectada', unidad: 'personas', valor: 0, obligatoria: true },
-    { id: 'v2', label: 'N° de familias beneficiarias', unidad: 'familias', valor: 0, obligatoria: true },
-  ]);
-
-  const addVarCuantitativa = () => {
-    setVarsCuantitativas([...varsCuantitativas, {
-      id: Date.now().toString(),
-      label: '',
-      unidad: '',
-      valor: 0,
-      obligatoria: false,
-    }]);
-  };
-
-  const removeVarCuantitativa = (id: string) => {
-    setVarsCuantitativas(varsCuantitativas.filter((v) => v.id !== id));
-  };
-
-  const updateVarCuantitativa = (id: string, field: keyof VariableCuantitativa, value: string | number) => {
-    setVarsCuantitativas(varsCuantitativas.map((v) => v.id === id ? { ...v, [field]: value } : v));
   };
 
   /* ── Sección 4: Componentes ── */
@@ -503,12 +473,16 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
     setParticipants([...participants, {
       id: Date.now().toString(),
       tipo: '', nacionalidad: '', horas: '', fechaInicio: '',
-      fechaFin: '', tipoDoc: '', numeroDoc: '', nombres: '', carrera: '',
+      fechaFin: '', tipoDoc: '', numeroDoc: '', nombres: '', carrera: '', firma: '',
     }]);
   };
 
   const removeParticipant = (id: string) => {
     setParticipants(participants.filter((p) => p.id !== id));
+  };
+
+  const updateParticipant = (id: string, field: keyof Omit<Participant, 'id'>, value: string) => {
+    setParticipants(participants.map((p) => p.id === id ? { ...p, [field]: value } : p));
   };
 
   const RadioSiNo = ({ value, onChange, label }: { value: SiNo | null; onChange: (v: SiNo) => void; label?: string }) => (
@@ -620,13 +594,15 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center font-bold text-[#003366] text-xl">PUCE</div>
               <div>
-                <h1 className="text-white text-2xl font-bold mb-1">INFORMACIÓN PARCIAL DE SEGUIMIENTO</h1>
+                <h1 className="text-white text-2xl font-bold mb-1">INFORME PARCIAL DE SEGUIMIENTO</h1>
                 <p className="text-white/90 text-lg">Proyectos de Servicio Comunitario</p>
               </div>
             </div>
             <div className="flex flex-col items-end">
               <label className="text-white/80 text-sm mb-1">Código:</label>
-              <input type="text" placeholder="XXXX-XXX" className="px-4 py-2 rounded-lg border-2 border-white/20 bg-white/10 text-white placeholder-white/50 focus:outline-none focus:border-white/50 w-40" />
+              <input type="text" value={codigoProyecto} onChange={(e) => setCodigoProyecto(e.target.value)} placeholder="XXXX-XXX"
+                className="px-4 py-2 rounded-lg border-2 border-white/20 bg-white/10 text-white placeholder-white/50 focus:outline-none focus:border-white/50 w-40" />
+              {getError('codigo') && <p className="text-xs text-[#FF9B9B] mt-1">{getError('codigo')}</p>}
             </div>
           </div>
         </div>
@@ -721,12 +697,14 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
 
               <div>
                 <label className="block text-[#344054] font-medium mb-2 text-sm">Correo <span className="text-red-500">*</span></label>
-                <input type="email" className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                <input type="email" className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="correo@ejemplo.com" />
+                {getError('correo') && <p className="text-xs text-[#D92D20] mt-1">{getError('correo')}</p>}
               </div>
 
               <div>
                 <label className="block text-[#344054] font-medium mb-2 text-sm">Teléfono <span className="text-red-500">*</span></label>
-                <input type="tel" className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                <input type="tel" className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="0999999999" />
+                {getError('telefono') && <p className="text-xs text-[#D92D20] mt-1">{getError('telefono')}</p>}
               </div>
 
               <div>
@@ -750,23 +728,7 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-[#344054] font-medium mb-2 text-sm">Programa</label>
-                <input type="text" className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
-              </div>
-
-              {/* Articulación con investigación */}
-              <div className="md:col-span-2 bg-[#F5F7FA] rounded-lg p-5 border border-[#D0D5DD]">
-                <label className="block text-[#344054] font-medium mb-3 text-sm">
-                  ¿Articulación con investigación PUCE? <span className="text-red-500">*</span>
-                </label>
-                <RadioSiNo value={articulacionInv} onChange={setArticulacionInv} />
-                {articulacionInv === 'si' && (
-                  <div className="mt-4 grid md:grid-cols-3 gap-4 p-4 bg-white rounded-lg border border-[#D0D5DD]">
-                    <SelectField label="Línea de investigación" value={lineaInv} onChange={setLineaInv} options={LINEAS_INVESTIGACION} required />
-                    <SelectField label="Red académica articulada" value={redAcademica} onChange={setRedAcademica} options={REDES_ACADEMICAS} required />
-                    <SelectField label="Grupo de investigación" value={grupoInv} onChange={setGrupoInv} options={GRUPOS_INVESTIGACION} required />
-                  </div>
-                )}
+                <InputField label="Programa" value="" onChange={() => {}} placeholder="Describa el programa..." />
               </div>
             </div>
           </section>
@@ -816,7 +778,7 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
                 </div>
               </div>
 
-              <InputField label="Institución contraparte" value="" onChange={() => {}} />
+              <InputField label="Beneficiarios directos" value="" onChange={() => {}} required placeholder="Describa los beneficiarios..." />
 
               {/* Presupuesto — Sistema de 3 estados */}
               <div className="bg-[#F5F7FA] rounded-lg p-6 border border-[#D0D5DD]">
@@ -1005,7 +967,7 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
           {/* ═══════════════ SECCIÓN 3 — ORGANIZACIÓN CONTRAPARTE ═══════════════ */}
           <section id="contraparte" className="bg-white rounded-lg border border-[#E1E4E8] p-8 shadow-sm">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-[#003366] text-xl font-semibold flex items-center gap-2">🏢 INFORMACIÓN GENERAL DE LA ORGANIZACIÓN O INSTITUCIÓN CONTRAPARTE DE LA PUCE</h2>
+              <h2 className="text-[#003366] text-xl font-semibold flex items-center gap-2">🏢 ORGANIZACIÓN CONTRAPARTE</h2>
               <button onClick={addContraparte} className="flex items-center gap-1 px-4 py-2 bg-[#003366] text-white text-sm rounded-lg hover:bg-[#002952] transition-colors">
                 <Plus size={16} /> Agregar contraparte
               </button>
@@ -1154,57 +1116,43 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
             <h2 className="text-[#003366] text-xl font-semibold mb-6 flex items-center gap-2">🔍 DIAGNÓSTICO, PROBLEMA Y ACTORES INVOLUCRADOS</h2>
             <div className="space-y-6">
 
-              {/* Variables cuantitativas dinámicas */}
-              <div className="bg-[#F5F7FA] rounded-lg p-5 border border-[#D0D5DD]">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-[#003366] font-semibold text-sm flex items-center gap-2">📊 VARIABLES CUANTITATIVAS</h3>
-                  <button onClick={addVarCuantitativa} className="flex items-center gap-1 px-3 py-2 bg-[#003366] text-white text-xs rounded-lg hover:bg-[#002952] transition-colors">
-                    <Plus size={14} /> Agregar variable
-                  </button>
-                </div>
-                <p className="text-xs text-[#344054] mb-4">Las primeras 2 variables son obligatorias. Puede añadir más según sea necesario.</p>
+              {/* Descripción del problema (obligatorio, ≥50 caracteres) */}
+              <TextAreaField label="Descripción del problema" value="" onChange={() => {}} rows={4} required placeholder="Describa detalladamente el problema que aborda el proyecto (mín. 50 caracteres)..." />
 
-                <div className="space-y-3">
-                  {varsCuantitativas.map((v) => (
+              {/* Actores involucrados (obligatorio, ≥50 caracteres) */}
+              <TextAreaField label="Actores involucrados" value="" onChange={() => {}} rows={4} required placeholder="Identifique los actores involucrados en el proyecto (mín. 50 caracteres)..." />
+
+              {/* Variables cuantitativas — fijas (7 obligatorias) */}
+              <div className="bg-[#F5F7FA] rounded-lg p-5 border border-[#D0D5DD]">
+                <h3 className="text-[#003366] font-semibold mb-4 flex items-center gap-2 text-sm">📊 VARIABLES CUANTITATIVAS (7) — obligatorias</h3>
+                <div className="grid md:grid-cols-2 gap-x-6 gap-y-4">
+                  {[
+                    { id: 'v1', label: 'Población total afectada', unidad: 'personas', rango: false },
+                    { id: 'v2', label: 'N° de familias beneficiarias', unidad: 'familias', rango: false },
+                    { id: 'v3', label: 'Índice de pobreza (NBI)', unidad: '%', rango: true },
+                    { id: 'v4', label: 'Tasa de desempleo local', unidad: '%', rango: true },
+                    { id: 'v5', label: 'N° de organizaciones comunitarias', unidad: '', rango: false },
+                    { id: 'v6', label: 'Cobertura servicios básicos', unidad: '%', rango: true },
+                    { id: 'v7', label: 'Tasa de escolaridad', unidad: '%', rango: true },
+                  ].map((v) => (
                     <div key={v.id} className="flex items-center gap-3 bg-white rounded-lg border border-[#D0D5DD] p-3">
-                      <span className="text-xs font-bold text-[#003366] w-6 text-center">{v.obligatoria ? '*' : ''}</span>
-                      <input
-                        type="text"
-                        value={v.label}
-                        onChange={(e) => updateVarCuantitativa(v.id, 'label', e.target.value)}
-                        placeholder="Nombre de la variable..."
-                        readOnly={v.obligatoria}
-                        className={`flex-1 px-3 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm ${v.obligatoria ? 'bg-gray-100 text-[#344054]' : ''}`}
-                      />
+                      <span className="text-xs font-medium text-[#344054] flex-1">{v.label}:</span>
                       <input
                         type="number"
                         min={0}
-                        value={v.valor || ''}
-                        onChange={(e) => updateVarCuantitativa(v.id, 'valor', Number(e.target.value))}
+                        max={v.rango ? 100 : undefined}
                         placeholder="0"
-                        className="w-28 px-3 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm"
+                        className="w-24 px-3 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm text-right"
                       />
-                      <input
-                        type="text"
-                        value={v.unidad}
-                        onChange={(e) => updateVarCuantitativa(v.id, 'unidad', e.target.value)}
-                        placeholder="Unidad"
-                        readOnly={v.obligatoria}
-                        className={`w-28 px-3 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm ${v.obligatoria ? 'bg-gray-100 text-[#344054]' : ''}`}
-                      />
-                      {!v.obligatoria && (
-                        <button onClick={() => removeVarCuantitativa(v.id)} className="text-red-500 hover:bg-red-50 rounded p-1.5">
-                          <Trash2 size={16} />
-                        </button>
-                      )}
-                      {v.obligatoria && <div className="w-9" />}
+                      {v.unidad && <span className="text-xs text-[#344054] w-14">{v.unidad}</span>}
                     </div>
                   ))}
                 </div>
+                <p className="text-xs text-[#344054] mt-3">Los valores porcentuales (%) deben estar en el rango 0–100.</p>
               </div>
 
-              {/* Descripción del problema (obligatorio) */}
-              <TextAreaField label="Descripción del problema" value="" onChange={() => {}} rows={5} required placeholder="Describa detalladamente el problema que aborda el proyecto..." />
+              {/* Resumen del problema */}
+              <TextAreaField label="Resumen del problema" value="" onChange={() => {}} rows={3} placeholder="Sintetice el problema central del proyecto..." />
             </div>
           </section>
 
@@ -1303,10 +1251,12 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
                 <p className="text-xs text-[#344054] mt-2">Total de estudiantes vinculados: <span className="font-semibold text-[#003366]">{totalEstudiantesVinculados}</span></p>
               </div>
 
-              {/* Articulación de funciones sustantivas */}
+              {/* Articulación funciones sustantivas — Investigación */}
               <div className="bg-[#F5F7FA] rounded-lg p-5 border border-[#D0D5DD]">
-                <label className="block text-[#344054] font-medium mb-3 text-sm">Articulación de funciones sustantivas</label>
-                <RadioSiNo value={articulacionF} onChange={setArticulacionF} />
+                <div className="flex items-center gap-4 mb-3">
+                  <label className="block text-[#344054] font-medium text-sm">¿Se articula con Investigación? <span className="text-red-500">*</span></label>
+                  <RadioSiNo value={articulacionF} onChange={setArticulacionF} />
+                </div>
 
                 {articulacionF === 'si' && (
                   <div className="mt-4 grid md:grid-cols-3 gap-4 p-4 bg-white rounded-lg border border-[#D0D5DD]">
@@ -1377,28 +1327,39 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
 
             <div className="overflow-x-auto">
               <div className="min-w-max">
-                <div className="grid grid-cols-10 gap-2 mb-2 bg-[#003366] text-white p-3 rounded-t-lg">
-                  <div className="text-sm font-semibold">Tipo</div>
+                <div className="grid grid-cols-11 gap-2 mb-2 bg-[#003366] text-white p-3 rounded-t-lg">
+                  <div className="text-sm font-semibold">Tipo partic.</div>
                   <div className="text-sm font-semibold">Nacionalidad</div>
-                  <div className="text-sm font-semibold">Horas estimadas</div>
+                  <div className="text-sm font-semibold">Horas (prog.)</div>
                   <div className="text-sm font-semibold">Fecha inicio</div>
                   <div className="text-sm font-semibold">Fecha fin</div>
                   <div className="text-sm font-semibold">Tipo doc.</div>
                   <div className="text-sm font-semibold">N° doc.</div>
                   <div className="text-sm font-semibold col-span-2">Apellidos y nombres</div>
+                  <div className="text-sm font-semibold">Carrera</div>
                   <div className="text-sm font-semibold">Acciones</div>
                 </div>
 
                 {participants.map((p, i) => (
-                  <div key={p.id} className={`grid grid-cols-10 gap-2 p-3 border-b border-[#E1E4E8] ${i % 2 === 0 ? 'bg-[#F5F7FA]' : 'bg-white'}`}>
-                    <input type="text" className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="Tipo" />
-                    <input type="text" className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="País" />
-                    <input type="number" className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="0" />
-                    <input type="date" className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" />
-                    <input type="date" className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" />
-                    <input type="text" className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="CI/Pasap." />
-                    <input type="text" className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="Número" />
-                    <input type="text" className="col-span-2 px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="Nombre completo" />
+                  <div key={p.id} className={`grid grid-cols-11 gap-2 p-3 border-b border-[#E1E4E8] ${i % 2 === 0 ? 'bg-[#F5F7FA]' : 'bg-white'}`}>
+                    <input type="text" value={p.tipo} onChange={(e) => updateParticipant(p.id, 'tipo', e.target.value)}
+                      className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="Tipo" />
+                    <input type="text" value={p.nacionalidad} onChange={(e) => updateParticipant(p.id, 'nacionalidad', e.target.value)}
+                      className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="País" />
+                    <input type="number" value={p.horas} onChange={(e) => updateParticipant(p.id, 'horas', e.target.value)}
+                      className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="0" />
+                    <input type="date" value={p.fechaInicio} onChange={(e) => updateParticipant(p.id, 'fechaInicio', e.target.value)}
+                      className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                    <input type="date" value={p.fechaFin} onChange={(e) => updateParticipant(p.id, 'fechaFin', e.target.value)}
+                      className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                    <input type="text" value={p.tipoDoc} onChange={(e) => updateParticipant(p.id, 'tipoDoc', e.target.value)}
+                      className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="CI/Pasap." />
+                    <input type="text" value={p.numeroDoc} onChange={(e) => updateParticipant(p.id, 'numeroDoc', e.target.value)}
+                      className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="Número" />
+                    <input type="text" value={p.nombres} onChange={(e) => updateParticipant(p.id, 'nombres', e.target.value)}
+                      className="col-span-2 px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="Nombre completo" />
+                    <input type="text" value={p.carrera} onChange={(e) => updateParticipant(p.id, 'carrera', e.target.value)}
+                      className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="Carrera" />
                     <button onClick={() => removeParticipant(p.id)} className="flex items-center justify-center p-2 text-red-500 hover:bg-red-50 rounded transition-colors">
                       <Trash2 size={18} />
                     </button>
@@ -1418,7 +1379,7 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
               {[
                 { title: 'ELABORADO POR', subtitle: 'Docente Líder del Proyecto' },
                 { title: 'REVISADO POR', subtitle: 'Decano de Unidad' },
-                { title: 'APROBADO', subtitle: 'Dirección de Vinculación' },
+                { title: 'APROBADO POR', subtitle: 'Dirección de Vinculación' },
               ].map((block) => (
                 <div key={block.title} className="border border-[#D0D5DD] rounded-lg p-6">
                   <h3 className="font-semibold text-[#003366] mb-4">{block.title}</h3>
@@ -1435,68 +1396,51 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
             <FileUploadBtn section="firmas" label="📎 Adjuntar documento de firmas escaneado" />
           </section>
 
-          {/* ═══════════════ SECCIÓN 10 — RESUMEN DE ANEXOS ═══════════════ */}
+          {/* ═══════════════ SECCIÓN 10 — ANEXOS ═══════════════ */}
           <section id="anexos" className="bg-white rounded-lg border border-[#E1E4E8] p-8 shadow-sm">
-            <h2 className="text-[#003366] text-xl font-semibold mb-6 flex items-center gap-2">📎 RESUMEN DE ANEXOS</h2>
-            <p className="text-sm text-[#344054] mb-6">Verifique que todos los documentos requeridos hayan sido adjuntados en sus respectivas secciones.</p>
+            <h2 className="text-[#003366] text-xl font-semibold mb-6 flex items-center gap-2">📎 ANEXOS</h2>
+            <p className="text-xs text-[#D92D20] mb-4">* Documentos obligatorios</p>
 
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-[#003366] text-white">
-                    <th className="border border-[#D0D5DD] px-4 py-3 text-left text-sm font-semibold">Documento</th>
-                    <th className="border border-[#D0D5DD] px-4 py-3 text-left text-sm font-semibold">Sección asociada</th>
-                    <th className="border border-[#D0D5DD] px-4 py-3 text-center text-sm font-semibold">Estado</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    { doc: 'Acta de entrega-recepción de productos', section: 'alcance' as SectionKey, label: 'Alcance' },
-                    { doc: 'Convenio / Carta de compromiso', section: 'contraparte' as SectionKey, label: 'Contraparte' },
-                    ...(internacionalizacion === 'si'
-                      ? [{ doc: 'Documento de convenio internacional', section: 'componentes' as SectionKey, label: 'Componentes' }]
-                      : []),
-                    { doc: 'Reporte banner de estudiantes', section: 'estudiantes' as SectionKey, label: 'Estudiantes' },
-                    { doc: 'Listado firmado de participantes', section: 'participantes' as SectionKey, label: 'Participantes' },
-                    { doc: 'Documento de firmas escaneado', section: 'firmas' as SectionKey, label: 'Firmas' },
-                  ].map((row, i) => {
-                    const hasFile = sectionFiles[row.section].length > 0;
-                    return (
-                      <tr key={row.doc} className={i % 2 === 0 ? 'bg-[#F5F7FA]' : 'bg-white'}>
-                        <td className="border border-[#D0D5DD] px-4 py-3 text-sm text-[#344054]">{row.doc}</td>
-                        <td className="border border-[#D0D5DD] px-4 py-3 text-sm text-[#344054]">{row.label}</td>
-                        <td className="border border-[#D0D5DD] px-4 py-3 text-center">
-                          {hasFile ? (
-                            <span className="inline-flex items-center gap-1 text-[#12B76A] font-medium text-sm">
-                              ✅ Adjunto
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1 text-[#D92D20] font-medium text-sm">
-                              ⚠ Pendiente
-                            </span>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+            <div className="space-y-3">
+              {/* Documentos anexos checklist */}
+              {[
+                { id: 'acta', label: 'Acta de entrega-recepción de productos', obligatorio: true },
+                { id: 'banner', label: 'Reporte banner de estudiantes', obligatorio: true },
+                ...(internacionalizacion === 'si'
+                  ? [{ id: 'convenio-int', label: 'Convenio internacional (requerido por internacionalización)', obligatorio: true }]
+                  : []),
+                { id: 'convenio', label: 'Convenio / Carta de compromiso', obligatorio: false },
+                { id: 'listado', label: 'Listado firmado de participantes', obligatorio: false },
+                { id: 'firmas-doc', label: 'Documento de firmas escaneado', obligatorio: false },
+                { id: 'otros', label: 'Otros documentos', obligatorio: false },
+              ].map((doc) => (
+                <label key={doc.id} className={`flex items-center gap-3 p-4 border rounded-xl cursor-pointer transition-colors ${
+                  doc.obligatorio
+                    ? 'border-[#D0D5DD] bg-[#F5F7FA] hover:bg-[#EEF1F5]'
+                    : 'border-[#D0D5DD] bg-white hover:bg-[#F5F7FA]'
+                }`}>
+                  <input
+                    type="checkbox"
+                    className="w-5 h-5 text-[#003366] rounded focus:ring-[#003366]"
+                  />
+                  <span className="flex-1 text-sm text-[#344054]">
+                    {doc.obligatorio && <span className="text-[#D92D20] mr-1">*</span>}
+                    {doc.label}
+                  </span>
+                  {doc.obligatorio && <span className="text-xs text-[#D92D20] font-medium">Obligatorio</span>}
+                </label>
+              ))}
             </div>
 
-            <div className="mt-6 p-4 bg-[#F5F7FA] rounded-lg border border-[#D0D5DD]">
-              <div className="flex items-center gap-3">
-                <FileText size={24} className="text-[#003366]" />
-                <div>
-                  <p className="text-sm font-medium text-[#344054]">
-                    Archivos adjuntos: {Object.values(sectionFiles).reduce((sum, files) => sum + files.length, 0)} en total
-                  </p>
-                  <p className="text-xs text-[#344054]/70">
-                    {Object.values(sectionFiles).every((files) => files.length > 0)
-                      ? '✅ Todos los documentos requeridos han sido adjuntados.'
-                      : '⚠️ Faltan documentos por adjuntar en algunas secciones.'}
-                  </p>
-                </div>
-              </div>
+            {/* Adjuntar archivos */}
+            <FileUploadBtn section="alcance" label="📎 Adjuntar archivos..." />
+
+            <div className="mt-6 p-4 bg-[#FFF9F0] rounded-lg border border-[#FFD9A0] flex items-start gap-3">
+              <span className="text-lg">⚠️</span>
+              <p className="text-sm text-[#344054]">
+                Los documentos marcados con <span className="text-[#D92D20] font-medium">*</span> son obligatorios.
+                {internacionalizacion === 'si' && ' El convenio internacional es requerido porque el componente de internacionalización está activo.'}
+              </p>
             </div>
           </section>
         </div>
