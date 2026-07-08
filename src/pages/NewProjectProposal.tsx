@@ -34,6 +34,50 @@ interface ImpactoEntry {
   descripcion: string;
 }
 
+interface ActividadML {
+  actividad: string;
+  indicadores: string;
+  fuentesVerificacion: string;
+  supuestos: string;
+  responsable: string;
+}
+
+interface ResultadoML {
+  resultado: string;
+  indicadores: string;
+  fuentesVerificacion: string;
+  supuestos: string;
+  responsable: string;
+  actividades: ActividadML[];
+}
+
+type MLSubView = 'main' | 'resultado' | 'actividad';
+
+/* ───────── Datos geográficos Ecuador ───────── */
+const PARROQUIAS_QUITO_URBANAS = [
+  'Belisario Quevedo', 'Carcelén', 'Centro Histórico', 'Chimbacalle', 'Chillogallo',
+  'Chilibulo', 'Cochapamba', 'Comité del Pueblo', 'Cotocollao', 'El Condado',
+  'El Inca', 'Guamaní', 'Iñaquito', 'Itchimbía', 'Jipijapa', 'Kennedy',
+  'La Argelia', 'La Concepción', 'La Ecuatoriana', 'La Ferroviaria', 'La Libertad',
+  'La Magdalena', 'La Mena', 'Mariscal Sucre', 'Ponceano', 'Puengasí',
+  'Quitumbe', 'Rumipamba', 'San Bartolo', 'San Juan', 'Solanda', 'Turubamba',
+];
+const PARROQUIAS_QUITO_RURALES = [
+  'Alangasí', 'Amaguaña', 'Atahualpa', 'Calacalí', 'Calderón', 'Chavezpamba',
+  'Checa (Chilpa)', 'El Quinche', 'Gualea', 'Guangopolo', 'Guayllabamba',
+  'La Merced', 'Llano Chico', 'Lloa', 'Nanegal', 'Nanegalito', 'Nayón',
+  'Nono', 'Pacto', 'Perucho', 'Pifo', 'Píntag', 'Pomasqui', 'Puéllaro',
+  'Puembo', 'San Antonio de Pichincha', 'San José de Minas', 'Tababela',
+  'Tumbaco', 'Yaruquí', 'Zámbiza',
+];
+const PROVINCIAS_ECUADOR = [
+  'Azuay', 'Bolívar', 'Cañar', 'Carchi', 'Chimborazo', 'Cotopaxi',
+  'El Oro', 'Esmeraldas', 'Galápagos', 'Guayas', 'Imbabura', 'Loja',
+  'Los Ríos', 'Manabí', 'Morona Santiago', 'Napo', 'Orellana', 'Pastaza',
+  'Pichincha', 'Santa Elena', 'Santo Domingo de los Tsáchilas', 'Sucumbíos',
+  'Tungurahua', 'Zamora Chinchipe',
+];
+
 /* ───────── Opciones de catálogo real (PowerApps) ───────── */
 const OPCIONES_TIPO = ['Vinculación'];
 const OPCIONES_ORIGEN = ['Carta de pedido de la comunidad, grupo u organización', 'Convenio interinstitucional', 'Iniciativa PUCE'];
@@ -320,44 +364,8 @@ const SECTIONS: SectionConfig[] = [
     ],
   },
   {
-    id: 'marcoLogicoOG', icon: '🎯', title: 'Marco Lógico - Objetivo General (OG)',
-    fields: [
-      { key: 'ogAvance', label: 'OG_Avance', type: 'text' },
-      { key: 'ogFuentes', label: 'OG_Fuentes', type: 'text' },
-      { key: 'ogIndicadores', label: 'OG_Indicadores', type: 'text' },
-      { key: 'ogResultados', label: 'OG_Resultados', type: 'text' },
-      { key: 'ogSupuestos', label: 'OG_SUPUESTOS', type: 'text' },
-    ],
-  },
-  {
-    id: 'marcoLogicoOE', icon: '🎯', title: 'Marco Lógico - Objetivo Específico (OE)',
-    fields: [
-      { key: 'oeAvance', label: 'OE_Avance', type: 'text' },
-      { key: 'oeFuentes', label: 'OE_Fuentes', type: 'text' },
-      { key: 'oeIndicadores', label: 'OE_Indicadores', type: 'text' },
-      { key: 'oeResultados', label: 'OE_Resultados', type: 'text' },
-      { key: 'oeSupuestos', label: 'OE_Supuestos', type: 'text' },
-    ],
-  },
-  {
-    id: 'marcoLogicoA', icon: '🛠️', title: 'Marco Lógico - Actividades (A)',
-    fields: [
-      { key: 'aFuentes', label: 'A_Fuentes', type: 'text' },
-      { key: 'aIndicadores', label: 'A_Indicadores', type: 'text' },
-      { key: 'aResultados', label: 'A_Resultados', type: 'text' },
-      { key: 'aSupuestos', label: 'A_Supuestos', type: 'text' },
-    ],
-  },
-  {
-    id: 'marcoLogicoR', icon: '📊', title: 'Marco Lógico - Resultados (R)',
-    fields: [
-      { key: 'rEtapa', label: 'R_Etapa', type: 'text' },
-      { key: 'rFuentes', label: 'R_Fuentes', type: 'text' },
-      { key: 'rIndicadores', label: 'R_Indicadores', type: 'text' },
-      { key: 'rResponsable', label: 'R_Responsable', type: 'text' },
-      { key: 'rResultados', label: 'R_Resultados', type: 'text' },
-      { key: 'rSupuestos', label: 'R_Supuestos', type: 'text' },
-    ],
+    id: 'marcoLogico', icon: '🎯', title: 'Marco Lógico',
+    fields: [],
   },
   {
     id: 'presupuesto', icon: '💰', title: 'Presupuesto',
@@ -559,6 +567,110 @@ function FieldRenderer({ field, value, onChange, showError }: {
 }
 
 /* ============================================================ */
+/*  SEARCHABLE SELECT (combobox)                                 */
+/* ============================================================ */
+interface SearchableSelectProps {
+  value: string;
+  onChange: (val: string) => void;
+  placeholder?: string;
+  groups?: { label: string; options: string[] }[];
+  options?: string[];
+  className?: string;
+}
+
+function SearchableSelect({ value, onChange, placeholder = 'Buscar...', groups, options = [], className = '' }: SearchableSelectProps) {
+  const [query, setQuery] = useState('');
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  const allOptions = groups ? groups.flatMap((g) => g.options) : options;
+  const lq = query.toLowerCase();
+  const filtered = lq ? allOptions.filter((o) => o.toLowerCase().includes(lq)) : allOptions;
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (wrapRef.current && !wrapRef.current.contains(e.target as Node)) {
+        setOpen(false);
+        setQuery('');
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const handleSelect = (opt: string) => {
+    onChange(opt);
+    setQuery('');
+    setOpen(false);
+  };
+
+  const baseCls = `w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#003366] ${className}`;
+  const borderCls = open ? 'border-[#003366]' : 'border-[#D0D5DD]';
+
+  const renderList = () => {
+    if (filtered.length === 0) {
+      return (
+        <div className="px-3 py-3 text-sm text-[#6B7280] italic">Sin resultados para "{query}"</div>
+      );
+    }
+    if (groups && !lq) {
+      return groups.map((g) => (
+        <div key={g.label}>
+          <div className="px-3 py-1.5 text-xs font-bold text-[#6B7280] uppercase tracking-wide bg-[#F5F7FA] sticky top-0">
+            {g.label}
+          </div>
+          {g.options.map((opt) => (
+            <div
+              key={opt}
+              onMouseDown={() => handleSelect(opt)}
+              className={`px-4 py-2 text-sm cursor-pointer transition-colors ${
+                opt === value ? 'bg-[#DBEAFE] font-semibold text-[#003366]' : 'text-[#344054] hover:bg-[#EFF6FF]'
+              }`}
+            >
+              {opt}
+            </div>
+          ))}
+        </div>
+      ));
+    }
+    return filtered.map((opt) => (
+      <div
+        key={opt}
+        onMouseDown={() => handleSelect(opt)}
+        className={`px-4 py-2 text-sm cursor-pointer transition-colors ${
+          opt === value ? 'bg-[#DBEAFE] font-semibold text-[#003366]' : 'text-[#344054] hover:bg-[#EFF6FF]'
+        }`}
+      >
+        {opt}
+      </div>
+    ));
+  };
+
+  return (
+    <div ref={wrapRef} className="relative">
+      <div className="relative">
+        <input
+          type="text"
+          value={open ? query : value}
+          placeholder={open ? 'Escriba para buscar...' : (value || placeholder)}
+          onFocus={() => { setOpen(true); setQuery(''); }}
+          onChange={(e) => { setQuery(e.target.value); }}
+          className={`${baseCls} ${borderCls} pr-8`}
+        />
+        <span className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#6B7280] pointer-events-none">
+          {open ? <Search size={14} /> : <ChevronDown size={14} />}
+        </span>
+      </div>
+      {open && (
+        <div className="absolute z-50 w-full mt-1 bg-white border border-[#D0D5DD] rounded-lg shadow-xl max-h-64 overflow-y-auto">
+          {renderList()}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ============================================================ */
 /*  COMPONENTE PRINCIPAL                                         */
 /* ============================================================ */
 export default function NewProjectProposal({ onBack, onSave }: NewProjectProposalProps) {
@@ -567,6 +679,19 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [showErrors, setShowErrors] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
+
+  /* ── Marco Lógico sub-navigation ── */
+  const [mlSubView, setMLSubView] = useState<MLSubView>('main');
+  const [mlResultadoEdit, setMLResultadoEdit] = useState<ResultadoML>({
+    resultado: '', indicadores: '', fuentesVerificacion: '', supuestos: '', responsable: '', actividades: [],
+  });
+  const [mlResultadoEditIdx, setMLResultadoEditIdx] = useState<number | null>(null);
+  const [mlActividadEdit, setMLActividadEdit] = useState<ActividadML>({
+    actividad: '', indicadores: '', fuentesVerificacion: '', supuestos: '', responsable: '',
+  });
+  const [mlActividadEditIdx, setMLActividadEditIdx] = useState<number | null>(null);
+  const [mlSelectedActividadIdx, setMLSelectedActividadIdx] = useState<number | null>(null);
+  const [mlSelectedResultadoIdx, setMLSelectedResultadoIdx] = useState<number | null>(null);
 
   const updateField = (key: string, value: any) => setFormData((prev) => ({ ...prev, [key]: value }));
 
@@ -841,6 +966,158 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
             </div>
           </div>
         </div>
+
+        {/* ── Ubicación del proyecto ── */}
+        <div className="mt-6 pt-6 border-t border-[#E1E4E8]">
+          <h3 className="text-[#003366] font-semibold mb-4 flex items-center gap-2 text-sm">📍 UBICACIÓN DEL PROYECTO</h3>
+
+          <div className="mb-5">
+            <p className="text-sm font-medium text-[#344054] mb-2">
+              ¿El proyecto se desarrolla dentro del Distrito Metropolitano de Quito?
+            </p>
+            <div className="flex gap-6">
+              {(['SI', 'NO'] as const).map((opt) => (
+                <label key={opt} className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="esQuito"
+                    value={opt}
+                    checked={formData.esQuito === opt}
+                    onChange={() => updateField('esQuito', opt)}
+                    className="accent-[#003366] w-4 h-4"
+                  />
+                  <span className="text-sm font-semibold text-[#344054]">{opt}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {formData.esQuito === 'SI' && (
+            <div className="grid md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block text-xs font-semibold text-[#344054] mb-1.5">Parroquia (Quito)</label>
+                <SearchableSelect
+                  value={formData.parroquiaQuito || ''}
+                  onChange={(v) => updateField('parroquiaQuito', v)}
+                  placeholder="— Seleccione parroquia —"
+                  groups={[
+                    { label: 'Parroquias Urbanas', options: PARROQUIAS_QUITO_URBANAS },
+                    { label: 'Parroquias Rurales', options: PARROQUIAS_QUITO_RURALES },
+                  ]}
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-[#344054] mb-1.5">Dirección</label>
+                <input
+                  type="text"
+                  placeholder="Calle, número, barrio..."
+                  value={formData.direccionUbicacion || ''}
+                  onChange={(e) => updateField('direccionUbicacion', e.target.value)}
+                  className="w-full px-3 py-2.5 border border-[#D0D5DD] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]"
+                />
+              </div>
+            </div>
+          )}
+
+          {formData.esQuito === 'NO' && (
+            <div className="grid md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block text-xs font-semibold text-[#344054] mb-1.5">Provincia</label>
+                <SearchableSelect
+                  value={formData.provinciaFuera || ''}
+                  onChange={(v) => updateField('provinciaFuera', v)}
+                  placeholder="— Seleccione provincia —"
+                  options={PROVINCIAS_ECUADOR}
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-[#344054] mb-1.5">Cantón</label>
+                <input
+                  type="text"
+                  placeholder="Nombre del cantón..."
+                  value={formData.cantonFuera || ''}
+                  onChange={(e) => updateField('cantonFuera', e.target.value)}
+                  className="w-full px-3 py-2.5 border border-[#D0D5DD] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-[#344054] mb-1.5">Parroquia</label>
+                <input
+                  type="text"
+                  placeholder="Nombre de la parroquia..."
+                  value={formData.parroquiaFuera || ''}
+                  onChange={(e) => updateField('parroquiaFuera', e.target.value)}
+                  className="w-full px-3 py-2.5 border border-[#D0D5DD] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-[#344054] mb-1.5">Dirección</label>
+                <input
+                  type="text"
+                  placeholder="Calle, número, referencia..."
+                  value={formData.direccionUbicacion || ''}
+                  onChange={(e) => updateField('direccionUbicacion', e.target.value)}
+                  className="w-full px-3 py-2.5 border border-[#D0D5DD] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]"
+                />
+              </div>
+            </div>
+          )}
+
+          {(formData.esQuito === 'SI' || formData.esQuito === 'NO') && (
+            <div className="mt-2">
+              <label className="block text-xs font-semibold text-[#344054] mb-1.5">
+                Enlace del mapa (Google Maps)
+              </label>
+              <input
+                type="url"
+                placeholder="Pegue aquí el enlace de Google Maps..."
+                value={formData.enlaceUbicacion || ''}
+                onChange={(e) => updateField('enlaceUbicacion', e.target.value)}
+                className="w-full px-3 py-2.5 border border-[#D0D5DD] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#003366] mb-2"
+              />
+              <p className="text-xs text-[#6B7280] mb-3">
+                Para previsualizar el mapa: en Google Maps use{' '}
+                <strong>Compartir → Insertar un mapa</strong> y copie el <code>src</code> del iframe.
+              </p>
+              {formData.enlaceUbicacion && (
+                formData.enlaceUbicacion.includes('maps/embed') ? (
+                  <div className="rounded-lg overflow-hidden border border-[#D0D5DD] shadow-sm">
+                    <iframe
+                      src={formData.enlaceUbicacion}
+                      width="100%"
+                      height="300"
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      className="block"
+                      title="Vista previa del mapa"
+                    />
+                  </div>
+                ) : (
+                  <div className="bg-[#FFF8E6] border border-[#FDE68A] rounded-lg p-4 flex items-start gap-3">
+                    <span className="text-lg leading-none">⚠️</span>
+                    <div>
+                      <p className="text-sm font-semibold text-[#92400E]">
+                        Este enlace no puede previsualizarse aquí.
+                      </p>
+                      <p className="text-xs text-[#92400E] mt-1">
+                        Use <strong>Compartir → Insertar un mapa</strong> en Google Maps para obtener el
+                        link de embed (contiene <code>/maps/embed</code>). O bien,{' '}
+                        <a
+                          href={formData.enlaceUbicacion}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="underline font-semibold"
+                        >
+                          abra el mapa en Google Maps ↗
+                        </a>
+                      </p>
+                    </div>
+                  </div>
+                )
+              )}
+            </div>
+          )}
+        </div>
       </>
     );
   };
@@ -1039,6 +1316,234 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
     );
   };
 
+  const renderMarcoLogico = () => {
+    const mlResultados: ResultadoML[] = formData.mlResultados ?? [];
+    const inp = 'w-full px-4 py-2.5 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm';
+    const ML_COLS = ['Resultado', 'Indicadores', 'Fuentes y Medios de Verific...', 'Supuestos', 'Responsable'];
+    const ACT_COLS = ['Actividad', 'Indicadores', 'Fuentes y Medios de Verific...', 'Supuestos', 'Responsable'];
+
+    const TableHeader = ({ cols }: { cols: string[] }) => (
+      <tr className="bg-[#003366] text-white">
+        {cols.map((col) => (
+          <th key={col} className="px-4 py-2.5 text-sm font-medium text-left border-r border-white/20 last:border-r-0 whitespace-nowrap">{col}</th>
+        ))}
+      </tr>
+    );
+
+    const ActionButtons = ({ onAgregar, onEditar, onBorrar, editDisabled, borrarDisabled }: {
+      onAgregar: () => void; onEditar: () => void; onBorrar: () => void; editDisabled: boolean; borrarDisabled: boolean;
+    }) => (
+      <div className="flex gap-2">
+        <button type="button" onClick={onAgregar} className="px-4 py-1.5 bg-[#003366] text-white text-sm font-semibold rounded-lg hover:bg-[#002952] transition-colors">Agregar</button>
+        <button type="button" disabled={editDisabled} onClick={onEditar} className="px-4 py-1.5 bg-white text-[#344054] border border-[#D0D5DD] text-sm font-semibold rounded-lg hover:bg-[#F5F7FA] disabled:opacity-40 disabled:cursor-not-allowed transition-colors">Editar</button>
+        <button type="button" disabled={borrarDisabled} onClick={onBorrar} className="px-4 py-1.5 bg-white text-[#344054] border border-[#D0D5DD] text-sm font-semibold rounded-lg hover:bg-[#F5F7FA] disabled:opacity-40 disabled:cursor-not-allowed transition-colors">Borrar</button>
+      </div>
+    );
+
+    const NavButtons = ({ onRegresar, onSiguiente }: { onRegresar: () => void; onSiguiente: () => void }) => (
+      <div className="flex justify-between pt-4 border-t border-[#E1E4E8]">
+        <button type="button" onClick={onRegresar} className="px-5 py-2.5 border-2 border-[#D0D5DD] rounded-lg font-semibold text-[#344054] hover:bg-[#F5F7FA] transition-colors">Regresar</button>
+        <button type="button" onClick={onSiguiente} className="px-5 py-2.5 bg-[#003366] text-white rounded-lg font-semibold hover:bg-[#002952] transition-colors">Siguiente</button>
+      </div>
+    );
+
+    /* ── Sub-vista: Formulario de Actividad ── */
+    if (mlSubView === 'actividad') {
+      const actFields: { key: keyof ActividadML; label: string }[] = [
+        { key: 'actividad', label: 'ACTIVIDAD' },
+        { key: 'indicadores', label: 'Indicadores' },
+        { key: 'fuentesVerificacion', label: 'Fuentes y Medios de Verificación' },
+        { key: 'supuestos', label: 'Supuestos' },
+        { key: 'responsable', label: 'Responsable' },
+      ];
+
+      const handleSaveActividad = () => {
+        const acts = [...mlResultadoEdit.actividades];
+        if (mlActividadEditIdx !== null) acts[mlActividadEditIdx] = { ...mlActividadEdit }; else acts.push({ ...mlActividadEdit });
+        setMLResultadoEdit((p) => ({ ...p, actividades: acts }));
+        setMLActividadEditIdx(null);
+        setMLSelectedActividadIdx(null);
+        setMLSubView('resultado');
+      };
+
+      return (
+        <div className="space-y-4">
+          {actFields.map((f) => (
+            <div key={f.key}>
+              <label className="block text-[#344054] font-semibold mb-1.5 text-sm"><span className="text-red-500">* </span>{f.label}</label>
+              <input type="text" value={mlActividadEdit[f.key]}
+                onChange={(e) => setMLActividadEdit((p) => ({ ...p, [f.key]: e.target.value } as ActividadML))}
+                className={inp} />
+            </div>
+          ))}
+          <NavButtons
+            onRegresar={() => { setMLActividadEditIdx(null); setMLSubView('resultado'); }}
+            onSiguiente={handleSaveActividad}
+          />
+        </div>
+      );
+    }
+
+    /* ── Sub-vista: Formulario de Resultado ── */
+    if (mlSubView === 'resultado') {
+      const resFields: { key: keyof Omit<ResultadoML, 'actividades'>; label: string }[] = [
+        { key: 'resultado', label: 'Resultado' },
+        { key: 'indicadores', label: 'Indicadores' },
+        { key: 'fuentesVerificacion', label: 'Fuentes y Medios de Verificación' },
+        { key: 'supuestos', label: 'Supuestos' },
+        { key: 'responsable', label: 'Responsable' },
+      ];
+      const actividades = mlResultadoEdit.actividades;
+
+      const handleSaveResultado = () => {
+        const updated = [...mlResultados];
+        if (mlResultadoEditIdx !== null) updated[mlResultadoEditIdx] = { ...mlResultadoEdit };
+        else updated.push({ ...mlResultadoEdit });
+        updateField('mlResultados', updated);
+        setMLResultadoEditIdx(null);
+        setMLSelectedResultadoIdx(null);
+        setMLSelectedActividadIdx(null);
+        setMLSubView('main');
+      };
+
+      return (
+        <div className="space-y-6">
+          <div className="grid md:grid-cols-2 gap-4">
+            {resFields.slice(0, 2).map((f) => (
+              <div key={f.key}>
+                <label className="block text-[#344054] font-medium mb-1.5 text-sm"><span className="text-red-500">* </span>{f.label}</label>
+                <input type="text" value={mlResultadoEdit[f.key]}
+                  onChange={(e) => setMLResultadoEdit((p) => ({ ...p, [f.key]: e.target.value } as ResultadoML))}
+                  className={inp} />
+              </div>
+            ))}
+          </div>
+          <div className="grid md:grid-cols-3 gap-4">
+            {resFields.slice(2).map((f) => (
+              <div key={f.key}>
+                <label className="block text-[#344054] font-medium mb-1.5 text-sm"><span className="text-red-500">* </span>{f.label}</label>
+                <input type="text" value={mlResultadoEdit[f.key]}
+                  onChange={(e) => setMLResultadoEdit((p) => ({ ...p, [f.key]: e.target.value } as ResultadoML))}
+                  className={inp} />
+              </div>
+            ))}
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[#344054] font-semibold text-sm">Actividades</span>
+              <ActionButtons
+                onAgregar={() => {
+                  setMLActividadEdit({ actividad: '', indicadores: '', fuentesVerificacion: '', supuestos: '', responsable: '' });
+                  setMLActividadEditIdx(null);
+                  setMLSubView('actividad');
+                }}
+                onEditar={() => {
+                  if (mlSelectedActividadIdx !== null) {
+                    setMLActividadEdit({ ...actividades[mlSelectedActividadIdx] });
+                    setMLActividadEditIdx(mlSelectedActividadIdx);
+                    setMLSubView('actividad');
+                  }
+                }}
+                onBorrar={() => {
+                  if (mlSelectedActividadIdx !== null) {
+                    setMLResultadoEdit((p) => ({ ...p, actividades: p.actividades.filter((_, i) => i !== mlSelectedActividadIdx) }));
+                    setMLSelectedActividadIdx(null);
+                  }
+                }}
+                editDisabled={mlSelectedActividadIdx === null}
+                borrarDisabled={mlSelectedActividadIdx === null}
+              />
+            </div>
+            <div className="overflow-x-auto border border-[#D0D5DD] rounded-lg">
+              <table className="w-full border-collapse min-w-[600px]">
+                <thead><TableHeader cols={ACT_COLS} /></thead>
+                <tbody>
+                  {actividades.length === 0 ? (
+                    <tr><td colSpan={5} className="text-center text-sm text-[#6B7280] py-6 italic">We didn't find any data to show at this time</td></tr>
+                  ) : actividades.map((act, i) => (
+                    <tr key={i} onClick={() => setMLSelectedActividadIdx(mlSelectedActividadIdx === i ? null : i)}
+                      className={`cursor-pointer transition-colors ${mlSelectedActividadIdx === i ? 'bg-[#DBEAFE]' : i % 2 === 0 ? 'bg-white hover:bg-[#F5F7FA]' : 'bg-[#F9FAFB] hover:bg-[#F0F2F5]'}`}>
+                      {[act.actividad, act.indicadores, act.fuentesVerificacion, act.supuestos, act.responsable].map((val, ci) => (
+                        <td key={ci} className="px-4 py-2.5 text-sm text-[#344054] border-b border-[#E1E4E8] max-w-[160px] truncate">{val}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <NavButtons
+            onRegresar={() => { setMLSelectedActividadIdx(null); setMLResultadoEditIdx(null); setMLSubView('main'); }}
+            onSiguiente={handleSaveResultado}
+          />
+        </div>
+      );
+    }
+
+    /* ── Sub-vista: Principal (Main) ── */
+    return (
+      <div className="space-y-6">
+        <div>
+          <label className="block text-[#344054] font-medium mb-1.5 text-sm"><span className="text-red-500">* </span>Fin (impacto)</label>
+          <input type="text" value={formData.mlFin || ''} onChange={(e) => updateField('mlFin', e.target.value)} className={inp} />
+        </div>
+        <div>
+          <label className="block text-[#344054] font-medium mb-1.5 text-sm"><span className="text-red-500">* </span>Propósito (Objetivo General)</label>
+          <input type="text" value={formData.mlProposito || ''} onChange={(e) => updateField('mlProposito', e.target.value)} className={inp} />
+        </div>
+
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[#344054] font-semibold text-sm">Resultados</span>
+            <ActionButtons
+              onAgregar={() => {
+                setMLResultadoEdit({ resultado: '', indicadores: '', fuentesVerificacion: '', supuestos: '', responsable: '', actividades: [] });
+                setMLResultadoEditIdx(null);
+                setMLSelectedActividadIdx(null);
+                setMLSubView('resultado');
+              }}
+              onEditar={() => {
+                if (mlSelectedResultadoIdx !== null) {
+                  setMLResultadoEdit({ ...mlResultados[mlSelectedResultadoIdx] });
+                  setMLResultadoEditIdx(mlSelectedResultadoIdx);
+                  setMLSelectedActividadIdx(null);
+                  setMLSubView('resultado');
+                }
+              }}
+              onBorrar={() => {
+                if (mlSelectedResultadoIdx !== null) {
+                  updateField('mlResultados', mlResultados.filter((_, i) => i !== mlSelectedResultadoIdx));
+                  setMLSelectedResultadoIdx(null);
+                }
+              }}
+              editDisabled={mlSelectedResultadoIdx === null}
+              borrarDisabled={mlSelectedResultadoIdx === null}
+            />
+          </div>
+          <div className="overflow-x-auto border border-[#D0D5DD] rounded-lg">
+            <table className="w-full border-collapse min-w-[600px]">
+              <thead><TableHeader cols={ML_COLS} /></thead>
+              <tbody>
+                {mlResultados.length === 0 ? (
+                  <tr><td colSpan={5} className="text-center text-sm text-[#6B7280] py-6 italic">We didn't find any data to show at this time</td></tr>
+                ) : mlResultados.map((r, i) => (
+                  <tr key={i} onClick={() => setMLSelectedResultadoIdx(mlSelectedResultadoIdx === i ? null : i)}
+                    className={`cursor-pointer transition-colors ${mlSelectedResultadoIdx === i ? 'bg-[#DBEAFE]' : i % 2 === 0 ? 'bg-white hover:bg-[#F5F7FA]' : 'bg-[#F9FAFB] hover:bg-[#F0F2F5]'}`}>
+                    {[r.resultado, r.indicadores, r.fuentesVerificacion, r.supuestos, r.responsable].map((val, ci) => (
+                      <td key={ci} className="px-4 py-2.5 text-sm text-[#344054] border-b border-[#E1E4E8] max-w-[160px] truncate">{val}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-[#F4F5F7] flex flex-col">
       {/* ─── HEADER ─── */}
@@ -1115,7 +1620,8 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
               {section.id === 'componentes' && renderComponentes(section)}
               {section.id === 'participantes' && renderParticipantes(section)}
               {section.id === 'impactos' && renderImpactos()}
-              {!['coordinacion', 'contraparte', 'alcance', 'componentes', 'participantes', 'impactos'].includes(section.id) && renderGenericGrid(section)}
+              {section.id === 'marcoLogico' && renderMarcoLogico()}
+              {!['coordinacion', 'contraparte', 'alcance', 'componentes', 'participantes', 'impactos', 'marcoLogico'].includes(section.id) && renderGenericGrid(section)}
             </section>
           ))}
         </div>
