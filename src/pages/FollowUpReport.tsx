@@ -41,10 +41,30 @@ interface Contraparte {
   aportes: Record<string, boolean>;
 }
 
+interface MarcoLogicoRow {
+  id: string;
+  label: string;
+  type: 'fin' | 'proposito' | 'resultado' | 'actividad';
+  cadena: string;
+  indicadores: string;
+  fuentes: string;
+  supuestos: string;
+  responsable: string;
+}
+
+interface FollowUpNotification {
+  id: string;
+  mensaje: string;
+  fecha: string;
+  tipo: 'info' | 'warning' | 'success' | 'error';
+  leido: boolean;
+}
+
 interface FollowUpReportProps {
   onBack?: () => void;
   onSave?: (tipoInforme: 'avance' | 'cierre' | null) => void;
   mode?: 'create' | 'edit';
+  isDivi?: boolean;
 }
 
 type SiNo = 'si' | 'no';
@@ -263,18 +283,65 @@ function GrupoSearchable({
 /* ============================================================ */
 /*  COMPONENTE PRINCIPAL                                         */
 /* ============================================================ */
-export default function FollowUpReport({ onBack, onSave, mode = 'create' }: FollowUpReportProps) {
-  const [activeSection, setActiveSection] = useState('datos');
+export default function FollowUpReport({ onBack, onSave, mode = 'create', isDivi = false }: FollowUpReportProps) {
+  const [activeSection, setActiveSection] = useState(isDivi ? 'notificaciones' : 'datos');
   const [codigoProyecto, setCodigoProyecto] = useState('');
-  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+  const [formErrors] = useState<Record<string, string>>({});
 
-  const setError = (field: string, msg: string) => setFormErrors((prev) => ({ ...prev, [field]: msg }));
-  const clearError = (field: string) => setFormErrors((prev) => { const { [field]: _, ...rest } = prev; return rest; });
   const getError = (field: string) => formErrors[field];
 
   const [participants, setParticipants] = useState<Participant[]>([
     { id: '1', tipo: '', nacionalidad: '', horas: '', fechaInicio: '', fechaFin: '', tipoDoc: '', numeroDoc: '', nombres: '', carrera: '', firma: '' },
   ]);
+
+  const TIPOS_PARTICIPANTE = ['Docente', 'Administrativo', 'Alumni', 'Estudiante'] as const;
+  const [activeParticipantTab, setActiveParticipantTab] = useState<string>('todos');
+
+  /* ── Marco Lógico ── */
+  const createMlRows = (): MarcoLogicoRow[] => [
+    { id: 'fin', label: 'FIN', type: 'fin', cadena: '', indicadores: '', fuentes: '', supuestos: '', responsable: '' },
+    { id: 'proposito', label: 'PROPÓSITO', type: 'proposito', cadena: '', indicadores: '', fuentes: '', supuestos: '', responsable: '' },
+    { id: 'r1', label: 'R1', type: 'resultado', cadena: '', indicadores: '', fuentes: '', supuestos: '', responsable: '' },
+    { id: 'a1r1', label: 'A1R1', type: 'actividad', cadena: '', indicadores: '', fuentes: '', supuestos: '', responsable: '' },
+    { id: 'r2', label: 'R2', type: 'resultado', cadena: '', indicadores: '', fuentes: '', supuestos: '', responsable: '' },
+    { id: 'a1r2', label: 'A1R2', type: 'actividad', cadena: '', indicadores: '', fuentes: '', supuestos: '', responsable: '' },
+    { id: 'r3', label: 'R3', type: 'resultado', cadena: '', indicadores: '', fuentes: '', supuestos: '', responsable: '' },
+    { id: 'a1r3', label: 'A1R3', type: 'actividad', cadena: '', indicadores: '', fuentes: '', supuestos: '', responsable: '' },
+    { id: 'r4', label: 'R4', type: 'resultado', cadena: '', indicadores: '', fuentes: '', supuestos: '', responsable: '' },
+    { id: 'a1r4', label: 'A1R4', type: 'actividad', cadena: '', indicadores: '', fuentes: '', supuestos: '', responsable: '' },
+  ];
+  const [marcoLogicoRows, setMarcoLogicoRows] = useState<MarcoLogicoRow[]>(createMlRows);
+
+  const addMlRow = (afterId: string, type: 'resultado' | 'actividad') => {
+    const idx = marcoLogicoRows.findIndex(r => r.id === afterId);
+    const nextR = marcoLogicoRows.filter(r => r.type === 'resultado').length + 1;
+    const nextA = marcoLogicoRows.filter(r => r.type === 'actividad').length + 1;
+    const newRow: MarcoLogicoRow = {
+      id: Date.now().toString(),
+      label: type === 'resultado' ? `R${nextR}` : `A1R${nextA}`,
+      type,
+      cadena: '', indicadores: '', fuentes: '', supuestos: '', responsable: '',
+    };
+    const copy = [...marcoLogicoRows];
+    copy.splice(idx + 1, 0, newRow);
+    setMarcoLogicoRows(copy);
+  };
+  const updateMlRow = (id: string, field: keyof Omit<MarcoLogicoRow, 'id' | 'label' | 'type'>, value: string) => {
+    setMarcoLogicoRows(rows => rows.map(r => r.id === id ? { ...r, [field]: value } : r));
+  };
+  const removeMlRow = (id: string) => setMarcoLogicoRows(rows => rows.filter(r => r.id !== id));
+
+  /* ── Notificaciones DIVI ── */
+  const [notifications] = useState<FollowUpNotification[]>([
+    { id: 'n1', mensaje: 'El proyecto requiere adjuntar el convenio internacional antes de la revisión.', fecha: '2026-07-10', tipo: 'warning', leido: false },
+    { id: 'n2', mensaje: 'La sección de presupuesto tiene montos inconsistentes. Revise los totales.', fecha: '2026-07-09', tipo: 'error', leido: false },
+    { id: 'n3', mensaje: 'El informe ha sido guardado como borrador correctamente.', fecha: '2026-07-08', tipo: 'success', leido: true },
+  ]);
+
+  /* ── Variables DIVI ── */
+  const [diviObservaciones, setDiviObservaciones] = useState('');
+  const [diviEstado, setDiviEstado] = useState<'pendiente' | 'aprobado' | 'rechazado'>('pendiente');
+  const [diviFechaRevision, setDiviFechaRevision] = useState('');
 
   /* ── Sección 2: Grupos prioritarios ── */
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
@@ -451,7 +518,7 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
     );
   };
 
-  const sections = [
+  const baseSections = [
     { id: 'datos', icon: '📋', label: 'Datos' },
     { id: 'alcance', icon: '🎯', label: 'Alcance' },
     { id: 'contraparte', icon: '🏢', label: 'Contraparte' },
@@ -464,15 +531,23 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
     { id: 'anexos', icon: '📎', label: 'Anexos' },
   ];
 
+  const diviSections = isDivi ? [
+    { id: 'notificaciones', icon: '🔔', label: 'Notif.' },
+    { id: 'divi-variables', icon: '🏛️', label: 'DIVI' },
+  ] : [];
+
+  const sections = [...diviSections, ...baseSections];
+
   const scrollToSection = (sectionId: string) => {
     setActiveSection(sectionId);
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
-  const addParticipant = () => {
+  const addParticipant = (tipo?: string) => {
+    const defaultTipo = tipo || (activeParticipantTab !== 'todos' ? activeParticipantTab : 'Docente');
     setParticipants([...participants, {
       id: Date.now().toString(),
-      tipo: '', nacionalidad: '', horas: '', fechaInicio: '',
+      tipo: defaultTipo, nacionalidad: '', horas: '', fechaInicio: '',
       fechaFin: '', tipoDoc: '', numeroDoc: '', nombres: '', carrera: '', firma: '',
     }]);
   };
@@ -631,6 +706,77 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
       {/* ─── MAIN ─── */}
       <main className="flex-1 overflow-y-auto">
         <div className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+
+          {/* ═══════════════ NOTIFICACIONES — solo visible para DIVI, al inicio ═══════════════ */}
+          {isDivi && notifications.length > 0 && (
+            <section id="notificaciones" className="bg-white rounded-lg border border-[#FFD9A0] p-6 shadow-sm">
+              <h2 className="text-[#003366] text-xl font-semibold mb-4 flex items-center gap-2">🔔 NOTIFICACIONES</h2>
+              <div className="space-y-3">
+                {notifications.map((n) => (
+                  <div
+                    key={n.id}
+                    className={`flex items-start gap-3 p-4 rounded-lg border ${
+                      n.tipo === 'error' ? 'bg-red-50 border-red-200' :
+                      n.tipo === 'warning' ? 'bg-amber-50 border-amber-200' :
+                      n.tipo === 'success' ? 'bg-green-50 border-green-200' :
+                      'bg-blue-50 border-blue-200'
+                    }`}
+                  >
+                    <span className="text-lg flex-shrink-0">
+                      {n.tipo === 'error' ? '❌' : n.tipo === 'warning' ? '⚠️' : n.tipo === 'success' ? '✅' : 'ℹ️'}
+                    </span>
+                    <div className="flex-1">
+                      <p className="text-sm text-[#344054]">{n.mensaje}</p>
+                      <p className="text-xs text-[#6B7280] mt-1">{n.fecha}</p>
+                    </div>
+                    <span className={`text-xs px-2 py-1 rounded-full ${n.leido ? 'bg-gray-200 text-gray-600' : 'bg-[#003366] text-white'}`}>
+                      {n.leido ? 'Leído' : 'Nuevo'}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* ═══════════════ VARIABLES DIVI — solo visible para DIVI ═══════════════ */}
+          {isDivi && (
+            <section id="divi-variables" className="bg-white rounded-lg border border-[#E1E4E8] p-8 shadow-sm">
+              <h2 className="text-[#003366] text-xl font-semibold mb-6 flex items-center gap-2">🏛️ VARIABLES DIVI</h2>
+              <div className="space-y-6">
+                <div className="bg-[#F5F7FA] rounded-lg p-5 border border-[#D0D5DD]">
+                  <label className="block text-[#344054] font-medium mb-2 text-sm">Estado de revisión DIVI</label>
+                  <div className="flex gap-3">
+                    {([
+                      { value: 'pendiente' as const, label: 'Pendiente', color: 'bg-amber-500' },
+                      { value: 'aprobado' as const, label: 'Aprobado', color: 'bg-green-500' },
+                      { value: 'rechazado' as const, label: 'Rechazado', color: 'bg-red-500' },
+                    ]).map((opt) => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => setDiviEstado(opt.value)}
+                        className={`flex items-center gap-2 px-6 py-3 rounded-lg border-2 font-semibold text-sm transition-colors ${
+                          diviEstado === opt.value
+                            ? `${opt.color} text-white border-transparent`
+                            : 'border-[#D0D5DD] bg-white text-[#344054] hover:border-[#003366]'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <TextAreaField label="Observaciones DIVI" value={diviObservaciones} onChange={setDiviObservaciones} rows={4} placeholder="Observaciones de la Dirección de Vinculación..." />
+                  <div>
+                    <label className="block text-[#344054] font-medium mb-2 text-sm">Fecha de revisión DIVI</label>
+                    <input type="date" value={diviFechaRevision} onChange={(e) => setDiviFechaRevision(e.target.value)}
+                      className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
 
           {/* ═══════════════ TIPO DE INFORME — al inicio del documento, solo al editar ═══════════════ */}
           {mode === 'edit' && (
@@ -1273,40 +1419,112 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
             </div>
           </section>
 
-          {/* ═══════════════ SECCIÓN 7 — MATRIZ DE RESULTADOS ═══════════════ */}
+          {/* ═══════════════ SECCIÓN 7 — MATRIZ DE MARCO LÓGICO ═══════════════ */}
           <section id="resultados" className="bg-white rounded-lg border border-[#E1E4E8] p-8 shadow-sm">
-            <h2 className="text-[#003366] text-xl font-semibold mb-6 flex items-center gap-2">📊 RESULTADOS DEL PROYECTO</h2>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-[#003366] text-xl font-semibold flex items-center gap-2">📊 MATRIZ DE MARCO LÓGICO</h2>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const lastR = [...marcoLogicoRows].reverse().find(r => r.type === 'resultado');
+                    addMlRow(lastR?.id || 'fin', 'resultado');
+                  }}
+                  className="flex items-center gap-1 px-3 py-2 bg-[#003366] text-white text-xs rounded-lg hover:bg-[#002952] transition-colors"
+                >
+                  <Plus size={14} /> Agregar resultado
+                </button>
+              </div>
+            </div>
+
             <div className="overflow-x-auto">
               <table className="w-full border-collapse">
                 <thead>
                   <tr className="bg-[#003366] text-white">
-                    <th className="border border-[#D0D5DD] px-4 py-3 text-left text-sm font-semibold w-[30%]">Cadena de Resultados</th>
-                    <th className="border border-[#D0D5DD] px-4 py-3 text-left text-sm font-semibold">Indicadores</th>
-                    <th className="border border-[#D0D5DD] px-4 py-3 text-left text-sm font-semibold">Fuentes y Medios de Verificación</th>
-                    <th className="border border-[#D0D5DD] px-4 py-3 text-left text-sm font-semibold">Avance de la Actividad y Actores Participantes</th>
+                    <th className="border border-[#D0D5DD] px-4 py-3 text-left text-sm font-semibold w-[22%]">Cadena de Resultados</th>
+                    <th className="border border-[#D0D5DD] px-4 py-3 text-left text-sm font-semibold w-[22%]">Indicadores</th>
+                    <th className="border border-[#D0D5DD] px-4 py-3 text-left text-sm font-semibold w-[22%]">Fuentes y Medios de Verificación</th>
+                    <th className="border border-[#D0D5DD] px-4 py-3 text-left text-sm font-semibold w-[17%]">Supuestos</th>
+                    <th className="border border-[#D0D5DD] px-4 py-3 text-left text-sm font-semibold w-[17%]">Responsable</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {[
-                    { label: 'OBJETIVO GENERAL', extra: null },
-                    { label: 'OBJETIVO ESPECÍFICO', extra: null },
-                    { label: 'RESULTADOS', extra: null },
-                    { label: 'ACTIVIDADES', extra: 'Ejecución' },
-                  ].map((row, i) => (
-                    <tr key={row.label} className={i % 2 === 0 ? 'bg-[#F5F7FA]' : 'bg-white'}>
-                      <td className="border border-[#D0D5DD] px-4 py-3">
-                        <div className="font-semibold text-[#003366] mb-2 text-sm">{row.label}</div>
-                        <textarea rows={2} className="w-full px-3 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm resize-none" />
+                  {marcoLogicoRows.map((row, i) => (
+                    <tr key={row.id} className={i % 2 === 0 ? 'bg-[#F5F7FA]' : 'bg-white'}>
+                      <td className="border border-[#D0D5DD] px-3 py-2 align-top">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className={`font-bold text-xs px-2 py-0.5 rounded ${
+                            row.type === 'fin' ? 'bg-[#003366] text-white' :
+                            row.type === 'proposito' ? 'bg-[#0056B3] text-white' :
+                            row.type === 'resultado' ? 'bg-[#E8EDF2] text-[#003366]' :
+                            'bg-white text-[#6B7280] border border-[#D0D5DD]'
+                          }`}>{row.label}</span>
+                          <div className="flex gap-1">
+                            {row.type === 'resultado' && (
+                              <button
+                                type="button"
+                                onClick={() => addMlRow(row.id, 'actividad')}
+                                className="text-[#003366] hover:bg-[#E8EDF2] rounded p-0.5"
+                                title="Agregar actividad"
+                              >
+                                <Plus size={12} />
+                              </button>
+                            )}
+                            {row.label !== 'FIN' && row.label !== 'PROPÓSITO' && (
+                              <button
+                                type="button"
+                                onClick={() => removeMlRow(row.id)}
+                                className="text-red-400 hover:text-red-600 rounded p-0.5"
+                                title="Eliminar fila"
+                              >
+                                <X size={12} />
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                        <textarea
+                          rows={3}
+                          value={row.cadena}
+                          onChange={(e) => updateMlRow(row.id, 'cadena', e.target.value)}
+                          className="w-full px-2 py-1.5 border border-[#D0D5DD] rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#003366] resize-none"
+                          placeholder={row.type === 'fin' ? 'Impacto esperado del proyecto...' : row.type === 'proposito' ? 'Propósito general...' : row.type === 'resultado' ? `Resultado ${row.label}...` : `Actividad ${row.label}...`}
+                        />
                       </td>
-                      <td className="border border-[#D0D5DD] px-4 py-3">
-                        <textarea rows={2} className="w-full px-3 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm resize-none" />
+                      <td className="border border-[#D0D5DD] px-3 py-2 align-top">
+                        <textarea
+                          rows={4}
+                          value={row.indicadores}
+                          onChange={(e) => updateMlRow(row.id, 'indicadores', e.target.value)}
+                          className="w-full px-2 py-1.5 border border-[#D0D5DD] rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#003366] resize-none"
+                          placeholder="Indicadores verificables..."
+                        />
                       </td>
-                      <td className="border border-[#D0D5DD] px-4 py-3">
-                        <textarea rows={2} className="w-full px-3 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm resize-none" />
+                      <td className="border border-[#D0D5DD] px-3 py-2 align-top">
+                        <textarea
+                          rows={4}
+                          value={row.fuentes}
+                          onChange={(e) => updateMlRow(row.id, 'fuentes', e.target.value)}
+                          className="w-full px-2 py-1.5 border border-[#D0D5DD] rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#003366] resize-none"
+                          placeholder="Fuentes documentales o evidencias..."
+                        />
                       </td>
-                      <td className="border border-[#D0D5DD] px-4 py-3">
-                        {row.extra && <div className="font-medium text-[#344054] mb-2 text-sm">{row.extra}</div>}
-                        <textarea rows={2} className="w-full px-3 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm resize-none" />
+                      <td className="border border-[#D0D5DD] px-3 py-2 align-top">
+                        <textarea
+                          rows={4}
+                          value={row.supuestos}
+                          onChange={(e) => updateMlRow(row.id, 'supuestos', e.target.value)}
+                          className="w-full px-2 py-1.5 border border-[#D0D5DD] rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#003366] resize-none"
+                          placeholder="Supuestos externos..."
+                        />
+                      </td>
+                      <td className="border border-[#D0D5DD] px-3 py-2 align-top">
+                        <textarea
+                          rows={4}
+                          value={row.responsable}
+                          onChange={(e) => updateMlRow(row.id, 'responsable', e.target.value)}
+                          className="w-full px-2 py-1.5 border border-[#D0D5DD] rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#003366] resize-none"
+                          placeholder="Persona o rol responsable..."
+                        />
                       </td>
                     </tr>
                   ))}
@@ -1319,57 +1537,97 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create' }: Foll
           <section id="participantes" className="bg-white rounded-lg border border-[#E1E4E8] p-8 shadow-sm">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-[#003366] text-xl font-semibold flex items-center gap-2">👤 LISTA DE PARTICIPANTES</h2>
-              <button onClick={addParticipant} className="flex items-center gap-2 px-4 py-2 bg-[#003366] text-white rounded-lg hover:bg-[#002952] transition-colors">
+              <button onClick={() => addParticipant()} className="flex items-center gap-2 px-4 py-2 bg-[#003366] text-white rounded-lg hover:bg-[#002952] transition-colors">
                 <Plus size={18} /> Agregar participante
               </button>
             </div>
-            <p className="text-sm text-[#344054] mb-4">Docentes, Administrativos, Alumni</p>
 
-            <div className="overflow-x-auto">
-              <div className="min-w-max">
-                <div className="grid grid-cols-11 gap-2 mb-2 bg-[#003366] text-white p-3 rounded-t-lg">
-                  <div className="text-sm font-semibold">Tipo partic.</div>
-                  <div className="text-sm font-semibold">Nacionalidad</div>
-                  <div className="text-sm font-semibold">Horas (prog.)</div>
-                  <div className="text-sm font-semibold">Fecha inicio</div>
-                  <div className="text-sm font-semibold">Fecha fin</div>
-                  <div className="text-sm font-semibold">Tipo doc.</div>
-                  <div className="text-sm font-semibold">N° doc.</div>
-                  <div className="text-sm font-semibold col-span-2">Apellidos y nombres</div>
-                  <div className="text-sm font-semibold">Carrera</div>
-                  <div className="text-sm font-semibold">Acciones</div>
-                </div>
-
-                {participants.map((p, i) => (
-                  <div key={p.id} className={`grid grid-cols-11 gap-2 p-3 border-b border-[#E1E4E8] ${i % 2 === 0 ? 'bg-[#F5F7FA]' : 'bg-white'}`}>
-                    <input type="text" value={p.tipo} onChange={(e) => updateParticipant(p.id, 'tipo', e.target.value)}
-                      className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="Tipo" />
-                    <input type="text" value={p.nacionalidad} onChange={(e) => updateParticipant(p.id, 'nacionalidad', e.target.value)}
-                      className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="País" />
-                    <input type="number" value={p.horas} onChange={(e) => updateParticipant(p.id, 'horas', e.target.value)}
-                      className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="0" />
-                    <input type="date" value={p.fechaInicio} onChange={(e) => updateParticipant(p.id, 'fechaInicio', e.target.value)}
-                      className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" />
-                    <input type="date" value={p.fechaFin} onChange={(e) => updateParticipant(p.id, 'fechaFin', e.target.value)}
-                      className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" />
-                    <input type="text" value={p.tipoDoc} onChange={(e) => updateParticipant(p.id, 'tipoDoc', e.target.value)}
-                      className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="CI/Pasap." />
-                    <input type="text" value={p.numeroDoc} onChange={(e) => updateParticipant(p.id, 'numeroDoc', e.target.value)}
-                      className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="Número" />
-                    <input type="text" value={p.nombres} onChange={(e) => updateParticipant(p.id, 'nombres', e.target.value)}
-                      className="col-span-2 px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="Nombre completo" />
-                    <input type="text" value={p.carrera} onChange={(e) => updateParticipant(p.id, 'carrera', e.target.value)}
-                      className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="Carrera" />
-                    <button onClick={() => removeParticipant(p.id)} className="flex items-center justify-center p-2 text-red-500 hover:bg-red-50 rounded transition-colors">
-                      <Trash2 size={18} />
-                    </button>
-                  </div>
-                ))}
-              </div>
+            {/* Tabs de categoría */}
+            <div className="flex gap-2 mb-4 border-b border-[#D0D5DD] pb-2">
+              {(['todos', ...TIPOS_PARTICIPANTE] as const).map((cat) => {
+                const count = cat === 'todos'
+                  ? participants.length
+                  : participants.filter(p => p.tipo === cat).length;
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveParticipantTab(cat)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      activeParticipantTab === cat
+                        ? 'bg-[#003366] text-white'
+                        : 'bg-[#F5F7FA] text-[#344054] hover:bg-[#E1E4E8]'
+                    }`}
+                  >
+                    <span className="capitalize">{cat === 'todos' ? 'Todos' : cat}</span>
+                    <span className={`text-xs px-1.5 py-0.5 rounded-full ${
+                      activeParticipantTab === cat
+                        ? 'bg-white/20 text-white'
+                        : 'bg-[#E1E4E8] text-[#6B7280]'
+                    }`}>{count}</span>
+                  </button>
+                );
+              })}
             </div>
-            <p className="text-xs text-[#344054] mt-3 flex items-center gap-1">💡 Deslizar horizontalmente para ver más columnas</p>
 
-            <FileUploadBtn section="participantes" label="📎 Adjuntar listado firmado de participantes" />
+            {participants.length > 0 ? (
+              <>
+                <div className="overflow-x-auto">
+                  <div className="min-w-max">
+                    <div className="grid grid-cols-11 gap-2 mb-2 bg-[#003366] text-white p-3 rounded-t-lg">
+                      <div className="text-sm font-semibold">Tipo partic.</div>
+                      <div className="text-sm font-semibold">Nacionalidad</div>
+                      <div className="text-sm font-semibold">Horas (prog.)</div>
+                      <div className="text-sm font-semibold">Fecha inicio</div>
+                      <div className="text-sm font-semibold">Fecha fin</div>
+                      <div className="text-sm font-semibold">Tipo doc.</div>
+                      <div className="text-sm font-semibold">N° doc.</div>
+                      <div className="text-sm font-semibold col-span-2">Apellidos y nombres</div>
+                      <div className="text-sm font-semibold">Carrera</div>
+                      <div className="text-sm font-semibold">Acciones</div>
+                    </div>
+
+                    {participants
+                      .filter(p => activeParticipantTab === 'todos' || p.tipo === activeParticipantTab)
+                      .map((p, i) => (
+                      <div key={p.id} className={`grid grid-cols-11 gap-2 p-3 border-b border-[#E1E4E8] ${i % 2 === 0 ? 'bg-[#F5F7FA]' : 'bg-white'}`}>
+                        <select value={p.tipo} onChange={(e) => updateParticipant(p.id, 'tipo', e.target.value)}
+                          className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366] bg-white">
+                          <option value="">Tipo</option>
+                          {TIPOS_PARTICIPANTE.map(t => <option key={t} value={t}>{t}</option>)}
+                        </select>
+                        <input type="text" value={p.nacionalidad} onChange={(e) => updateParticipant(p.id, 'nacionalidad', e.target.value)}
+                          className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="País" />
+                        <input type="number" value={p.horas} onChange={(e) => updateParticipant(p.id, 'horas', e.target.value)}
+                          className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="0" />
+                        <input type="date" value={p.fechaInicio} onChange={(e) => updateParticipant(p.id, 'fechaInicio', e.target.value)}
+                          className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                        <input type="date" value={p.fechaFin} onChange={(e) => updateParticipant(p.id, 'fechaFin', e.target.value)}
+                          className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                        <input type="text" value={p.tipoDoc} onChange={(e) => updateParticipant(p.id, 'tipoDoc', e.target.value)}
+                          className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="CI/Pasap." />
+                        <input type="text" value={p.numeroDoc} onChange={(e) => updateParticipant(p.id, 'numeroDoc', e.target.value)}
+                          className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="Número" />
+                        <input type="text" value={p.nombres} onChange={(e) => updateParticipant(p.id, 'nombres', e.target.value)}
+                          className="col-span-2 px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="Nombre completo" />
+                        <input type="text" value={p.carrera} onChange={(e) => updateParticipant(p.id, 'carrera', e.target.value)}
+                          className="px-3 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="Carrera" />
+                        <button onClick={() => removeParticipant(p.id)} className="flex items-center justify-center p-2 text-red-500 hover:bg-red-50 rounded transition-colors">
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <p className="text-xs text-[#344054] mt-3 flex items-center gap-1">💡 Deslizar horizontalmente para ver más columnas</p>
+              </>
+            ) : (
+              <div className="bg-[#F5F7FA] rounded-lg p-6 border border-[#D0D5DD] text-center">
+                <p className="text-sm text-[#6B7280] mb-2">No hay participantes registrados manualmente.</p>
+                <p className="text-xs text-[#6B7280]">Adjunte el listado descargado del Banner o agregue participantes manualmente.</p>
+              </div>
+            )}
+
+            <FileUploadBtn section="participantes" label="📎 Adjuntar listado firmado de participantes (descargado del Banner)" />
           </section>
 
           {/* ═══════════════ SECCIÓN 9 — FIRMAS ═══════════════ */}
