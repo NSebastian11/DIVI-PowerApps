@@ -51,7 +51,7 @@ interface ResultadoML {
   actividades: ActividadML[];
 }
 
-type MLSubView = 'main' | 'resultado' | 'actividad';
+type MLSubView = 'main' | 'resultado';
 
 /* ───────── Datos geográficos Ecuador ───────── */
 const PARROQUIAS_QUITO_URBANAS = [
@@ -207,7 +207,7 @@ const OPCIONES_SI_NO = ['SI', 'NO'];
 const OPCIONES_ALCANCE_TERRITORIAL = ['CANTONAL2', 'INSTITUCIONAL', 'INTERNACIONAL', 'NACIONAL', 'PARROQUIAL', 'PROVINCIAL'];
 const OPCIONES_FUENTE_FINANCIAMIENTO = ['Interno', 'Externo'];
 const OPCIONES_INSTRUMENTO_LEGAL = ['Carta de Solicitud o Pedido', 'Convenio Marco', 'Convenio Específico de Cooperación Interinstitucional', 'No Aplica'];
-const OPCIONES_TIPO_IMPACTO = ['SOCIAL', 'ECONÓMICO', 'AMBIENTAL', 'CIENTÍFICO-ACADÉMICO', 'OTRO'];
+const OPCIONES_TIPO_IMPACTO = ['SOCIAL', 'ECONÓMICO', 'AMBIENTAL', 'CIENTÍFICO-ACADÉMICO', 'POLÍTICO', 'OTRO'];
 const OPCIONES_PROPIEDAD_INTELECTUAL = ['Derechos de Autor', 'Diseños Industriales', 'Indicaciones Geográficas', 'Marca', 'Modelos de Utilidad', 'Obtenciones Vegetales', 'Patentes de Invención', 'Secretos Empresariales'];
 const OPCIONES_OBJETIVO = [
   'Objetivo 1: Mejorar las condiciones de vida de la población de forma integral, promoviendo el acceso equitativo a salud, vivienda y bienestar social',
@@ -258,75 +258,75 @@ const SECTIONS: SectionConfig[] = [
     id: 'identificacion', icon: '📋', title: 'Identificación del Proyecto',
     fields: [
       { key: 'nombreProyecto', label: 'NOMBRE DEL PROYECTO', type: 'text', required: true, colSpan: 2, help: 'El título deberá expresar la idea principal del proyecto que se propone.' },
-      { key: 'tipo', label: 'TIPO', type: 'select', options: OPCIONES_TIPO },
+      { key: 'tipo', label: 'TIPO', type: 'select', required: true, options: OPCIONES_TIPO },
       { key: 'origenProyecto', label: 'ORIGEN DEL PROYECTO', type: 'select', required: true, options: OPCIONES_ORIGEN },
       { key: 'ambitoProyecto', label: 'Ámbito del Proyecto', type: 'select', required: true, options: OPCIONES_AMBITO },
       { key: 'ejeVinculacion', label: 'Eje de Vinculación', type: 'select', required: true, options: OPCIONES_EJE },
       { key: 'dominioAcademico', label: 'DOMINIO ACADÉMICO', type: 'select', required: true, options: OPCIONES_DOMINIO },
       { key: 'articulacionFuncionesSustantivas', label: 'ARTICULACIÓN DE FUNCIONES SUSTANTIVAS', type: 'select', required: true, options: OPCIONES_ARTICULACION_FUNCIONES },
-      { key: 'articulacionFuncionesJustificacion', label: 'JUSTIFICACIÓN DE LA ARTICULACIÓN', type: 'textarea', colSpan: 2, help: 'Explique por qué el proyecto se articula con la(s) función(es) seleccionada(s).' },
-      { key: 'fechaInicio', label: 'FECHA INICIO', type: 'date' },
-      { key: 'fechaFinPlaneado', label: 'FECHA DE FIN PLANEADO', type: 'date' },
+      { key: 'articulacionFuncionesJustificacion', label: 'JUSTIFICACIÓN DE LA ARTICULACIÓN', type: 'textarea', required: true, colSpan: 2, help: 'Explique por qué el proyecto se articula con la(s) función(es) seleccionada(s).' },
+      { key: 'fechaInicio', label: 'FECHA INICIO', type: 'date', required: true },
+      { key: 'fechaFinPlaneado', label: 'FECHA DE FIN PLANEADO', type: 'date', required: true },
       { key: 'fechaFinReal', label: 'FECHA DE FIN REAL', type: 'date' },
-      { key: 'anioPresupuesto', label: 'AÑO DE PRESUPUESTO', type: 'number' },
-      { key: 'unidadResponsable', label: 'UNIDAD RESPONSABLE', type: 'select', options: OPCIONES_UNIDAD },
-      { key: 'sede', label: 'SEDE', type: 'select', options: OPCIONES_SEDE },
+      { key: 'anioPresupuesto', label: 'AÑO DE PRESUPUESTO', type: 'number', required: true },
+      { key: 'unidadResponsable', label: 'UNIDAD RESPONSABLE', type: 'select', required: true, options: OPCIONES_UNIDAD },
+      { key: 'sede', label: 'SEDE', type: 'select', required: true, options: OPCIONES_SEDE },
     ],
   },
   {
     id: 'coordinacion', icon: '🎓', title: 'Coordinación y Académico',
     fields: [
-      { key: 'coordinadorResponsable', label: 'COORDINADOR / RESPONSABLE', type: 'text' },
-      { key: 'correoCoordinador', label: 'CORREO ELECTRÓNICO COORDINADOR', type: 'email' },
+      { key: 'coordinadorResponsable', label: 'COORDINADOR / RESPONSABLE', type: 'text', required: true },
+      { key: 'correoCoordinador', label: 'CORREO ELECTRÓNICO COORDINADOR', type: 'email', required: true },
       { key: 'telefonoCoordinador', label: 'TELÉFONO COORDINADOR', type: 'tel' },
-      { key: 'carreraQueCoordina', label: 'CARRERA QUE COORDINA', type: 'text' },
-      { key: 'grupoInvestigacion', label: 'GRUPO DE INVESTIGACIÓN', type: 'select', options: OPCIONES_GRUPO_INV },
-      { key: 'lineaInvestigacion', label: 'LÍNEA DE INVESTIGACIÓN', type: 'select', options: OPCIONES_LINEA_INV },
-      { key: 'lineaEstrategica', label: 'LÍNEA ESTRATÉGICA', type: 'select', options: OPCIONES_LINEA_ESTRATEGICA },
+      { key: 'carreraQueCoordina', label: 'CARRERA QUE COORDINA', type: 'text', required: true },
+      { key: 'grupoInvestigacion', label: 'GRUPO DE INVESTIGACIÓN', type: 'select', required: true, options: OPCIONES_GRUPO_INV },
+      { key: 'lineaInvestigacion', label: 'LÍNEA DE INVESTIGACIÓN', type: 'select', required: true, options: OPCIONES_LINEA_INV },
+      { key: 'lineaEstrategica', label: 'LÍNEA ESTRATÉGICA', type: 'select', required: true, options: OPCIONES_LINEA_ESTRATEGICA },
       { key: 'proyectoInvestigacion', label: 'PROYECTO INVESTIGACIÓN', type: 'text', help: '¿El proyecto de vinculación surge a partir del desarrollo de un proyecto de investigación previo?' },
       { key: 'articulaInvestigacionPuce', label: '¿El proyecto se articula con alguna investigación PUCE?', type: 'text' },
       { key: 'redAcademicaArticulada', label: 'RED ACADÉMICA ARTICULADA', type: 'multiselect', options: OPCIONES_RED_ACADEMICA, colSpan: 2 },
-      { key: 'identificacion', label: 'IDENTIFICACION', type: 'text', help: 'Número de cédula, pasaporte, etc.' },
+      { key: 'identificacion', label: 'IDENTIFICACION', type: 'text', required: true, help: 'Número de cédula, pasaporte, etc.' },
     ],
   },
   {
     id: 'diagnostico', icon: '🔍', title: 'Diagnóstico y Justificación',
     fields: [
-      { key: 'diagnosticoProblemaActores', label: 'DIAGNÓSTICO, PROBLEMA Y ACTORES INVOLUCRADOS', type: 'textarea' },
-      { key: 'objetivo', label: 'OBJETIVO', type: 'select', options: OPCIONES_OBJETIVO },
-      { key: 'resumen', label: 'Resumen', type: 'textarea' },
-      { key: 'problemaContraparteDiagnostico', label: 'PROBLEMA EN EL QUE INTERVIENE LA CONTRAPARTE', type: 'textarea', help: 'Máximo 200 palabras' },
+      { key: 'diagnosticoProblemaActores', label: 'DIAGNÓSTICO, PROBLEMA Y ACTORES INVOLUCRADOS', type: 'textarea', required: true },
+      { key: 'objetivo', label: 'OBJETIVO', type: 'select', required: true, options: OPCIONES_OBJETIVO },
+      { key: 'resumen', label: 'Resumen', type: 'textarea', required: true },
+      { key: 'problemaContraparteDiagnostico', label: 'PROBLEMA EN EL QUE INTERVIENE LA CONTRAPARTE', type: 'textarea', required: true, help: 'Máximo 200 palabras' },
       { key: 'campoAmplio', label: 'CAMPO AMPLIO', type: 'readonly', help: 'Se completa automáticamente según la carrera principal (Coordinación y Académico).' },
       { key: 'campoEspecifico', label: 'CAMPO ESPECÍFICO', type: 'readonly', help: 'Se completa automáticamente según la carrera principal.' },
       { key: 'campoDetallado', label: 'CAMPO DETALLADO', type: 'readonly', help: 'Se completa automáticamente según la carrera principal.' },
-      { key: 'ods', label: 'ODS', type: 'select', options: OPCIONES_ODS },
-      { key: 'mapeoActores', label: 'Mapeo de Actores y responsabilidades', type: 'textarea' },
-      { key: 'tipoActoresSociales', label: 'TIPO DE ACTORES SOCIALES', type: 'select', options: OPCIONES_TIPO_ACTORES },
-      { key: 'descripcionTipoVinculacion', label: 'Descripción del Tipo de Vinculación', type: 'textarea' },
+      { key: 'ods', label: 'ODS', type: 'select', required: true, options: OPCIONES_ODS },
+      { key: 'mapeoActores', label: 'Mapeo de Actores y responsabilidades', type: 'textarea', required: true },
+      { key: 'tipoActoresSociales', label: 'TIPO DE ACTORES SOCIALES', type: 'select', required: true, options: OPCIONES_TIPO_ACTORES },
+      { key: 'descripcionTipoVinculacion', label: 'Descripción del Tipo de Vinculación', type: 'textarea', required: true },
     ],
   },
   {
     id: 'contraparte', icon: '🤝', title: 'Contraparte y Convenio',
     fields: [
-      { key: 'nombreContraparte', label: 'NOMBRE DE CONTRAPARTE', type: 'text' },
+      { key: 'nombreContraparte', label: 'NOMBRE DE CONTRAPARTE', type: 'text', required: true },
       { key: 'instrumentoLegalContraparte', label: 'Instrumento Legal de la Contraparte', type: 'select', required: true, options: OPCIONES_INSTRUMENTO_LEGAL },
-      { key: 'problemaContraparteConvenio', label: 'PROBLEMA EN EL QUE INTERVIENE LA CONTRAPARTE', type: 'textarea', help: 'Máximo 200 palabras' },
+      { key: 'problemaContraparteConvenio', label: 'PROBLEMA EN EL QUE INTERVIENE LA CONTRAPARTE', type: 'textarea', required: true, help: 'Máximo 200 palabras' },
     ],
   },
   {
     id: 'alcance', icon: '🌍', title: 'Alcance Territorial y Beneficiarios',
     fields: [
-      { key: 'alcanceTerritorial', label: 'ALCANCE TERRITORIAL', type: 'select', options: OPCIONES_ALCANCE_TERRITORIAL },
-      { key: 'nombreComunidadAlcanzada', label: 'NOMBRE DE COMUNIDAD ALCANZADA', type: 'text' },
-      { key: 'criteriosSeleccionBeneficiarios', label: 'CRITERIOS DE SELECCIÓN DE BENEFICIARIOS ENTRE LA POBLACIÓN OBJETIVO', type: 'textarea' },
-      { key: 'detalleCalculoComunidad', label: 'Detalle del cálculo de la comunidad participante', type: 'textarea' },
+      { key: 'alcanceTerritorial', label: 'ALCANCE TERRITORIAL', type: 'select', required: true, options: OPCIONES_ALCANCE_TERRITORIAL },
+      { key: 'nombreComunidadAlcanzada', label: 'NOMBRE DE COMUNIDAD ALCANZADA', type: 'text', required: true },
+      { key: 'criteriosSeleccionBeneficiarios', label: 'CRITERIOS DE SELECCIÓN DE BENEFICIARIOS ENTRE LA POBLACIÓN OBJETIVO', type: 'textarea', required: true },
+      { key: 'detalleCalculoComunidad', label: 'Detalle del cálculo de la comunidad participante', type: 'textarea', required: true },
       { key: 'numeroPersonasAlcanzadas', label: 'NÚMERO DE PERSONAS ALCANZADAS', type: 'number' },
       { key: 'personasAlcanzadasFemeninos', label: 'Personas Alcanzadas Femeninos', type: 'number' },
       { key: 'personasAlcanzadasMasculinos', label: 'Personas Alcanzadas Masculinos', type: 'number' },
-      { key: 'beneficiariosDirectosFemeninos', label: 'Beneficiarios Directos Femeninos', type: 'number' },
-      { key: 'beneficiariosDirectosMasculinos', label: 'Beneficiarios Directos Masculinos', type: 'number' },
-      { key: 'beneficiariosIndirectosFemeninos', label: 'Beneficiarios Indirectos Femeninos', type: 'number' },
-      { key: 'beneficiariosIndirectosMasculinos', label: 'Beneficiarios Indirectos Masculinos', type: 'number' },
+      { key: 'beneficiariosDirectosFemeninos', label: 'Beneficiarios Directos Femeninos', type: 'number', required: true },
+      { key: 'beneficiariosDirectosMasculinos', label: 'Beneficiarios Directos Masculinos', type: 'number', required: true },
+      { key: 'beneficiariosIndirectosFemeninos', label: 'Beneficiarios Indirectos Femeninos', type: 'number', required: true },
+      { key: 'beneficiariosIndirectosMasculinos', label: 'Beneficiarios Indirectos Masculinos', type: 'number', required: true },
       { key: 'numComunidad1f', label: 'Número de Comunidad Femenino Primer Semestre', type: 'number' },
       { key: 'numComunidad1m', label: 'Número de Comunidad Masculino Primer Semestre', type: 'number' },
       { key: 'numComunidad2f', label: 'Número de Comunidad Femenino Segundo Semestre', type: 'number' },
@@ -336,11 +336,11 @@ const SECTIONS: SectionConfig[] = [
   {
     id: 'componentes', icon: '🧩', title: 'Componentes Especiales',
     fields: [
-      { key: 'componenteInterculturalidad', label: 'COMPONENTE DE INTERCULTURALIDAD', type: 'select', options: OPCIONES_SI_NO },
+      { key: 'componenteInterculturalidad', label: 'COMPONENTE DE INTERCULTURALIDAD', type: 'select', required: true, options: OPCIONES_SI_NO },
       { key: 'detalleInterculturalidad', label: 'DETALLE — INTERCULTURALIDAD', type: 'text', showIf: (d) => d.componenteInterculturalidad === 'SI' },
-      { key: 'componenteInterdisciplinariedad', label: 'COMPONENTE DE INTERDISCIPLINARIEDAD', type: 'select', options: OPCIONES_SI_NO },
+      { key: 'componenteInterdisciplinariedad', label: 'COMPONENTE DE INTERDISCIPLINARIEDAD', type: 'select', required: true, options: OPCIONES_SI_NO },
       { key: 'detalleInterdisciplinariedad', label: 'DETALLE — INTERDISCIPLINARIEDAD', type: 'text', showIf: (d) => d.componenteInterdisciplinariedad === 'SI' },
-      { key: 'componenteInternacionalizacion', label: 'COMPONENTE DE INTERNACIONALIZACIÓN', type: 'select', options: OPCIONES_SI_NO },
+      { key: 'componenteInternacionalizacion', label: 'COMPONENTE DE INTERNACIONALIZACIÓN', type: 'select', required: true, options: OPCIONES_SI_NO },
       { key: 'detalleInternacionalizacion', label: 'DETALLE — INTERNACIONALIZACIÓN', type: 'text', showIf: (d) => d.componenteInternacionalizacion === 'SI' },
       { key: 'componentePosgrados', label: 'COMPONENTE DE POSGRADOS', type: 'select', required: true, options: OPCIONES_SI_NO },
       { key: 'detallePosgrados', label: 'DETALLE — POSGRADOS', type: 'text', showIf: (d) => d.componentePosgrados === 'SI' },
@@ -351,16 +351,16 @@ const SECTIONS: SectionConfig[] = [
   {
     id: 'participantes', icon: '👥', title: 'Participantes (Docentes/Estudiantes/Otros)',
     fields: [
-      { key: 'numeroDocentesVinculados', label: 'NÚMERO DE DOCENTES VINCULADOS (1ER SEMESTRE)', type: 'number' },
-      { key: 'numeroDocentesVinculados2do', label: 'NÚMERO DE DOCENTES VINCULADOS (2DO SEMESTRE)', type: 'number' },
-      { key: 'numeroEstudiantesVinculados', label: 'NÚMERO DE ESTUDIANTES VINCULADOS (1ER SEMESTRE)', type: 'number' },
-      { key: 'numeroEstudiantesVinculados2do', label: 'NÚMERO DE ESTUDIANTES VINCULADOS (2DO SEMESTRE)', type: 'number' },
-      { key: 'numeroAdministrativosVinculados', label: 'NÚMERO DE ADMINISTRATIVOS VINCULADOS (1ER SEMESTRE)', type: 'number' },
-      { key: 'numeroAdministrativosVinculados2do', label: 'NÚMERO DE ADMINISTRATIVOS VINCULADOS (2DO SEMESTRE)', type: 'number' },
-      { key: 'numeroAlumniVinculados', label: 'NÚMERO DE ALUMNI VINCULADOS (1ER SEMESTRE)', type: 'number' },
-      { key: 'numeroAlumniVinculados2do', label: 'NÚMERO DE ALUMNI VINCULADOS (2DO SEMESTRE)', type: 'number' },
-      { key: 'resultadosAprendizaje', label: 'RESULTADOS DE APRENDIZAJE', type: 'textarea' },
-      { key: 'asesoria', label: 'ASESORÍA', type: 'select', options: OPCIONES_SI_NO },
+      { key: 'numeroDocentesVinculados', label: 'NÚMERO DE DOCENTES VINCULADOS (1ER SEMESTRE)', type: 'number', required: true },
+      { key: 'numeroDocentesVinculados2do', label: 'NÚMERO DE DOCENTES VINCULADOS (2DO SEMESTRE)', type: 'number', required: true },
+      { key: 'numeroEstudiantesVinculados', label: 'NÚMERO DE ESTUDIANTES VINCULADOS (1ER SEMESTRE)', type: 'number', required: true },
+      { key: 'numeroEstudiantesVinculados2do', label: 'NÚMERO DE ESTUDIANTES VINCULADOS (2DO SEMESTRE)', type: 'number', required: true },
+      { key: 'numeroAdministrativosVinculados', label: 'NÚMERO DE ADMINISTRATIVOS VINCULADOS (1ER SEMESTRE)', type: 'number', required: true },
+      { key: 'numeroAdministrativosVinculados2do', label: 'NÚMERO DE ADMINISTRATIVOS VINCULADOS (2DO SEMESTRE)', type: 'number', required: true },
+      { key: 'numeroAlumniVinculados', label: 'NÚMERO DE ALUMNI VINCULADOS (1ER SEMESTRE)', type: 'number', required: true },
+      { key: 'numeroAlumniVinculados2do', label: 'NÚMERO DE ALUMNI VINCULADOS (2DO SEMESTRE)', type: 'number', required: true },
+      { key: 'resultadosAprendizaje', label: 'RESULTADOS DE APRENDIZAJE', type: 'textarea', required: true },
+      { key: 'asesoria', label: 'ASESORÍA', type: 'select', required: true, options: OPCIONES_SI_NO },
     ],
   },
   {
@@ -370,8 +370,8 @@ const SECTIONS: SectionConfig[] = [
   {
     id: 'presupuesto', icon: '💰', title: 'Presupuesto',
     fields: [
-      { key: 'fuenteFinanciamiento', label: 'FUENTE DE FINANCIAMIENTO', type: 'select', options: OPCIONES_FUENTE_FINANCIAMIENTO },
-      { key: 'presupuestoPlanificado', label: 'PRESUPUESTO PLANIFICADO', type: 'number' },
+      { key: 'fuenteFinanciamiento', label: 'FUENTE DE FINANCIAMIENTO', type: 'select', required: true, options: OPCIONES_FUENTE_FINANCIAMIENTO },
+      { key: 'presupuestoPlanificado', label: 'PRESUPUESTO PLANIFICADO', type: 'number', required: true },
       { key: 'presupuestoEjecutado', label: 'PRESUPUESTO EJECUTADO', type: 'number' },
       { key: 'presupuestoExterno', label: 'PRESUPUESTO EXTERNO PLANIFICADO', type: 'number', showIf: (d) => d.fuenteFinanciamiento === 'Externo' },
       { key: 'presupuestoExternoAsignado', label: 'PRESUPUESTO EXTERNO ASIGNADO', type: 'number', showIf: (d) => d.fuenteFinanciamiento === 'Externo' },
@@ -692,6 +692,7 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
   const [mlActividadEditIdx, setMLActividadEditIdx] = useState<number | null>(null);
   const [mlSelectedActividadIdx, setMLSelectedActividadIdx] = useState<number | null>(null);
   const [mlSelectedResultadoIdx, setMLSelectedResultadoIdx] = useState<number | null>(null);
+  const [mlShowActForm, setMLShowActForm] = useState(false);
 
   const updateField = (key: string, value: any) => setFormData((prev) => ({ ...prev, [key]: value }));
 
@@ -857,49 +858,55 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
 
         <div className="mt-6 pt-6 border-t border-[#E1E4E8]">
           <h3 className="text-[#003366] font-semibold mb-4 flex items-center gap-2 text-sm">👥 BENEFICIARIOS</h3>
-
-          <div className="mb-4 max-w-sm">
-            <FieldRenderer
-              field={numeroPersonasField}
-              value={formData.numeroPersonasAlcanzadas}
-              onChange={(v) => updateField('numeroPersonasAlcanzadas', v)}
-              showError={showErrors && missingKeys.includes('numeroPersonasAlcanzadas')}
-            />
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-4">
-            {BENEFICIARY_FM_GROUPS.map((g) => {
-              const { total } = fm(g.fKey, g.mKey);
-              return (
-                <div key={g.title} className="bg-[#F5F7FA] rounded-lg p-4 border border-[#D0D5DD]">
-                  <p className="text-sm font-semibold text-[#344054] mb-3">{g.title}</p>
-                  <div className="grid grid-cols-3 gap-2">
-                    <div>
-                      <label className="block text-xs text-[#6B7280] mb-1">Femenino</label>
-                      <input
-                        type="number" min={0}
-                        value={formData[g.fKey] ?? ''}
-                        onChange={(e) => updateField(g.fKey, e.target.value)}
-                        className="w-full px-2 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs text-[#6B7280] mb-1">Masculino</label>
-                      <input
-                        type="number" min={0}
-                        value={formData[g.mKey] ?? ''}
-                        onChange={(e) => updateField(g.mKey, e.target.value)}
-                        className="w-full px-2 py-2 border border-[#D0D5DD] rounded text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs text-[#6B7280] mb-1">Total</label>
-                      <div className="px-2 py-2 border border-[#D0D5DD] rounded text-sm bg-white font-semibold text-[#003366] text-center">{total}</div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-[#003366] text-white">
+                  <th className="border border-[#1a4a7a] px-4 py-3 text-left text-sm font-semibold">Tipo de Beneficiario</th>
+                  <th className="border border-[#1a4a7a] px-4 py-3 text-center text-sm font-semibold w-32">Femenino</th>
+                  <th className="border border-[#1a4a7a] px-4 py-3 text-center text-sm font-semibold w-32">Masculino</th>
+                  <th className="border border-[#1a4a7a] px-4 py-3 text-center text-sm font-semibold w-28">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {([
+                  { label: 'Beneficiarios Directos', fKey: 'beneficiariosDirectosFemeninos', mKey: 'beneficiariosDirectosMasculinos', bg: 'bg-white' },
+                  { label: 'Beneficiarios Indirectos', fKey: 'beneficiariosIndirectosFemeninos', mKey: 'beneficiariosIndirectosMasculinos', bg: 'bg-[#F9FAFB]' },
+                ] as const).map((row) => {
+                  const { f, m, total } = fm(row.fKey, row.mKey);
+                  return (
+                    <tr key={row.label} className={row.bg}>
+                      <td className="border border-[#D0D5DD] px-4 py-2.5 text-sm font-medium text-[#344054]">
+                        {row.label} <span className="text-red-500">*</span>
+                      </td>
+                      <td className="border border-[#D0D5DD] px-2 py-2">
+                        <input type="number" min={0} value={formData[row.fKey] ?? ''} onChange={(e) => updateField(row.fKey, e.target.value)}
+                          className="w-full px-2 py-1.5 border border-[#D0D5DD] rounded text-sm text-center focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                      </td>
+                      <td className="border border-[#D0D5DD] px-2 py-2">
+                        <input type="number" min={0} value={formData[row.mKey] ?? ''} onChange={(e) => updateField(row.mKey, e.target.value)}
+                          className="w-full px-2 py-1.5 border border-[#D0D5DD] rounded text-sm text-center focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                      </td>
+                      <td className="border border-[#D0D5DD] px-3 py-2 text-center text-sm font-semibold text-[#003366]">{f + m}</td>
+                    </tr>
+                  );
+                })}
+                {(() => {
+                  const dirF = Number(formData.beneficiariosDirectosFemeninos) || 0;
+                  const dirM = Number(formData.beneficiariosDirectosMasculinos) || 0;
+                  const indF = Number(formData.beneficiariosIndirectosFemeninos) || 0;
+                  const indM = Number(formData.beneficiariosIndirectosMasculinos) || 0;
+                  return (
+                    <tr className="bg-[#E6F0FF]">
+                      <td className="border border-[#D0D5DD] px-4 py-2.5 text-sm font-bold text-[#003366]">Personas Alcanzadas (Total)</td>
+                      <td className="border border-[#D0D5DD] px-3 py-2 text-center text-sm font-bold text-[#003366]">{dirF + indF}</td>
+                      <td className="border border-[#D0D5DD] px-3 py-2 text-center text-sm font-bold text-[#003366]">{dirM + indM}</td>
+                      <td className="border border-[#D0D5DD] px-3 py-2 text-center text-sm font-bold text-[#0056B3]">{dirF + indF + dirM + indM}</td>
+                    </tr>
+                  );
+                })()}
+              </tbody>
+            </table>
           </div>
 
           <div className="mt-4 bg-[#F5F7FA] rounded-lg p-5 border border-[#D0D5DD]">
@@ -993,29 +1000,17 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
           </div>
 
           {formData.esQuito === 'SI' && (
-            <div className="grid md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label className="block text-xs font-semibold text-[#344054] mb-1.5">Parroquia (Quito)</label>
-                <SearchableSelect
-                  value={formData.parroquiaQuito || ''}
-                  onChange={(v) => updateField('parroquiaQuito', v)}
-                  placeholder="— Seleccione parroquia —"
-                  groups={[
-                    { label: 'Parroquias Urbanas', options: PARROQUIAS_QUITO_URBANAS },
-                    { label: 'Parroquias Rurales', options: PARROQUIAS_QUITO_RURALES },
-                  ]}
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-[#344054] mb-1.5">Dirección</label>
-                <input
-                  type="text"
-                  placeholder="Calle, número, barrio..."
-                  value={formData.direccionUbicacion || ''}
-                  onChange={(e) => updateField('direccionUbicacion', e.target.value)}
-                  className="w-full px-3 py-2.5 border border-[#D0D5DD] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]"
-                />
-              </div>
+            <div className="mb-4">
+              <label className="block text-xs font-semibold text-[#344054] mb-1.5">Parroquia (Quito)</label>
+              <SearchableSelect
+                value={formData.parroquiaQuito || ''}
+                onChange={(v) => updateField('parroquiaQuito', v)}
+                placeholder="— Seleccione parroquia —"
+                groups={[
+                  { label: 'Parroquias Urbanas', options: PARROQUIAS_QUITO_URBANAS },
+                  { label: 'Parroquias Rurales', options: PARROQUIAS_QUITO_RURALES },
+                ]}
+              />
             </div>
           )}
 
@@ -1040,23 +1035,13 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
                   className="w-full px-3 py-2.5 border border-[#D0D5DD] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]"
                 />
               </div>
-              <div>
+              <div className="md:col-span-2">
                 <label className="block text-xs font-semibold text-[#344054] mb-1.5">Parroquia</label>
                 <input
                   type="text"
                   placeholder="Nombre de la parroquia..."
                   value={formData.parroquiaFuera || ''}
                   onChange={(e) => updateField('parroquiaFuera', e.target.value)}
-                  className="w-full px-3 py-2.5 border border-[#D0D5DD] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-[#344054] mb-1.5">Dirección</label>
-                <input
-                  type="text"
-                  placeholder="Calle, número, referencia..."
-                  value={formData.direccionUbicacion || ''}
-                  onChange={(e) => updateField('direccionUbicacion', e.target.value)}
                   className="w-full px-3 py-2.5 border border-[#D0D5DD] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]"
                 />
               </div>
@@ -1251,7 +1236,10 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
 
     return (
       <div className="space-y-4">
-        {display.map((item, i) => (
+        {display.map((item, i) => {
+          const usedTipos = display.filter((_, idx) => idx !== i).map((it) => it.tipo).filter(Boolean);
+          const opcionesDisponibles = OPCIONES_TIPO_IMPACTO.filter((t) => !usedTipos.includes(t));
+          return (
           <div key={i} className="flex gap-3 items-start p-4 border border-[#E1E4E8] rounded-lg">
             <div className="w-56 flex-shrink-0">
               <label className="block text-[#344054] font-medium mb-2 text-sm">
@@ -1265,7 +1253,10 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
                 }`}
               >
                 <option value="">Seleccionar...</option>
-                {OPCIONES_TIPO_IMPACTO.map((t) => <option key={t} value={t}>{t}</option>)}
+                {opcionesDisponibles.map((t) => <option key={t} value={t}>{t}</option>)}
+                {item.tipo && !opcionesDisponibles.includes(item.tipo) && (
+                  <option value={item.tipo}>{item.tipo}</option>
+                )}
               </select>
             </div>
             <div className="flex-1">
@@ -1287,11 +1278,16 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
               </button>
             )}
           </div>
-        ))}
-        <button type="button" onClick={addImpacto} className="text-sm text-[#0056B3] font-semibold hover:underline">
+          );
+        })}
+        <button
+          type="button"
+          onClick={addImpacto}
+          disabled={display.length >= OPCIONES_TIPO_IMPACTO.length}
+          className="text-sm text-[#0056B3] font-semibold hover:underline disabled:opacity-40 disabled:cursor-not-allowed"
+        >
           + Agregar impacto
         </button>
-
         <div className="mt-6 pt-6 border-t border-[#E1E4E8]">
           <label className="block text-[#344054] font-medium mb-3 text-sm">Tipo Propiedad Intelectual</label>
           <div className="grid md:grid-cols-2 gap-3">
@@ -1319,72 +1315,11 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
   const renderMarcoLogico = () => {
     const mlResultados: ResultadoML[] = formData.mlResultados ?? [];
     const inp = 'w-full px-4 py-2.5 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm';
-    const ML_COLS = ['Resultado', 'Indicadores', 'Fuentes y Medios de Verific...', 'Supuestos', 'Responsable'];
-    const ACT_COLS = ['Actividad', 'Indicadores', 'Fuentes y Medios de Verific...', 'Supuestos', 'Responsable'];
+    const COLS = ['Descripción', 'Indicadores', 'Fuentes y Medios de Verif.', 'Supuestos', 'Responsable'];
+    const emptyAct: ActividadML = { actividad: '', indicadores: '', fuentesVerificacion: '', supuestos: '', responsable: '' };
+    const emptyRes: ResultadoML = { resultado: '', indicadores: '', fuentesVerificacion: '', supuestos: '', responsable: '', actividades: [] };
 
-    const TableHeader = ({ cols }: { cols: string[] }) => (
-      <tr className="bg-[#003366] text-white">
-        {cols.map((col) => (
-          <th key={col} className="px-4 py-2.5 text-sm font-medium text-left border-r border-white/20 last:border-r-0 whitespace-nowrap">{col}</th>
-        ))}
-      </tr>
-    );
-
-    const ActionButtons = ({ onAgregar, onEditar, onBorrar, editDisabled, borrarDisabled }: {
-      onAgregar: () => void; onEditar: () => void; onBorrar: () => void; editDisabled: boolean; borrarDisabled: boolean;
-    }) => (
-      <div className="flex gap-2">
-        <button type="button" onClick={onAgregar} className="px-4 py-1.5 bg-[#003366] text-white text-sm font-semibold rounded-lg hover:bg-[#002952] transition-colors">Agregar</button>
-        <button type="button" disabled={editDisabled} onClick={onEditar} className="px-4 py-1.5 bg-white text-[#344054] border border-[#D0D5DD] text-sm font-semibold rounded-lg hover:bg-[#F5F7FA] disabled:opacity-40 disabled:cursor-not-allowed transition-colors">Editar</button>
-        <button type="button" disabled={borrarDisabled} onClick={onBorrar} className="px-4 py-1.5 bg-white text-[#344054] border border-[#D0D5DD] text-sm font-semibold rounded-lg hover:bg-[#F5F7FA] disabled:opacity-40 disabled:cursor-not-allowed transition-colors">Borrar</button>
-      </div>
-    );
-
-    const NavButtons = ({ onRegresar, onSiguiente }: { onRegresar: () => void; onSiguiente: () => void }) => (
-      <div className="flex justify-between pt-4 border-t border-[#E1E4E8]">
-        <button type="button" onClick={onRegresar} className="px-5 py-2.5 border-2 border-[#D0D5DD] rounded-lg font-semibold text-[#344054] hover:bg-[#F5F7FA] transition-colors">Regresar</button>
-        <button type="button" onClick={onSiguiente} className="px-5 py-2.5 bg-[#003366] text-white rounded-lg font-semibold hover:bg-[#002952] transition-colors">Siguiente</button>
-      </div>
-    );
-
-    /* ── Sub-vista: Formulario de Actividad ── */
-    if (mlSubView === 'actividad') {
-      const actFields: { key: keyof ActividadML; label: string }[] = [
-        { key: 'actividad', label: 'ACTIVIDAD' },
-        { key: 'indicadores', label: 'Indicadores' },
-        { key: 'fuentesVerificacion', label: 'Fuentes y Medios de Verificación' },
-        { key: 'supuestos', label: 'Supuestos' },
-        { key: 'responsable', label: 'Responsable' },
-      ];
-
-      const handleSaveActividad = () => {
-        const acts = [...mlResultadoEdit.actividades];
-        if (mlActividadEditIdx !== null) acts[mlActividadEditIdx] = { ...mlActividadEdit }; else acts.push({ ...mlActividadEdit });
-        setMLResultadoEdit((p) => ({ ...p, actividades: acts }));
-        setMLActividadEditIdx(null);
-        setMLSelectedActividadIdx(null);
-        setMLSubView('resultado');
-      };
-
-      return (
-        <div className="space-y-4">
-          {actFields.map((f) => (
-            <div key={f.key}>
-              <label className="block text-[#344054] font-semibold mb-1.5 text-sm"><span className="text-red-500">* </span>{f.label}</label>
-              <input type="text" value={mlActividadEdit[f.key]}
-                onChange={(e) => setMLActividadEdit((p) => ({ ...p, [f.key]: e.target.value } as ActividadML))}
-                className={inp} />
-            </div>
-          ))}
-          <NavButtons
-            onRegresar={() => { setMLActividadEditIdx(null); setMLSubView('resultado'); }}
-            onSiguiente={handleSaveActividad}
-          />
-        </div>
-      );
-    }
-
-    /* ── Sub-vista: Formulario de Resultado ── */
+    /* ── Vista: Formulario de Resultado con actividades inline ── */
     if (mlSubView === 'resultado') {
       const resFields: { key: keyof Omit<ResultadoML, 'actividades'>; label: string }[] = [
         { key: 'resultado', label: 'Resultado' },
@@ -1393,7 +1328,13 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
         { key: 'supuestos', label: 'Supuestos' },
         { key: 'responsable', label: 'Responsable' },
       ];
-      const actividades = mlResultadoEdit.actividades;
+      const actFields: { key: keyof ActividadML; label: string; wide?: boolean }[] = [
+        { key: 'actividad', label: 'Actividad', wide: true },
+        { key: 'indicadores', label: 'Indicadores' },
+        { key: 'fuentesVerificacion', label: 'Fuentes y Medios de Verificación' },
+        { key: 'supuestos', label: 'Supuestos' },
+        { key: 'responsable', label: 'Responsable' },
+      ];
 
       const handleSaveResultado = () => {
         const updated = [...mlResultados];
@@ -1403,139 +1344,188 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
         setMLResultadoEditIdx(null);
         setMLSelectedResultadoIdx(null);
         setMLSelectedActividadIdx(null);
+        setMLShowActForm(false);
         setMLSubView('main');
       };
 
+      const handleSaveActividad = () => {
+        const acts = [...mlResultadoEdit.actividades];
+        if (mlActividadEditIdx !== null) acts[mlActividadEditIdx] = { ...mlActividadEdit };
+        else acts.push({ ...mlActividadEdit });
+        setMLResultadoEdit((p) => ({ ...p, actividades: acts }));
+        setMLActividadEdit(emptyAct);
+        setMLActividadEditIdx(null);
+        setMLSelectedActividadIdx(null);
+        setMLShowActForm(false);
+      };
+
       return (
-        <div className="space-y-6">
-          <div className="grid md:grid-cols-2 gap-4">
-            {resFields.slice(0, 2).map((f) => (
-              <div key={f.key}>
-                <label className="block text-[#344054] font-medium mb-1.5 text-sm"><span className="text-red-500">* </span>{f.label}</label>
-                <input type="text" value={mlResultadoEdit[f.key]}
-                  onChange={(e) => setMLResultadoEdit((p) => ({ ...p, [f.key]: e.target.value } as ResultadoML))}
-                  className={inp} />
-              </div>
-            ))}
-          </div>
-          <div className="grid md:grid-cols-3 gap-4">
-            {resFields.slice(2).map((f) => (
-              <div key={f.key}>
-                <label className="block text-[#344054] font-medium mb-1.5 text-sm"><span className="text-red-500">* </span>{f.label}</label>
-                <input type="text" value={mlResultadoEdit[f.key]}
-                  onChange={(e) => setMLResultadoEdit((p) => ({ ...p, [f.key]: e.target.value } as ResultadoML))}
-                  className={inp} />
-              </div>
-            ))}
+        <div className="space-y-5">
+          {/* Datos del resultado */}
+          <div className="p-4 bg-[#EFF6FF] rounded-lg border border-[#C5D9F0]">
+            <p className="text-[#003366] font-bold text-sm mb-3">Datos del Resultado</p>
+            <div className="grid md:grid-cols-2 gap-4">
+              {resFields.slice(0, 2).map((f) => (
+                <div key={f.key}>
+                  <label className="block text-[#344054] font-medium mb-1.5 text-sm"><span className="text-red-500">* </span>{f.label}</label>
+                  <input type="text" value={mlResultadoEdit[f.key]}
+                    onChange={(e) => setMLResultadoEdit((p) => ({ ...p, [f.key]: e.target.value } as ResultadoML))}
+                    className={inp} />
+                </div>
+              ))}
+            </div>
+            <div className="grid md:grid-cols-3 gap-4 mt-4">
+              {resFields.slice(2).map((f) => (
+                <div key={f.key}>
+                  <label className="block text-[#344054] font-medium mb-1.5 text-sm"><span className="text-red-500">* </span>{f.label}</label>
+                  <input type="text" value={mlResultadoEdit[f.key]}
+                    onChange={(e) => setMLResultadoEdit((p) => ({ ...p, [f.key]: e.target.value } as ResultadoML))}
+                    className={inp} />
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[#344054] font-semibold text-sm">Actividades</span>
-              <ActionButtons
-                onAgregar={() => {
-                  setMLActividadEdit({ actividad: '', indicadores: '', fuentesVerificacion: '', supuestos: '', responsable: '' });
-                  setMLActividadEditIdx(null);
-                  setMLSubView('actividad');
-                }}
-                onEditar={() => {
-                  if (mlSelectedActividadIdx !== null) {
-                    setMLActividadEdit({ ...actividades[mlSelectedActividadIdx] });
-                    setMLActividadEditIdx(mlSelectedActividadIdx);
-                    setMLSubView('actividad');
-                  }
-                }}
-                onBorrar={() => {
-                  if (mlSelectedActividadIdx !== null) {
-                    setMLResultadoEdit((p) => ({ ...p, actividades: p.actividades.filter((_, i) => i !== mlSelectedActividadIdx) }));
-                    setMLSelectedActividadIdx(null);
-                  }
-                }}
-                editDisabled={mlSelectedActividadIdx === null}
-                borrarDisabled={mlSelectedActividadIdx === null}
-              />
+          {/* Actividades de este resultado */}
+          <div className="p-4 bg-white rounded-lg border border-[#D0D5DD]">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-[#003366] font-bold text-sm">Actividades de este Resultado</p>
+              <div className="flex gap-2">
+                <button type="button"
+                  onClick={() => { setMLActividadEdit(emptyAct); setMLActividadEditIdx(null); setMLShowActForm(true); }}
+                  className="px-3 py-1.5 bg-[#003366] text-white text-sm font-semibold rounded-lg hover:bg-[#002952]">+ Agregar</button>
+                <button type="button" disabled={mlSelectedActividadIdx === null}
+                  onClick={() => { if (mlSelectedActividadIdx !== null) { setMLActividadEdit({ ...mlResultadoEdit.actividades[mlSelectedActividadIdx] }); setMLActividadEditIdx(mlSelectedActividadIdx); setMLShowActForm(true); } }}
+                  className="px-3 py-1.5 bg-white border border-[#D0D5DD] text-sm font-semibold rounded-lg hover:bg-[#F5F7FA] disabled:opacity-40">Editar</button>
+                <button type="button" disabled={mlSelectedActividadIdx === null}
+                  onClick={() => { if (mlSelectedActividadIdx !== null) { setMLResultadoEdit((p) => ({ ...p, actividades: p.actividades.filter((_, i) => i !== mlSelectedActividadIdx) })); setMLSelectedActividadIdx(null); setMLShowActForm(false); } }}
+                  className="px-3 py-1.5 bg-white border border-[#D0D5DD] text-sm font-semibold rounded-lg hover:bg-[#F5F7FA] disabled:opacity-40">Borrar</button>
+              </div>
             </div>
-            <div className="overflow-x-auto border border-[#D0D5DD] rounded-lg">
-              <table className="w-full border-collapse min-w-[600px]">
-                <thead><TableHeader cols={ACT_COLS} /></thead>
+
+            <div className="overflow-x-auto rounded border border-[#E1E4E8]">
+              <table className="w-full border-collapse min-w-[560px]">
+                <thead>
+                  <tr className="bg-[#344054] text-white">
+                    {COLS.map((c) => <th key={c} className="px-3 py-2 text-xs font-semibold text-left border-r border-white/20 last:border-r-0 whitespace-nowrap">{c}</th>)}
+                  </tr>
+                </thead>
                 <tbody>
-                  {actividades.length === 0 ? (
-                    <tr><td colSpan={5} className="text-center text-sm text-[#6B7280] py-6 italic">We didn't find any data to show at this time</td></tr>
-                  ) : actividades.map((act, i) => (
-                    <tr key={i} onClick={() => setMLSelectedActividadIdx(mlSelectedActividadIdx === i ? null : i)}
+                  {mlResultadoEdit.actividades.length === 0 ? (
+                    <tr><td colSpan={5} className="text-center text-sm text-[#6B7280] py-5 italic">Sin actividades — use + Agregar</td></tr>
+                  ) : mlResultadoEdit.actividades.map((act, i) => (
+                    <tr key={i}
+                      onClick={() => { setMLSelectedActividadIdx(mlSelectedActividadIdx === i ? null : i); setMLShowActForm(false); }}
                       className={`cursor-pointer transition-colors ${mlSelectedActividadIdx === i ? 'bg-[#DBEAFE]' : i % 2 === 0 ? 'bg-white hover:bg-[#F5F7FA]' : 'bg-[#F9FAFB] hover:bg-[#F0F2F5]'}`}>
                       {[act.actividad, act.indicadores, act.fuentesVerificacion, act.supuestos, act.responsable].map((val, ci) => (
-                        <td key={ci} className="px-4 py-2.5 text-sm text-[#344054] border-b border-[#E1E4E8] max-w-[160px] truncate">{val}</td>
+                        <td key={ci} className="px-3 py-2.5 text-sm text-[#344054] border-b border-[#E1E4E8] max-w-[160px]"><div className="truncate">{val}</div></td>
                       ))}
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
+
+            {mlShowActForm && (
+              <div className="mt-4 pt-4 border-t border-[#E1E4E8]">
+                <p className="text-sm font-semibold text-[#344054] mb-3">{mlActividadEditIdx !== null ? 'Editar Actividad' : 'Nueva Actividad'}</p>
+                <div className="grid md:grid-cols-2 gap-3">
+                  {actFields.map((f) => (
+                    <div key={f.key} className={f.wide ? 'md:col-span-2' : ''}>
+                      <label className="block text-xs font-semibold text-[#344054] mb-1">{f.label}</label>
+                      <input type="text" value={mlActividadEdit[f.key]}
+                        onChange={(e) => setMLActividadEdit((p) => ({ ...p, [f.key]: e.target.value } as ActividadML))}
+                        className="w-full px-3 py-2 border border-[#D0D5DD] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                    </div>
+                  ))}
+                </div>
+                <div className="flex gap-2 mt-3">
+                  <button type="button" onClick={handleSaveActividad}
+                    className="px-4 py-2 bg-[#003366] text-white text-sm font-semibold rounded-lg hover:bg-[#002952]">
+                    {mlActividadEditIdx !== null ? 'Actualizar' : 'Guardar'} Actividad
+                  </button>
+                  <button type="button" onClick={() => { setMLShowActForm(false); setMLActividadEditIdx(null); setMLActividadEdit(emptyAct); }}
+                    className="px-4 py-2 border border-[#D0D5DD] text-sm font-semibold rounded-lg hover:bg-[#F5F7FA]">Cancelar</button>
+                </div>
+              </div>
+            )}
           </div>
 
-          <NavButtons
-            onRegresar={() => { setMLSelectedActividadIdx(null); setMLResultadoEditIdx(null); setMLSubView('main'); }}
-            onSiguiente={handleSaveResultado}
-          />
+          <div className="flex justify-between pt-4 border-t border-[#E1E4E8]">
+            <button type="button"
+              onClick={() => { setMLResultadoEditIdx(null); setMLSelectedActividadIdx(null); setMLShowActForm(false); setMLSubView('main'); }}
+              className="px-5 py-2.5 border-2 border-[#D0D5DD] rounded-lg font-semibold text-[#344054] hover:bg-[#F5F7FA]">Regresar</button>
+            <button type="button" onClick={handleSaveResultado}
+              className="px-5 py-2.5 bg-[#003366] text-white rounded-lg font-semibold hover:bg-[#002952]">Guardar Resultado →</button>
+          </div>
         </div>
       );
     }
 
-    /* ── Sub-vista: Principal (Main) ── */
+    /* ── Vista principal: Fin/Propósito + tabla combinada ── */
     return (
-      <div className="space-y-6">
-        <div>
-          <label className="block text-[#344054] font-medium mb-1.5 text-sm"><span className="text-red-500">* </span>Fin (impacto)</label>
-          <input type="text" value={formData.mlFin || ''} onChange={(e) => updateField('mlFin', e.target.value)} className={inp} />
-        </div>
-        <div>
-          <label className="block text-[#344054] font-medium mb-1.5 text-sm"><span className="text-red-500">* </span>Propósito (Objetivo General)</label>
-          <input type="text" value={formData.mlProposito || ''} onChange={(e) => updateField('mlProposito', e.target.value)} className={inp} />
+      <div className="space-y-5">
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-[#344054] font-medium mb-1.5 text-sm"><span className="text-red-500">* </span>Fin (impacto)</label>
+            <input type="text" value={formData.mlFin || ''} onChange={(e) => updateField('mlFin', e.target.value)} className={inp} />
+          </div>
+          <div>
+            <label className="block text-[#344054] font-medium mb-1.5 text-sm"><span className="text-red-500">* </span>Propósito (Objetivo General)</label>
+            <input type="text" value={formData.mlProposito || ''} onChange={(e) => updateField('mlProposito', e.target.value)} className={inp} />
+          </div>
         </div>
 
         <div>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[#344054] font-semibold text-sm">Resultados</span>
-            <ActionButtons
-              onAgregar={() => {
-                setMLResultadoEdit({ resultado: '', indicadores: '', fuentesVerificacion: '', supuestos: '', responsable: '', actividades: [] });
-                setMLResultadoEditIdx(null);
-                setMLSelectedActividadIdx(null);
-                setMLSubView('resultado');
-              }}
-              onEditar={() => {
-                if (mlSelectedResultadoIdx !== null) {
-                  setMLResultadoEdit({ ...mlResultados[mlSelectedResultadoIdx] });
-                  setMLResultadoEditIdx(mlSelectedResultadoIdx);
-                  setMLSelectedActividadIdx(null);
-                  setMLSubView('resultado');
-                }
-              }}
-              onBorrar={() => {
-                if (mlSelectedResultadoIdx !== null) {
-                  updateField('mlResultados', mlResultados.filter((_, i) => i !== mlSelectedResultadoIdx));
-                  setMLSelectedResultadoIdx(null);
-                }
-              }}
-              editDisabled={mlSelectedResultadoIdx === null}
-              borrarDisabled={mlSelectedResultadoIdx === null}
-            />
+            <span className="text-[#003366] font-bold text-sm">Matriz de Resultados y Actividades</span>
+            <div className="flex gap-2">
+              <button type="button"
+                onClick={() => { setMLResultadoEdit(emptyRes); setMLResultadoEditIdx(null); setMLSelectedActividadIdx(null); setMLShowActForm(false); setMLSubView('resultado'); }}
+                className="px-3 py-1.5 bg-[#003366] text-white text-sm font-semibold rounded-lg hover:bg-[#002952]">+ Agregar</button>
+              <button type="button" disabled={mlSelectedResultadoIdx === null}
+                onClick={() => { if (mlSelectedResultadoIdx !== null) { setMLResultadoEdit({ ...mlResultados[mlSelectedResultadoIdx] }); setMLResultadoEditIdx(mlSelectedResultadoIdx); setMLSelectedActividadIdx(null); setMLShowActForm(false); setMLSubView('resultado'); } }}
+                className="px-3 py-1.5 bg-white border border-[#D0D5DD] text-sm font-semibold rounded-lg hover:bg-[#F5F7FA] disabled:opacity-40">Editar</button>
+              <button type="button" disabled={mlSelectedResultadoIdx === null}
+                onClick={() => { if (mlSelectedResultadoIdx !== null) { updateField('mlResultados', mlResultados.filter((_, i) => i !== mlSelectedResultadoIdx)); setMLSelectedResultadoIdx(null); } }}
+                className="px-3 py-1.5 bg-white border border-[#D0D5DD] text-sm font-semibold rounded-lg hover:bg-[#F5F7FA] disabled:opacity-40">Borrar</button>
+            </div>
           </div>
+
           <div className="overflow-x-auto border border-[#D0D5DD] rounded-lg">
-            <table className="w-full border-collapse min-w-[600px]">
-              <thead><TableHeader cols={ML_COLS} /></thead>
+            <table className="w-full border-collapse min-w-[640px]">
+              <thead>
+                <tr className="bg-[#003366] text-white">
+                  <th className="px-3 py-2.5 text-xs font-semibold text-left border-r border-white/20 w-24 whitespace-nowrap">Tipo</th>
+                  {COLS.map((c) => <th key={c} className="px-3 py-2.5 text-xs font-semibold text-left border-r border-white/20 last:border-r-0 whitespace-nowrap">{c}</th>)}
+                </tr>
+              </thead>
               <tbody>
                 {mlResultados.length === 0 ? (
-                  <tr><td colSpan={5} className="text-center text-sm text-[#6B7280] py-6 italic">We didn't find any data to show at this time</td></tr>
-                ) : mlResultados.map((r, i) => (
-                  <tr key={i} onClick={() => setMLSelectedResultadoIdx(mlSelectedResultadoIdx === i ? null : i)}
-                    className={`cursor-pointer transition-colors ${mlSelectedResultadoIdx === i ? 'bg-[#DBEAFE]' : i % 2 === 0 ? 'bg-white hover:bg-[#F5F7FA]' : 'bg-[#F9FAFB] hover:bg-[#F0F2F5]'}`}>
-                    {[r.resultado, r.indicadores, r.fuentesVerificacion, r.supuestos, r.responsable].map((val, ci) => (
-                      <td key={ci} className="px-4 py-2.5 text-sm text-[#344054] border-b border-[#E1E4E8] max-w-[160px] truncate">{val}</td>
-                    ))}
-                  </tr>
-                ))}
+                  <tr><td colSpan={6} className="text-center text-sm text-[#6B7280] py-8 italic">Sin resultados — use + Agregar para comenzar</td></tr>
+                ) : mlResultados.flatMap((r, ri) => {
+                  const actRows = r.actividades.length === 0
+                    ? [<tr key={`r-${ri}-empty`}><td colSpan={6} className="px-3 py-2 text-xs text-[#9CA3AF] italic border-b border-[#E1E4E8] pl-5">↳ Sin actividades</td></tr>]
+                    : r.actividades.map((act, ai) => (
+                        <tr key={`r-${ri}-a-${ai}`} className={ai % 2 === 0 ? 'bg-white' : 'bg-[#F9FAFB]'}>
+                          <td className="px-3 py-2 text-xs text-[#6B7280] border-b border-[#E1E4E8] pl-5">↳ Act.{ai + 1}</td>
+                          {[act.actividad, act.indicadores, act.fuentesVerificacion, act.supuestos, act.responsable].map((val, ci) => (
+                            <td key={ci} className="px-3 py-2 text-sm text-[#344054] border-b border-[#E1E4E8] max-w-[180px]"><div className="truncate">{val}</div></td>
+                          ))}
+                        </tr>
+                      ));
+                  return [
+                    <tr key={`r-${ri}`}
+                      onClick={() => setMLSelectedResultadoIdx(mlSelectedResultadoIdx === ri ? null : ri)}
+                      className={`cursor-pointer transition-colors ${mlSelectedResultadoIdx === ri ? 'bg-[#DBEAFE]' : 'bg-[#EFF6FF] hover:bg-[#DBEAFE]/60'}`}>
+                      <td className="px-3 py-2.5 text-xs font-bold text-[#003366] border-b border-[#C5D9F0]">R{ri + 1} Resultado</td>
+                      {[r.resultado, r.indicadores, r.fuentesVerificacion, r.supuestos, r.responsable].map((val, ci) => (
+                        <td key={ci} className="px-3 py-2.5 text-sm text-[#1F2937] font-medium border-b border-[#C5D9F0] max-w-[180px]"><div className="truncate">{val}</div></td>
+                      ))}
+                    </tr>,
+                    ...actRows,
+                  ];
+                })}
               </tbody>
             </table>
           </div>
