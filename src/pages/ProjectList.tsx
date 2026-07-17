@@ -84,6 +84,7 @@ export default function ProjectList({ projects, onStartReport, onModifyReport, o
                     <h3 className="text-[#003366] font-bold text-sm leading-snug mb-2">{project.title}</h3>
                     <p className="text-[#0056B3] text-sm font-medium">{project.code}</p>
                     <p className="text-[#0056B3] text-sm">{project.responsable}</p>
+                    <p className="text-[#6B7280] text-xs">{project.unidadResponsable}</p>
                   </div>
                   <div className="flex items-center justify-between mt-4">
                     {project.status === 'asignado' ? (
