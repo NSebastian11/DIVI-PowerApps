@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "appId": null,
-  "appDisplayName": "Vinculacion PowerApps",
+  "appId": "f84de71d-9c46-4d03-a44a-418ec4bbe1e0",
+  "appDisplayName": "Vinculacion PowerApps DEV",
   "region": "prod",
   "environmentId": "b0c17177-51b4-4b38-9bd0-46cca91bb7b7",
   "description": " ",
@@ -9,6 +9,23 @@
   "buildEntryPoint": "index.html",
   "localAppUrl": "http://localhost:3000",
   "logoPath": "Default",
-  "connectionReferences": {},
+  "connectionReferences": {
+    "ded7c52f-bec2-423a-b9de-e2cf93cc7e4a": {
+      "id": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+      "displayName": "SharePoint",
+      "dataSources": [
+        "enprueba_proyectosvinculacion"
+      ],
+      "dataSets": {
+        "https://puceeduec-my.sharepoint.com/personal/dinvtramites_puce_edu_ec": {
+          "dataSources": {
+            "enprueba_proyectosvinculacion": {
+              "tableName": "En Prueba: ProyectosVinculacion"
+            }
+          }
+        }
+      }
+    }
+  },
   "databaseReferences": {}
 }

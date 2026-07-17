@@ -26,7 +26,10 @@ interface SectionConfig {
 
 interface NewProjectProposalProps {
   onBack?: () => void;
-  onSave?: () => void;
+  onSave?: (
+    formData: Record<string, unknown>,
+    mode: 'draft' | 'submitted',
+  ) => Promise<void> | void;
 }
 
 interface ImpactoEntry {
@@ -679,6 +682,8 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
   const [formData, setFormData] = useState<Record<string, any>>({});
   const [showErrors, setShowErrors] = useState(false);
   const [showSummary, setShowSummary] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   /* ── Marco Lógico sub-navigation ── */
   const [mlSubView, setMLSubView] = useState<MLSubView>('main');
@@ -735,6 +740,19 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
       return;
     }
     setShowSummary(true);
+  };
+
+  const saveProposal = async (mode: 'draft' | 'submitted') => {
+    try {
+      setIsSaving(true);
+      setSaveError(null);
+      await onSave?.({ ...formData, codigoProyecto }, mode);
+      setShowSummary(false);
+    } catch (error) {
+      setSaveError(error instanceof Error ? error.message : 'No se pudo guardar la propuesta.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const renderGenericGrid = (section: SectionConfig) => (
@@ -826,7 +844,6 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
       'numComunidad1f', 'numComunidad1m', 'numComunidad2f', 'numComunidad2m',
     ]);
     const restFields = section.fields.filter((f) => f.key !== 'alcanceTerritorial' && !beneficiaryKeys.has(f.key));
-    const numeroPersonasField = section.fields.find((f) => f.key === 'numeroPersonasAlcanzadas')!;
 
     const fm = (fKey: string, mKey: string) => {
       const f = Number(formData[fKey]) || 0;
@@ -873,7 +890,7 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
                   { label: 'Beneficiarios Directos', fKey: 'beneficiariosDirectosFemeninos', mKey: 'beneficiariosDirectosMasculinos', bg: 'bg-white' },
                   { label: 'Beneficiarios Indirectos', fKey: 'beneficiariosIndirectosFemeninos', mKey: 'beneficiariosIndirectosMasculinos', bg: 'bg-[#F9FAFB]' },
                 ] as const).map((row) => {
-                  const { f, m, total } = fm(row.fKey, row.mKey);
+                  const { f, m } = fm(row.fKey, row.mKey);
                   return (
                     <tr key={row.label} className={row.bg}>
                       <td className="border border-[#D0D5DD] px-4 py-2.5 text-sm font-medium text-[#344054]">
@@ -1625,7 +1642,7 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
               Volver
             </button>
             <div className="flex gap-3">
-              <button onClick={onSave} className="flex items-center gap-2 px-6 py-3 bg-[#F5F7FA] text-[#344054] border border-[#D0D5DD] rounded-lg font-semibold hover:bg-[#E1E4E8] transition-colors">
+              <button onClick={() => void saveProposal('draft')} disabled={isSaving} className="flex items-center gap-2 px-6 py-3 bg-[#F5F7FA] text-[#344054] border border-[#D0D5DD] rounded-lg font-semibold hover:bg-[#E1E4E8] transition-colors disabled:opacity-60">
                 <Save size={20} /> Guardar borrador
               </button>
               <button onClick={handleSubmitClick} className="flex items-center gap-2 px-6 py-3 bg-[#12B76A] text-white rounded-lg font-semibold hover:bg-[#0F9C5A] transition-colors">
@@ -1636,6 +1653,7 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
           <div className="text-center text-sm text-[#344054]/70 pt-4 border-t border-[#E1E4E8]">
             Pontificia Universidad Católica del Ecuador • Av. 12 de Octubre 1076 • Quito, Ecuador • {new Date().toLocaleDateString('es-ES')}
           </div>
+          {saveError && <p className="mt-3 text-center text-sm text-red-600">{saveError}</p>}
         </div>
       </footer>
 
@@ -1653,13 +1671,13 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
               <p><span className="font-semibold">Estado:</span> Propuesta</p>
               <p><span className="font-semibold">Unidad responsable:</span> {formData.unidadResponsable || '-'}</p>
             </div>
-            <p className="text-xs text-[#6B7280] mb-6">Esta es una simulación local. No se envía información a ningún servidor.</p>
+            <p className="text-xs text-[#6B7280] mb-6">La propuesta se guardará en la lista ProyectosVinculacion de SharePoint.</p>
             <div className="flex justify-end gap-3">
               <button onClick={() => setShowSummary(false)} className="px-5 py-2.5 border border-[#D0D5DD] rounded-lg text-[#344054] font-semibold hover:bg-[#F5F7FA] transition-colors">
                 Seguir editando
               </button>
-              <button onClick={onSave} className="px-5 py-2.5 bg-[#003366] text-white rounded-lg font-semibold hover:bg-[#002952] transition-colors">
-                Confirmar y guardar
+              <button onClick={() => void saveProposal('submitted')} disabled={isSaving} className="px-5 py-2.5 bg-[#003366] text-white rounded-lg font-semibold hover:bg-[#002952] transition-colors disabled:opacity-60">
+                {isSaving ? 'Guardando…' : 'Confirmar y guardar'}
               </button>
             </div>
           </div>
