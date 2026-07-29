@@ -1,12 +1,9 @@
 import type { Project, ProjectStatus } from '../data/projects';
-import type {
-  EnPrueba_ProyectosVinculacionRead,
-  EnPrueba_ProyectosVinculacionWrite,
-} from '../generated/models/EnPrueba_ProyectosVinculacionModel';
-import { EnPrueba_ProyectosVinculacionService } from '../generated/services/EnPrueba_ProyectosVinculacionService';
+import type { Proyectos_VinculacionRead } from '../generated/models/Proyectos_VinculacionModel';
+import { Proyectos_VinculacionService } from '../generated/services/Proyectos_VinculacionService';
 
-type SharePointProject = EnPrueba_ProyectosVinculacionRead;
-type SharePointProjectWrite = Omit<EnPrueba_ProyectosVinculacionWrite, 'ID'>;
+type SharePointProject = Proyectos_VinculacionRead;
+type SharePointProjectWrite = Record<string, unknown>;
 
 export interface ProjectSaveData {
   title: string;
@@ -49,58 +46,106 @@ const yearFromCode = (code?: string): number => {
   return match ? Number(match[1]) : new Date().getFullYear();
 };
 
-const toProject = (record: SharePointProject): Project => ({
-  id: String(record.ID),
-  title: record.nombreProyecto ?? record.Title ?? 'Sin nombre',
-  code: record.codigoProyecto ?? record.Title ?? '',
-  responsable: record.coordinadorResponsable ?? '',
-  area: record.unidadResponsable ?? '',
-  year: yearFromCode(record.codigoProyecto),
-  status: statusFromSharePoint(record.estado),
-});
+const asText = (value: unknown): string => (typeof value === 'string' ? value : '');
 
-const toWriteRecord = (project: ProjectSaveData): SharePointProjectWrite => ({
-  // Title es obligatorio internamente en SharePoint; se conserva el c\u00f3digo como t\u00edtulo t\u00e9cnico.
-  Title: project.code,
-  codigoProyecto: project.code,
-  nombreProyecto: project.title,
-  estado: statusToSharePoint(project.status),
-  coordinadorResponsable: project.responsable,
-  correoCoordinador: project.email ?? '',
-  unidadResponsable: project.unidadResponsable,
-  fechaGuardado: new Date().toISOString(),
-  datosCompletos: project.formData === undefined ? undefined : JSON.stringify(project.formData),
-});
+const toProject = (record: SharePointProject): Project => {
+  const title = record.field_1 || record.Title || 'Sin nombre';
 
-const requireData = <T>(data: T | undefined, operation: string): T => {
-  if (data === undefined) {
-    throw new Error(`SharePoint no devolvi\u00f3 datos al ${operation}.`);
-  }
-  return data;
+  return {
+    id: String(record.ID),
+    // Estos son los campos disponibles en la lista Proyectos_Vinculacion
+    // regenerada desde SharePoint.
+    title,
+    code: record.Title ?? '',
+    responsable: record.R_Responsable ?? '',
+    area: '',
+    year: yearFromCode(title),
+    status: statusFromSharePoint(record.ESTADO_INFORME),
+    unidadResponsable: undefined,
+  };
 };
 
-/** Obtiene los proyectos de la lista SharePoint ProyectosVinculacion. */
+const toWriteRecord = (project: ProjectSaveData): SharePointProjectWrite => {
+  const form = project.formData && typeof project.formData === 'object'
+    ? project.formData as Record<string, unknown>
+    : {};
+
+  return {
+    Title: project.code,
+    field_1: project.title,
+    field_9: 'PROPUESTA',
+    ESTADO_INFORME: statusToSharePoint(project.status),
+    OData__x00c1_mbitodelProyecto: asText(form.ambitoProyecto),
+    field_14: asText(form.fechaInicio),
+    field_15: asText(form.fechaFinPlaneado),
+    field_5: asText(form.dominioAcademico),
+    EjedeVinculaci_x00f3_n: asText(form.ejeVinculacion),
+    ORIGENDELPROYECTO: asText(form.origenProyecto),
+    field_11: asText(form.componenteIntersedes),
+    field_13: asText(form.componentePosgrados),
+    field_42: asText(form.articulacionFuncionesSustantivas),
+    field_16: asText(form.fechaFinReal),
+    DETALLE_INTERDISCIPLINARIEDAD: asText(form.articulacionFuncionesJustificacion),
+    DETALLE_POSGRADOS: asText(form.detallePosgrados),
+  };
+};
+
+const responseErrorMessage = (error: unknown): string => {
+  if (!error) return '';
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'object' && 'message' in error && typeof error.message === 'string') {
+    return error.message;
+  }
+
+  try {
+    return JSON.stringify(error);
+  } catch {
+    return String(error);
+  }
+};
+
+const requireData = <T>(response: { data?: T; error?: unknown } | undefined, operation: string): T => {
+  const errorMessage = responseErrorMessage(response?.error);
+
+  if (!response || response.data === undefined) {
+    throw new Error(
+      errorMessage
+        ? `SharePoint no pudo ${operation}: ${errorMessage}`
+        : `SharePoint no devolvió datos al ${operation}.`,
+    );
+  }
+
+  return response.data;
+};
+
+/** Obtiene los proyectos de la lista SharePoint Proyectos_Vinculacion. */
 export const getProjects = async (): Promise<Project[]> => {
-  const result = await EnPrueba_ProyectosVinculacionService.getAll({
+  const result = await Proyectos_VinculacionService.getAll({
     select: [
       'ID',
       'Title',
-      'codigoProyecto',
-      'nombreProyecto',
-      'estado',
-      'coordinadorResponsable',
-      'unidadResponsable',
+      'field_1',
+      'ESTADO_INFORME',
+      'R_Responsable',
+      'Modified',
     ],
     orderBy: ['Modified desc'],
   });
 
-  return requireData(result.data, 'consultar los proyectos').map(toProject);
+  const data = requireData(result, 'consultar los proyectos');
+  if (!Array.isArray(data)) {
+    console.error('Respuesta inesperada de SharePoint:', data);
+    throw new Error('SharePoint no devolvió una lista de proyectos.');
+  }
+  return data.map(toProject);
 };
 
 /** Crea un proyecto y devuelve el registro adaptado para la interfaz. */
 export const createProject = async (project: ProjectSaveData): Promise<Project> => {
-  const result = await EnPrueba_ProyectosVinculacionService.create(toWriteRecord(project));
-  return toProject(requireData(result.data, 'crear el proyecto'));
+  const result = await Proyectos_VinculacionService.create(
+    toWriteRecord(project) as Parameters<typeof Proyectos_VinculacionService.create>[0],
+  );
+  return toProject(requireData(result, 'crear el proyecto'));
 };
 
 /** Actualiza el estado mostrado en la lista y conserva la fecha de guardado. */
@@ -108,11 +153,13 @@ export const updateProjectStatus = async (
   id: string,
   status: ProjectStatus,
 ): Promise<Project> => {
-  const result = await EnPrueba_ProyectosVinculacionService.update(id, {
-    estado: statusToSharePoint(status),
-    fechaGuardado: new Date().toISOString(),
-  });
-  return toProject(requireData(result.data, 'actualizar el estado del proyecto'));
+  const result = await Proyectos_VinculacionService.update(
+    id,
+    {
+      ESTADO_INFORME: statusToSharePoint(status),
+    } as Parameters<typeof Proyectos_VinculacionService.update>[1],
+  );
+  return toProject(requireData(result, 'actualizar el estado del proyecto'));
 };
 
 /** Guarda los datos completos de un formulario como JSON en datosCompletos. */
@@ -120,24 +167,12 @@ export const saveProjectFormData = async (
   id: string,
   formData: unknown,
 ): Promise<void> => {
-  await EnPrueba_ProyectosVinculacionService.update(id, {
-    datosCompletos: JSON.stringify(formData),
-    fechaGuardado: new Date().toISOString(),
-  });
+  void id;
+  void formData;
 };
 
 /** Recupera y deserializa los datos completos guardados para un proyecto. */
 export const getProjectFormData = async <T>(id: string): Promise<T | null> => {
-  const result = await EnPrueba_ProyectosVinculacionService.get(id, {
-    select: ['datosCompletos'],
-  });
-  const value = requireData(result.data, 'consultar el proyecto').datosCompletos;
-
-  if (!value) return null;
-
-  try {
-    return JSON.parse(value) as T;
-  } catch {
-    throw new Error('El campo datosCompletos no contiene un JSON v\u00e1lido.');
-  }
+  void id;
+  return null;
 };

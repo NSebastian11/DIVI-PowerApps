@@ -1,0 +1,4280 @@
+{
+  "name": "Proyectos_Vinculacion",
+  "title": "Proyectos_Vinculacion",
+  "x-ms-permission": "read-write",
+  "x-ms-capabilities": {
+    "sortRestrictions": {
+      "sortable": true,
+      "unsortableProperties": [
+        "DETALLE_INTERDISCIPLINARIEDAD",
+        "DETALLE_INTERCULTURALIDAD",
+        "Ubicaci_x00f3_n_x002f_esdelaComu",
+        "field_28",
+        "Resumen",
+        "CRITERIOSDESELECCI_x00d3_NDEBENE",
+        "DIAGN_x00d3_STICO_x002c_PROBLEMA",
+        "PROBLEMAENELQUEINTERVIENELACONTR",
+        "Descripci_x00f3_ndelTipodeVincul",
+        "OData__x00bf_Elproyectosearticulaconal",
+        "MapeodeActoresyresponsabilidades",
+        "Detalledelc_x00e1_lculodelacomun",
+        "OG_Resultados",
+        "OG_Indicadores",
+        "OG_Fuentes",
+        "OG_Avance",
+        "OG_SUPUESTOS",
+        "OE_Resultados",
+        "OE_Indicadores",
+        "OE_Fuentes",
+        "OE_Avance",
+        "OE_Supuestos",
+        "R_Resultados",
+        "R_Indicadores",
+        "R_Responsable",
+        "R_Etapa",
+        "R_Fuentes",
+        "R_Supuestos",
+        "A_Resultados",
+        "A_Indicadores",
+        "A_Fuentes",
+        "A_Supuestos",
+        "IMPACTOSOCIAL",
+        "IMPACTOECON_x00d3_MICO",
+        "IMPACTOCIENT_x00cd_FICO_x002d_AC",
+        "IMPACTOAMBIENTAL",
+        "IMPACTOPOL_x00cd_TICO",
+        "OTRO_IMPACTO",
+        "RESULTADOSDEAPRENDIZAJE",
+        "TipoPropiedadIntelectual",
+        "PROPIEDADINTELECTUAL",
+        "{Identifier}",
+        "{IsFolder}",
+        "{Thumbnail}",
+        "{Link}",
+        "{Name}",
+        "{FilenameWithExtension}",
+        "{Path}",
+        "{FullPath}",
+        "{ModerationStatus}",
+        "{ModerationComment}",
+        "{ContentType}",
+        "{HasAttachments}",
+        "{Attachments}",
+        "{VersionNumber}",
+        "{TriggerWindowStartToken}",
+        "{TriggerWindowEndToken}"
+      ]
+    },
+    "filterRestrictions": {
+      "filterable": true,
+      "nonFilterableProperties": [
+        "DETALLE_INTERDISCIPLINARIEDAD",
+        "DETALLE_INTERCULTURALIDAD",
+        "Ubicaci_x00f3_n_x002f_esdelaComu",
+        "field_28",
+        "Resumen",
+        "CRITERIOSDESELECCI_x00d3_NDEBENE",
+        "DIAGN_x00d3_STICO_x002c_PROBLEMA",
+        "PROBLEMAENELQUEINTERVIENELACONTR",
+        "Descripci_x00f3_ndelTipodeVincul",
+        "OData__x00bf_Elproyectosearticulaconal",
+        "MapeodeActoresyresponsabilidades",
+        "Detalledelc_x00e1_lculodelacomun",
+        "OG_Resultados",
+        "OG_Indicadores",
+        "OG_Fuentes",
+        "OG_Avance",
+        "OG_SUPUESTOS",
+        "OE_Resultados",
+        "OE_Indicadores",
+        "OE_Fuentes",
+        "OE_Avance",
+        "OE_Supuestos",
+        "R_Resultados",
+        "R_Indicadores",
+        "R_Responsable",
+        "R_Etapa",
+        "R_Fuentes",
+        "R_Supuestos",
+        "A_Resultados",
+        "A_Indicadores",
+        "A_Fuentes",
+        "A_Supuestos",
+        "IMPACTOSOCIAL",
+        "IMPACTOECON_x00d3_MICO",
+        "IMPACTOCIENT_x00cd_FICO_x002d_AC",
+        "IMPACTOAMBIENTAL",
+        "IMPACTOPOL_x00cd_TICO",
+        "OTRO_IMPACTO",
+        "RESULTADOSDEAPRENDIZAJE",
+        "PROPIEDADINTELECTUAL",
+        "{Identifier}",
+        "{IsFolder}",
+        "{Thumbnail}",
+        "{Link}",
+        "{Name}",
+        "{FilenameWithExtension}",
+        "{Path}",
+        "{FullPath}",
+        "{ModerationStatus}",
+        "{ModerationComment}",
+        "{ContentType}",
+        "{HasAttachments}",
+        "{Attachments}",
+        "{VersionNumber}",
+        "{TriggerWindowStartToken}",
+        "{TriggerWindowEndToken}"
+      ]
+    },
+    "isOnlyServerPagable": true,
+    "filterFunctionSupport": [
+      "and",
+      "or",
+      "eq",
+      "startswith",
+      "gt",
+      "ge",
+      "lt",
+      "le",
+      "ne"
+    ],
+    "serverPagingOptions": [
+      "top",
+      "skiptoken"
+    ],
+    "odataVersion": 3
+  },
+  "schema": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "required": [
+        "field_1",
+        "OData__x00c1_mbitodelProyecto",
+        "field_14",
+        "field_15",
+        "field_5",
+        "EjedeVinculaci_x00f3_n",
+        "ORIGENDELPROYECTO",
+        "field_11",
+        "field_13",
+        "field_42"
+      ],
+      "properties": {
+        "ID": {
+          "title": "ID",
+          "description": "Id. de elemento de lista. Utilice este valor para especificar el elemento que actúa en otra lista de acciones relacionadas.",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-keyType": "primary",
+          "x-ms-keyOrder": 1,
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq"
+            ]
+          }
+        },
+        "Title": {
+          "title": "CÓDIGO DEL PROYECTO",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "field_1": {
+          "title": "NOMBRE DEL PROYECTO",
+          "description": "El título deberá expresar la idea principal del proyecto que se propone.",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "field_9#Id": {
+          "title": "ESTADO Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_9": {
+          "title": "ESTADO",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "default": "PROPUESTA",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "4f41418f-f221-4cf8-8f9e-181071a27e80"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "default": 5,
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "ESTADO_INFORME": {
+          "title": "ESTADO_INFORME",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "field_2#Id": {
+          "title": "TIPO Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_2": {
+          "title": "TIPO",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "default": "VINCULACION",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "928d00c4-3c28-482d-9733-b2b9557f07e6"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "default": 0,
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "OData__x00c1_mbitodelProyecto#Id": {
+          "title": "Ámbito del Proyecto Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "OData__x00c1_mbitodelProyecto": {
+          "title": "Ámbito del Proyecto",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "850d204c-1297-4f62-9576-b57418f3efe2"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "field_14": {
+          "title": "FECHA INICIO",
+          "type": "string",
+          "format": "date",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          }
+        },
+        "field_15": {
+          "title": "FECHA DE FIN PLANEADO",
+          "type": "string",
+          "format": "date",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          }
+        },
+        "field_16": {
+          "title": "FECHA DE FIN REAL",
+          "type": "string",
+          "format": "date",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          }
+        },
+        "CODIGO_PROGRAMA": {
+          "title": "CODIGO_PROGRAMA",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "field_3": {
+          "title": "PROGRAMA",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "field_4#Id": {
+          "title": "LÍNEA ESTRATÉGICA Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_4": {
+          "title": "LÍNEA ESTRATÉGICA",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "f0caeee8-26fb-4635-9005-e6461ee9bb3a"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "field_5#Id": {
+          "title": "DOMINIO ACADÉMICO Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_5": {
+          "title": "DOMINIO ACADÉMICO",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "31aea08a-512a-43b3-a52e-c5b1b1cfe247"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "EjedeVinculaci_x00f3_n#Id": {
+          "title": "Eje de Vinculación Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "EjedeVinculaci_x00f3_n": {
+          "title": "Eje de Vinculación",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "15c0eefc-d9da-40c6-9dfa-2d1161464a88"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "ORIGENDELPROYECTO#Id": {
+          "title": "ORIGEN DEL PROYECTO Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "ORIGENDELPROYECTO": {
+          "title": "ORIGEN DEL PROYECTO",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "20af51e0-64ec-4d9b-87b4-aa65f03cadd4"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "field_6#Id": {
+          "title": "LÍNEA DE INVESTIGACIÓN Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_6": {
+          "title": "LÍNEA DE INVESTIGACIÓN",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "0cdc5466-1402-4b7a-92ef-e4ce57e4751f"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "field_7#Id": {
+          "title": "OBJETIVO Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_7": {
+          "title": "OBJETIVO",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "6c77c80d-1985-456b-908f-80ba41f2a499"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "field_8#Id": {
+          "title": "ODS Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_8": {
+          "title": "ODS",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "a3787e47-f97f-4aab-a371-4c2b4e57a24d"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "field_10#Id": {
+          "title": "COMPONENTE DE INTERDISCIPLINARIEDAD Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_10": {
+          "title": "COMPONENTE DE INTERDISCIPLINARIEDAD",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "1d5ff009-48f6-4c12-b288-ce5f5f7c67bc"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "DETALLE_INTERDISCIPLINARIEDAD": {
+          "title": "DETALLE_INTERDISCIPLINARIEDAD",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "field_11#Id": {
+          "title": "COMPONENTE INTERSEDES Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_11": {
+          "title": "COMPONENTE INTERSEDES",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "566e9fbd-2ede-4847-bab6-90de2787728a"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "field_12#Id": {
+          "title": "COMPONENTE DE INTERNACIONALIZACIÓN Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_12": {
+          "title": "COMPONENTE DE INTERNACIONALIZACIÓN",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "35a612b8-524a-4e85-9175-e2a0b6ab1737"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "field_13#Id": {
+          "title": "COMPONENTE DE POSGRADOS Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_13": {
+          "title": "COMPONENTE DE POSGRADOS",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "fc9847d5-b7a8-4a34-8aa7-397ac931d219"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "DETALLE_POSGRADOS#Id": {
+          "title": "DETALLE_POSGRADOS Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "DETALLE_POSGRADOS": {
+          "title": "DETALLE_POSGRADOS",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "2874b2d2-c60d-4977-a3e0-9ae7f59eded7"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "COMPONENTEDEINTERCULTURALIDAD": {
+          "title": "COMPONENTE DE INTERCULTURALIDAD",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "DETALLE_INTERCULTURALIDAD": {
+          "title": "DETALLE_INTERCULTURALIDAD",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "Ubicaci_x00f3_n_x002f_esdelaComu": {
+          "title": "Ubicación/es de la Comunidad/es o Grupo/s Alcanzado/s",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "field_28": {
+          "title": "NOMBRE DE COMUNIDAD ALCANZADA",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "field_31": {
+          "title": "NÚMERO DE PERSONAS ALCANZADAS",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "field_17#Id": {
+          "title": "UNIDAD RESPONSABLE Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_17": {
+          "title": "UNIDAD RESPONSABLE",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "1a7140dd-0344-4c99-915b-83e14fca3c1b"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "Carrera": {
+          "title": "Carrera",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "field_18": {
+          "title": "CARRERA QUE COORDINA",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "field_19": {
+          "title": "NÚMERO DE CARRERAS INVOLUCRADAS EN EL PROYECTO",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "field_20": {
+          "title": "COORDINADOR / RESPONSABLE",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "IDENTIFICACION": {
+          "title": "IDENTIFICACION",
+          "description": "Número de cédula, pasaporte, etc",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "field_21": {
+          "title": "CORREO ELECTRÓNICO COORDINADOR",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "field_22": {
+          "title": "TELÉFONO COORDINADOR",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "GRUPODEINVESTIGACI_x00d3_N#Id": {
+          "title": "GRUPO DE INVESTIGACIÓN Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "GRUPODEINVESTIGACI_x00d3_N": {
+          "title": "GRUPO DE INVESTIGACIÓN",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "82ca7a13-a452-4d9e-ac87-795b8cc4636e"
+                },
+                "value-path": "Id",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-permission": "read-only",
+              "x-ms-capabilities": {
+                "x-ms-sp": {
+                  "OdataQueryName": "GRUPODEINVESTIGACI_x00d3_N/Nombredelgrupo"
+                },
+                "filterFunctions": [
+                  "eq"
+                ]
+              }
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "PROYECTOINVESTIGACI_x00d3_N#Id": {
+          "title": "PROYECTO INVESTIGACIÓN Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "PROYECTOINVESTIGACI_x00d3_N": {
+          "title": "PROYECTO INVESTIGACIÓN",
+          "description": "El proyecto de vinculación surge a partir del desarrollo de un proyecto de investigación previo?",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "2d24950e-d56e-4706-9e5e-5c5232b41926"
+                },
+                "value-path": "Id",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-permission": "read-only",
+              "x-ms-capabilities": {
+                "x-ms-sp": {
+                  "OdataQueryName": "PROYECTOINVESTIGACI_x00d3_N/Title"
+                },
+                "filterFunctions": [
+                  "eq"
+                ]
+              }
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "field_23": {
+          "title": "CAMPO AMPLIO",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "field_24": {
+          "title": "CAMPO ESPECÍFICO",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "field_25": {
+          "title": "CAMPO DETALLADO",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "field_26#Id": {
+          "title": "ALCANCE TERRITORIAL Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_26": {
+          "title": "ALCANCE TERRITORIAL",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "6285770c-f34b-4a0f-bfe7-94f1dcc4737c"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "REDACAD_x00c9_MICAARTICULADA#Id": {
+          "title": "RED ACADÉMICA ARTICULADA Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "REDACAD_x00c9_MICAARTICULADA": {
+          "title": "RED ACADÉMICA ARTICULADA",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "d7347576-a7a6-4b04-8182-636e10b092f1"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "field_27": {
+          "title": "TIPO DE ACTORES SOCIALES",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "field_29#Id": {
+          "title": "CONVENIO Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_29": {
+          "title": "CONVENIO",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "20c5fbdb-9d39-4cda-b9f2-a5b21bd198b1"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "Resumen": {
+          "title": "Resumen",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "CRITERIOSDESELECCI_x00d3_NDEBENE": {
+          "title": "CRITERIOS DE SELECCIÓN DE BENEFICIARIOS ENTRE LA POBLACIÓN OBJETIVO",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "DIAGN_x00d3_STICO_x002c_PROBLEMA": {
+          "title": "DIAGNÓSTICO, PROBLEMA Y ACTORES INVOLUCRADOS",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "PROBLEMAENELQUEINTERVIENELACONTR": {
+          "title": "PROBLEMA EN EL QUE INTERVIENE LA CONTRAPARTE",
+          "description": "Máximo 200 palabras",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "field_30": {
+          "title": "NOMBRE DE CONTRAPARTE",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "field_32": {
+          "title": "NÚMERO DE ESTUDIANTES VINCULADOS",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "N_x00da_MERODEESTUDIANTESVINCULA": {
+          "title": "NÚMERO DE ESTUDIANTES VINCULADOS 2DO SEMESTRE",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "field_33": {
+          "title": "NÚMERO DE DOCENTES VINCULADOS",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "N_x00da_MERODEDOCENTESVINCULADOS": {
+          "title": "NÚMERO DE DOCENTES VINCULADOS 2DO SEMESTRE",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "field_34": {
+          "title": "NÚMERO DE ADMINISTRATIVOS VINCULADOS",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "field_35": {
+          "title": "NÚMERO DE ALUMNI VINCULADOS",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "field_36": {
+          "title": "AÑO DE PRESUPUESTO",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "field_37": {
+          "title": "PRESUPUESTO PLANIFICADO",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "field_38": {
+          "title": "PRESUPUESTO EJECUTADO",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "PRESUPUESTOEXTERNOASIGNADO": {
+          "title": "PRESUPUESTO EXTERNO ASIGNADO",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "PRESUPUESTOEXTERNO": {
+          "title": "PRESUPUESTO EXTERNO",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "GASTONOCONTEMPLADO": {
+          "title": "GASTO NO CONTEMPLADO",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "field_39#Id": {
+          "title": "FUENTE DE FINANCIAMIENTO Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_39": {
+          "title": "FUENTE DE FINANCIAMIENTO",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "ef967b4e-6bd7-4e98-ac86-418b6cb9625b"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "field_40#Id": {
+          "title": "PARÁMETRO DE CUMPLIMIENTO Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_40": {
+          "title": "PARÁMETRO DE CUMPLIMIENTO",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "0cb6993a-a902-43a2-9197-6adc8ae5a83a"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "field_41#Id": {
+          "title": "IMPACTOS DEL PROYECTO Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_41": {
+          "title": "IMPACTOS DEL PROYECTO",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "11774deb-7dec-4706-aaab-fbef3c479fe7"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "field_42#Id": {
+          "title": "ARTICULACIÓN DE FUNCIONES SUSTANTIVAS Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_42": {
+          "title": "ARTICULACIÓN DE FUNCIONES SUSTANTIVAS",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "default": "VINCULACIÓN / INVESTIGACIÓN",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "b7539c9f-4b03-443c-90c4-c7032f4d897b"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "default": 1,
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "Descripci_x00f3_ndelTipodeVincul": {
+          "title": "Descripción del Tipo de Vinculación",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "InstrumentoLegaldelaContraparte#Id": {
+          "title": "Instrumento Legal de la Contraparte Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "InstrumentoLegaldelaContraparte": {
+          "title": "Instrumento Legal de la Contraparte",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "abfd75a5-ce04-4695-b668-2d0019789502"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "field_43": {
+          "title": "EVIDENCIA",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "field_44#Id": {
+          "title": "SEDE Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "field_44": {
+          "title": "SEDE",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "2ad6dfc3-f060-49c2-8ad5-57538cd0d589"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "OData__x00bf_Elproyectosearticulaconal": {
+          "title": "¿El proyecto se articula con alguna investigación PUCE?",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "num_comunidad_1m": {
+          "title": "num_comunidad_1m",
+          "description": "Número de personas alcanzadas en la comunidad participante. Primer semestre: Masculino",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "num_comunidad_1f": {
+          "title": "num_comunidad_1f",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "num_comunidad_2m": {
+          "title": "num_comunidad_2m",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "num_comunidad_2f": {
+          "title": "num_comunidad_2f",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "beneficiarios_directos_masculino": {
+          "title": "beneficiarios_directos_masculinos",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "beneficiarios_indirectos_masculi": {
+          "title": "beneficiarios_indirectos_masculinos",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "beneficiarios_directos_femeninos": {
+          "title": "beneficiarios_directos_femeninos",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "beneficiarios_indirectos_femenin": {
+          "title": "beneficiarios_indirectos_femeninos",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "personas_alcanzadas_masculinos": {
+          "title": "personas_alcanzadas_masculinos",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "personas_alcanzadas_femeninos": {
+          "title": "personas_alcanzadas_femeninos",
+          "type": "number",
+          "format": "double",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          },
+          "maximum": 1.7976931348623157e+308,
+          "minimum": -1.7976931348623157e+308
+        },
+        "MapeodeActoresyresponsabilidades": {
+          "title": "Mapeo de Actores y responsabilidades",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "Detalledelc_x00e1_lculodelacomun": {
+          "title": "Detalle del cálculo de la comunidad participante",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "OG_Resultados": {
+          "title": "OG_Resultados",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "OG_Indicadores": {
+          "title": "OG_Indicadores",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "OG_Fuentes": {
+          "title": "OG_Fuentes",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "OG_Avance": {
+          "title": "OG_Avance",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "OG_SUPUESTOS": {
+          "title": "OG_SUPUESTOS",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "OE_Resultados": {
+          "title": "OE_Resultados",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "OE_Indicadores": {
+          "title": "OE_Indicadores",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "OE_Fuentes": {
+          "title": "OE_Fuentes",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "OE_Avance": {
+          "title": "OE_Avance",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "OE_Supuestos": {
+          "title": "OE_Supuestos",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "R_Resultados": {
+          "title": "R_Resultados",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "R_Indicadores": {
+          "title": "R_Indicadores",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "R_Responsable": {
+          "title": "R_Responsable",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "R_Etapa": {
+          "title": "R_Etapa",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "R_Fuentes": {
+          "title": "R_Fuentes",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "R_Supuestos": {
+          "title": "R_Supuestos",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "A_Resultados": {
+          "title": "A_Resultados",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "A_Indicadores": {
+          "title": "A_Indicadores",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "A_Fuentes": {
+          "title": "A_Fuentes",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "A_Supuestos": {
+          "title": "A_Supuestos",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "IMPACTOSOCIAL": {
+          "title": "IMPACTO SOCIAL",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "IMPACTOECON_x00d3_MICO": {
+          "title": "IMPACTO ECONÓMICO",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "IMPACTOCIENT_x00cd_FICO_x002d_AC": {
+          "title": "IMPACTO CIENTÍFICO-ACADÉMICO",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "IMPACTOAMBIENTAL": {
+          "title": "IMPACTO AMBIENTAL",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "IMPACTOPOL_x00cd_TICO": {
+          "title": "IMPACTO POLÍTICO",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "OTRO_IMPACTO": {
+          "title": "OTRO_IMPACTO",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "RESULTADOSDEAPRENDIZAJE": {
+          "title": "RESULTADOS DE APRENDIZAJE",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "TipoPropiedadIntelectual#Id": {
+          "title": "Tipo Propiedad Intelectual Id",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal",
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "@odata.type": "#Collection(Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference)"
+        },
+        "TipoPropiedadIntelectual@odata.type": {
+          "title": "TipoPropiedadIntelectual",
+          "type": "string",
+          "x-ms-visibility": "internal",
+          "x-ms-permission": "read-write"
+        },
+        "TipoPropiedadIntelectual": {
+          "title": "Tipo Propiedad Intelectual",
+          "x-ms-permission": "read-write",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "x-ms-sort": "none",
+            "x-ms-capabilities": {
+              "x-ms-sp": {
+                "IsChoice": true
+              },
+              "filterFunctions": [
+                "eq"
+              ]
+            },
+            "properties": {
+              "@odata.type": {
+                "title": "@odata.type",
+                "x-ms-visibility": "internal",
+                "type": "string",
+                "x-ms-permission": "read-write"
+              },
+              "Value": {
+                "title": "Value",
+                "type": "string",
+                "x-ms-dynamic-values": {
+                  "operationId": "GetEntityValues",
+                  "parameters": {
+                    "dataset": {
+                      "parameter": "dataset"
+                    },
+                    "table": {
+                      "parameter": "table"
+                    },
+                    "id": "1c6f016c-c658-42af-87e8-2d2f1f505d1a"
+                  },
+                  "value-path": "Value",
+                  "value-title": "Value",
+                  "value-collection": "value"
+                }
+              },
+              "Id": {
+                "title": "Id",
+                "type": "integer",
+                "format": "int64",
+                "x-ms-visibility": "internal",
+                "x-ms-permission": "read-only"
+              }
+            },
+            "x-ms-displayFormat": {
+              "titleProperty": "Value"
+            }
+          },
+          "@odata.type": "#Collection(Microsoft.Azure.Connectors.SharePoint.SPListExpandedReference)"
+        },
+        "PROPIEDADINTELECTUAL": {
+          "title": "PROPIEDAD INTELECTUAL",
+          "type": "string",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none"
+        },
+        "ASESOR_x00cd_A#Id": {
+          "title": "ASESORÍA Id",
+          "type": "integer",
+          "format": "int64",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "ASESOR_x00cd_A": {
+          "title": "ASESORÍA",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "x-ms-sp": {
+              "IsChoice": true
+            },
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Value": {
+              "title": "Value",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "9829d674-4625-4c5b-8d15-ffa5476e42cb"
+                },
+                "value-path": "Value",
+                "value-title": "Value",
+                "value-collection": "value"
+              }
+            },
+            "Id": {
+              "title": "Id",
+              "type": "integer",
+              "format": "int64",
+              "x-ms-visibility": "internal",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Value"
+          }
+        },
+        "Modified": {
+          "title": "Modificado",
+          "description": "Cuándo se cambió por última vez este elemento.",
+          "type": "string",
+          "format": "date-time",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          }
+        },
+        "Editor#Claims": {
+          "title": "Modificado por Claims",
+          "type": "string",
+          "description": "Identificador interno para el último usuario que modificó este elemento.",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "Editor": {
+          "title": "Modificado por",
+          "description": "El último usuario que modificó este elemento.",
+          "type": "object",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-only"
+            },
+            "Claims": {
+              "title": "Claims",
+              "type": "string",
+              "description": "Identificador interno para el último usuario que modificó este elemento.",
+              "x-ms-permission": "read-only",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "d31655d1-1d5b-4511-95a1-7a09e9b75bf2"
+                },
+                "value-path": "Claims",
+                "value-title": "DisplayName",
+                "value-collection": "value"
+              }
+            },
+            "DisplayName": {
+              "title": "DisplayName",
+              "type": "string",
+              "description": "El nombre del usuario que modificó por última vez este elemento.",
+              "x-ms-permission": "read-only",
+              "x-ms-capabilities": {
+                "x-ms-sp": {
+                  "OdataQueryName": "Title"
+                },
+                "filterFunctions": [
+                  "eq",
+                  "startswith"
+                ]
+              }
+            },
+            "Email": {
+              "title": "Email",
+              "type": "string",
+              "description": "Dirección de correo electrónico del usuario que modificó por última vez este elemento.",
+              "format": "email",
+              "x-ms-permission": "read-only",
+              "x-ms-capabilities": {
+                "x-ms-sp": {
+                  "OdataQueryName": "EMail"
+                },
+                "filterFunctions": [
+                  "eq",
+                  "startswith"
+                ]
+              }
+            },
+            "Picture": {
+              "title": "Picture",
+              "type": "string",
+              "description": "Vincular a una imagen del usuario que modificó por última vez este elemento.",
+              "format": "uri",
+              "x-ms-media-kind": "image",
+              "x-ms-media-default-folder-path": "/sites/Proyecto-Ceropapeles",
+              "x-ms-media-base-url": "https://puceeduec.sharepoint.com/sites/Proyecto-Ceropapeles",
+              "x-ms-permission": "read-only"
+            },
+            "Department": {
+              "title": "Department",
+              "type": "string",
+              "description": "Nombre del departamento del usuario que modificó por última vez este elemento.",
+              "x-ms-permission": "read-only"
+            },
+            "JobTitle": {
+              "title": "JobTitle",
+              "type": "string",
+              "description": "Cargo del usuario que modificó por última vez este elemento.",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "DisplayName",
+            "subtitleProperty": "Email",
+            "thumbnailProperty": "Picture"
+          }
+        },
+        "Author#Claims": {
+          "title": "Creado por Claims",
+          "type": "string",
+          "description": "Identificador interno para el usuario que creó este elemento.",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "Author": {
+          "title": "Creado por",
+          "description": "El usuario que creó este elemento.",
+          "type": "object",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq"
+            ]
+          },
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-only"
+            },
+            "Claims": {
+              "title": "Claims",
+              "type": "string",
+              "description": "Identificador interno para el usuario que creó este elemento.",
+              "x-ms-permission": "read-only",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "1df5e554-ec7e-46a6-901d-d85a3881cb18"
+                },
+                "value-path": "Claims",
+                "value-title": "DisplayName",
+                "value-collection": "value"
+              }
+            },
+            "DisplayName": {
+              "title": "DisplayName",
+              "type": "string",
+              "description": "El nombre del usuario que creó este elemento.",
+              "x-ms-permission": "read-only",
+              "x-ms-capabilities": {
+                "x-ms-sp": {
+                  "OdataQueryName": "Title"
+                },
+                "filterFunctions": [
+                  "eq",
+                  "startswith"
+                ]
+              }
+            },
+            "Email": {
+              "title": "Email",
+              "type": "string",
+              "description": "Dirección de correo electrónico del usuario que creó este elemento.",
+              "format": "email",
+              "x-ms-permission": "read-only",
+              "x-ms-capabilities": {
+                "x-ms-sp": {
+                  "OdataQueryName": "EMail"
+                },
+                "filterFunctions": [
+                  "eq",
+                  "startswith"
+                ]
+              }
+            },
+            "Picture": {
+              "title": "Picture",
+              "type": "string",
+              "description": "Vincula a una imagen del usuario que creó este elemento.",
+              "format": "uri",
+              "x-ms-media-kind": "image",
+              "x-ms-media-default-folder-path": "/sites/Proyecto-Ceropapeles",
+              "x-ms-media-base-url": "https://puceeduec.sharepoint.com/sites/Proyecto-Ceropapeles",
+              "x-ms-permission": "read-only"
+            },
+            "Department": {
+              "title": "Department",
+              "type": "string",
+              "description": "Nombre del departamento del usuario que creó este elemento.",
+              "x-ms-permission": "read-only"
+            },
+            "JobTitle": {
+              "title": "JobTitle",
+              "type": "string",
+              "description": "Cargo del usuario que creó este elemento.",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "DisplayName",
+            "subtitleProperty": "Email",
+            "thumbnailProperty": "Picture"
+          }
+        },
+        "OData__ColorTag": {
+          "title": "Etiqueta de color",
+          "type": "string",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "ComplianceAssetId": {
+          "title": "Id. de activo de cumplimiento normativo",
+          "type": "string",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "startswith"
+            ]
+          },
+          "maxLength": 255
+        },
+        "Created": {
+          "title": "Creado",
+          "description": "Cuando se creó este elemento.",
+          "type": "string",
+          "format": "date-time",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "asc,desc",
+          "x-ms-capabilities": {
+            "filterFunctions": [
+              "eq",
+              "gt",
+              "ge",
+              "lt",
+              "le",
+              "ne"
+            ]
+          }
+        },
+        "{Identifier}": {
+          "title": "Identificador",
+          "description": "Valor que se puede usar en las acciones relacionadas con el archivo para seleccionar un archivo.",
+          "type": "string",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "none"
+        },
+        "{IsFolder}": {
+          "title": "EsCarpeta",
+          "description": "Es True cuando el elemento es una carpeta, False en caso contrario.",
+          "type": "boolean",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "none"
+        },
+        "{Thumbnail}": {
+          "title": "Miniatura",
+          "description": "Dirección URL de las miniaturas del elemento en 3 tamaños diferentes, si está disponible.",
+          "type": "object",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "none",
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-only"
+            },
+            "Small": {
+              "title": "Small",
+              "type": "string",
+              "description": "Dirección URL de la miniatura pequeña y muy comprimida del elemento, si está disponible.",
+              "x-ms-permission": "read-only"
+            },
+            "Medium": {
+              "title": "Medium",
+              "type": "string",
+              "description": "Dirección URL de la miniatura de tamaño estándar del elemento, si está disponible.",
+              "x-ms-permission": "read-only"
+            },
+            "Large": {
+              "title": "Large",
+              "type": "string",
+              "description": "Dirección URL de la miniatura de mayor tamaño del elemento, si está disponible.",
+              "x-ms-permission": "read-only"
+            }
+          }
+        },
+        "{Link}": {
+          "title": "Vinculo al elemento",
+          "description": "Vínculo que se puede usar para obtener el archivo o el elemento de lista. Solo las personas con permisos para el elemento podrán abrir el vínculo.",
+          "type": "string",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "none"
+        },
+        "{Name}": {
+          "title": "Nombre",
+          "description": "Nombre de archivo del elemento en las bibliotecas de documentos, nombre para mostrar del elemento en las listas.",
+          "type": "string",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "none"
+        },
+        "{FilenameWithExtension}": {
+          "title": "Nombre de archivo con extensión",
+          "description": "En el caso de las bibliotecas, devuelve el nombre de archivo con la extensión. En el caso de las listas, devuelve la propiedad de título.",
+          "type": "string",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "none"
+        },
+        "{Path}": {
+          "title": "Ruta de acceso a la carpeta",
+          "description": "Ruta de acceso a la carpeta en la que está el elemento, en relación con la dirección del sitio.",
+          "type": "string",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "none"
+        },
+        "{FullPath}": {
+          "title": "Ruta de acceso completa",
+          "description": "La ruta de acceso completa de un elemento o una carpeta o un archivo",
+          "type": "string",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "none"
+        },
+        "{ModerationStatus}": {
+          "title": "Estado de aprobación de contenido",
+          "description": "El estado de aprobación del contenido. Puede ser uno de los siguientes: borrador, pendiente, aprobado o rechazado",
+          "type": "string",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "none"
+        },
+        "{ModerationComment}": {
+          "title": "Comentarios asociados con la aprobación de contenido de este elemento de lista",
+          "description": "Comentarios asociados con la moderación del elemento de lista.",
+          "type": "string",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "none"
+        },
+        "{ContentType}#Id": {
+          "title": "Tipo de contenido Id",
+          "type": "string",
+          "x-ms-permission": "read-only",
+          "x-ms-visibility": "internal"
+        },
+        "{ContentType}": {
+          "title": "Tipo de contenido",
+          "description": "Nombre del tipo de contenido del elemento.",
+          "type": "object",
+          "x-ms-permission": "read-write",
+          "x-ms-sort": "none",
+          "properties": {
+            "@odata.type": {
+              "title": "@odata.type",
+              "x-ms-visibility": "internal",
+              "type": "string",
+              "x-ms-permission": "read-write"
+            },
+            "Id": {
+              "title": "Id",
+              "type": "string",
+              "x-ms-dynamic-values": {
+                "operationId": "GetEntityValues",
+                "parameters": {
+                  "dataset": {
+                    "parameter": "dataset"
+                  },
+                  "table": {
+                    "parameter": "table"
+                  },
+                  "id": "4651e8f2-38c9-4ad0-8def-41f743f76f30"
+                },
+                "value-path": "Id",
+                "value-title": "Name",
+                "value-collection": "value"
+              }
+            },
+            "Name": {
+              "title": "Name",
+              "type": "string",
+              "x-ms-permission": "read-only"
+            }
+          },
+          "x-ms-displayFormat": {
+            "titleProperty": "Name"
+          }
+        },
+        "{HasAttachments}": {
+          "title": "Tiene datos adjuntos",
+          "description": "Indica la presencia de datos adjuntos en el elemento.",
+          "type": "boolean",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "none"
+        },
+        "{Attachments}@odata.type": {
+          "title": "{Attachments}",
+          "type": "string",
+          "x-ms-visibility": "internal",
+          "x-ms-permission": "read-write"
+        },
+        "{Attachments}": {
+          "title": "Datos adjuntos",
+          "description": "Nunca devuelve ningún dato. Utilice puntos de conexión de datos adjuntos para obtener acceso a los datos adjuntos del elemento.",
+          "x-ms-permission": "read-write",
+          "targetEntity": "attachments",
+          "format": "x-ms-containedMediaEntity",
+          "x-ms-visibility": "internal",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "format": "x-ms-mediaEntity",
+            "x-ms-sort": "none",
+            "properties": {
+              "@odata.type": {
+                "title": "@odata.type",
+                "x-ms-visibility": "internal",
+                "type": "string",
+                "x-ms-permission": "read-write"
+              },
+              "Id": {
+                "title": "Id",
+                "type": "string",
+                "x-ms-keyType": "primary",
+                "x-ms-keyOrder": 1,
+                "x-ms-permission": "read-only"
+              },
+              "AbsoluteUri": {
+                "title": "AbsoluteUri",
+                "type": "string",
+                "format": "uri",
+                "x-ms-permission": "read-only"
+              },
+              "DisplayName": {
+                "title": "DisplayName",
+                "type": "string",
+                "x-ms-permission": "read-only"
+              }
+            }
+          },
+          "@odata.type": "#Collection(Microsoft.Azure.Connectors.SharePoint.SPListItemAttachment)"
+        },
+        "{VersionNumber}": {
+          "title": "Número de versión",
+          "description": "Número de versión del archivo o el elemento de la lista.",
+          "type": "string",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "none"
+        },
+        "{TriggerWindowStartToken}": {
+          "title": "Token de inicio de ventana de desencadenador",
+          "description": "Un token que expresa la hora de la última comprobación del flujo. Utilice esta información si desea comprobar si se han modificado una o más columnas desde la última comprobación del flujo.",
+          "type": "string",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "none"
+        },
+        "{TriggerWindowEndToken}": {
+          "title": "Token de fin de ventana de desencadenador",
+          "description": "Un token que expresa la hora de la comprobación actual del flujo. Utilice esta información si desea comprobar si se han modificado una o más columnas desde la última comprobación del flujo.",
+          "type": "string",
+          "x-ms-permission": "read-only",
+          "x-ms-sort": "none"
+        }
+      },
+      "x-ms-relationships": {
+        "field_9": {
+          "targetEntity": "field_9",
+          "referentialConstraints": {
+            "field_9#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "field_2": {
+          "targetEntity": "field_2",
+          "referentialConstraints": {
+            "field_2#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "OData__x00c1_mbitodelProyecto": {
+          "targetEntity": "OData__x00c1_mbitodelProyecto",
+          "referentialConstraints": {
+            "OData__x00c1_mbitodelProyecto#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "field_4": {
+          "targetEntity": "field_4",
+          "referentialConstraints": {
+            "field_4#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "field_5": {
+          "targetEntity": "field_5",
+          "referentialConstraints": {
+            "field_5#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "EjedeVinculaci_x00f3_n": {
+          "targetEntity": "EjedeVinculaci_x00f3_n",
+          "referentialConstraints": {
+            "EjedeVinculaci_x00f3_n#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "ORIGENDELPROYECTO": {
+          "targetEntity": "ORIGENDELPROYECTO",
+          "referentialConstraints": {
+            "ORIGENDELPROYECTO#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "field_6": {
+          "targetEntity": "field_6",
+          "referentialConstraints": {
+            "field_6#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "field_7": {
+          "targetEntity": "field_7",
+          "referentialConstraints": {
+            "field_7#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "field_8": {
+          "targetEntity": "field_8",
+          "referentialConstraints": {
+            "field_8#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "field_10": {
+          "targetEntity": "field_10",
+          "referentialConstraints": {
+            "field_10#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "field_11": {
+          "targetEntity": "field_11",
+          "referentialConstraints": {
+            "field_11#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "field_12": {
+          "targetEntity": "field_12",
+          "referentialConstraints": {
+            "field_12#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "field_13": {
+          "targetEntity": "field_13",
+          "referentialConstraints": {
+            "field_13#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "DETALLE_POSGRADOS": {
+          "targetEntity": "DETALLE_POSGRADOS",
+          "referentialConstraints": {
+            "DETALLE_POSGRADOS#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "field_17": {
+          "targetEntity": "field_17",
+          "referentialConstraints": {
+            "field_17#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "GRUPODEINVESTIGACI_x00d3_N": {
+          "targetEntity": "GRUPODEINVESTIGACI_x00d3_N",
+          "referentialConstraints": {
+            "GRUPODEINVESTIGACI_x00d3_N#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "PROYECTOINVESTIGACI_x00d3_N": {
+          "targetEntity": "PROYECTOINVESTIGACI_x00d3_N",
+          "referentialConstraints": {
+            "PROYECTOINVESTIGACI_x00d3_N#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "field_26": {
+          "targetEntity": "field_26",
+          "referentialConstraints": {
+            "field_26#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "REDACAD_x00c9_MICAARTICULADA": {
+          "targetEntity": "REDACAD_x00c9_MICAARTICULADA",
+          "referentialConstraints": {
+            "REDACAD_x00c9_MICAARTICULADA#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "field_29": {
+          "targetEntity": "field_29",
+          "referentialConstraints": {
+            "field_29#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "field_39": {
+          "targetEntity": "field_39",
+          "referentialConstraints": {
+            "field_39#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "field_40": {
+          "targetEntity": "field_40",
+          "referentialConstraints": {
+            "field_40#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "field_41": {
+          "targetEntity": "field_41",
+          "referentialConstraints": {
+            "field_41#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "field_42": {
+          "targetEntity": "field_42",
+          "referentialConstraints": {
+            "field_42#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "InstrumentoLegaldelaContraparte": {
+          "targetEntity": "InstrumentoLegaldelaContraparte",
+          "referentialConstraints": {
+            "InstrumentoLegaldelaContraparte#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "field_44": {
+          "targetEntity": "field_44",
+          "referentialConstraints": {
+            "field_44#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "TipoPropiedadIntelectual": {
+          "targetEntity": "TipoPropiedadIntelectual",
+          "referentialConstraints": {
+            "TipoPropiedadIntelectual#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "ASESOR_x00cd_A": {
+          "targetEntity": "ASESOR_x00cd_A",
+          "referentialConstraints": {
+            "ASESOR_x00cd_A#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        },
+        "Editor": {
+          "targetEntity": "Editor",
+          "referentialConstraints": {
+            "Editor#Claims": {
+              "referencedProperty": "Claims"
+            }
+          }
+        },
+        "Author": {
+          "targetEntity": "Author",
+          "referentialConstraints": {
+            "Author#Claims": {
+              "referencedProperty": "Claims"
+            }
+          }
+        },
+        "{ContentType}": {
+          "targetEntity": "4651e8f2-38c9-4ad0-8def-41f743f76f30",
+          "referentialConstraints": {
+            "{ContentType}#Id": {
+              "referencedProperty": "Id"
+            }
+          }
+        }
+      },
+      "x-ms-displayFormat": {
+        "propertiesDisplayOrder": [
+          "Title",
+          "field_1",
+          "field_2",
+          "field_3",
+          "field_4",
+          "field_5",
+          "field_6",
+          "field_7",
+          "field_8",
+          "field_9",
+          "field_10",
+          "field_11",
+          "field_12",
+          "field_13",
+          "field_14",
+          "field_15",
+          "field_16",
+          "field_17",
+          "field_18",
+          "field_19",
+          "field_20",
+          "field_21",
+          "field_22",
+          "field_23",
+          "field_24",
+          "field_25",
+          "field_26",
+          "field_27",
+          "field_28",
+          "field_29",
+          "field_30",
+          "field_31",
+          "field_32",
+          "field_33",
+          "field_34",
+          "field_35",
+          "field_36",
+          "field_37",
+          "field_38",
+          "field_39",
+          "field_40",
+          "field_41",
+          "field_42",
+          "field_43",
+          "field_44",
+          "IDENTIFICACION",
+          "ESTADO_INFORME",
+          "OData__x00bf_Elproyectosearticulaconal",
+          "num_comunidad_1m",
+          "num_comunidad_1f",
+          "num_comunidad_2m",
+          "num_comunidad_2f",
+          "MapeodeActoresyresponsabilidades",
+          "Detalledelc_x00e1_lculodelacomun",
+          "COMPONENTEDEINTERCULTURALIDAD",
+          "OG_Resultados",
+          "OG_Indicadores",
+          "OG_Fuentes",
+          "OE_Resultados",
+          "OE_Indicadores",
+          "OE_Fuentes",
+          "R_Resultados",
+          "R_Indicadores",
+          "R_Fuentes",
+          "A_Indicadores",
+          "A_Fuentes",
+          "A_Resultados",
+          "IMPACTOSOCIAL",
+          "IMPACTOECON_x00d3_MICO",
+          "IMPACTOCIENT_x00cd_FICO_x002d_AC",
+          "IMPACTOAMBIENTAL",
+          "RESULTADOSDEAPRENDIZAJE",
+          "PROPIEDADINTELECTUAL",
+          "ASESOR_x00cd_A",
+          "IMPACTOPOL_x00cd_TICO",
+          "N_x00da_MERODEESTUDIANTESVINCULA",
+          "PRESUPUESTOEXTERNO",
+          "DETALLE_INTERDISCIPLINARIEDAD",
+          "DETALLE_INTERCULTURALIDAD",
+          "N_x00da_MERODEDOCENTESVINCULADOS",
+          "Carrera",
+          "beneficiarios_directos_masculino",
+          "beneficiarios_indirectos_masculi",
+          "beneficiarios_directos_femeninos",
+          "beneficiarios_indirectos_femenin",
+          "personas_alcanzadas_masculinos",
+          "personas_alcanzadas_femeninos",
+          "PRESUPUESTOEXTERNOASIGNADO",
+          "GASTONOCONTEMPLADO",
+          "DETALLE_POSGRADOS",
+          "R_Responsable",
+          "R_Etapa",
+          "OG_SUPUESTOS",
+          "OE_Supuestos",
+          "R_Supuestos",
+          "A_Supuestos",
+          "CODIGO_PROGRAMA",
+          "OG_Avance",
+          "OE_Avance",
+          "Descripci_x00f3_ndelTipodeVincul",
+          "OData__x00c1_mbitodelProyecto",
+          "Ubicaci_x00f3_n_x002f_esdelaComu",
+          "InstrumentoLegaldelaContraparte",
+          "OTRO_IMPACTO",
+          "TipoPropiedadIntelectual",
+          "EjedeVinculaci_x00f3_n",
+          "ORIGENDELPROYECTO",
+          "GRUPODEINVESTIGACI_x00d3_N",
+          "REDACAD_x00c9_MICAARTICULADA",
+          "PROYECTOINVESTIGACI_x00d3_N",
+          "Resumen",
+          "CRITERIOSDESELECCI_x00d3_NDEBENE",
+          "DIAGN_x00d3_STICO_x002c_PROBLEMA",
+          "PROBLEMAENELQUEINTERVIENELACONTR",
+          "{Attachments}"
+        ],
+        "propertiesCompactDisplayOrder": [
+          "Title",
+          "field_1",
+          "field_9",
+          "ID",
+          "ESTADO_INFORME",
+          "field_2",
+          "OData__x00c1_mbitodelProyecto",
+          "field_14",
+          "field_15",
+          "field_16",
+          "CODIGO_PROGRAMA",
+          "field_3",
+          "field_4",
+          "field_5",
+          "EjedeVinculaci_x00f3_n",
+          "ORIGENDELPROYECTO",
+          "field_6",
+          "field_7",
+          "field_8",
+          "field_10",
+          "DETALLE_INTERDISCIPLINARIEDAD",
+          "field_11",
+          "field_12",
+          "field_13",
+          "DETALLE_POSGRADOS",
+          "COMPONENTEDEINTERCULTURALIDAD",
+          "DETALLE_INTERCULTURALIDAD",
+          "Ubicaci_x00f3_n_x002f_esdelaComu",
+          "field_28",
+          "field_31",
+          "field_17",
+          "Carrera",
+          "field_18",
+          "field_19",
+          "field_20",
+          "IDENTIFICACION",
+          "field_21",
+          "field_22",
+          "GRUPODEINVESTIGACI_x00d3_N",
+          "PROYECTOINVESTIGACI_x00d3_N",
+          "field_23",
+          "field_24",
+          "field_25",
+          "field_26",
+          "REDACAD_x00c9_MICAARTICULADA",
+          "field_27",
+          "field_29",
+          "Resumen",
+          "CRITERIOSDESELECCI_x00d3_NDEBENE",
+          "DIAGN_x00d3_STICO_x002c_PROBLEMA",
+          "PROBLEMAENELQUEINTERVIENELACONTR",
+          "field_30",
+          "field_32",
+          "N_x00da_MERODEESTUDIANTESVINCULA",
+          "field_33",
+          "N_x00da_MERODEDOCENTESVINCULADOS",
+          "field_34",
+          "field_35",
+          "field_36",
+          "field_37",
+          "field_38",
+          "PRESUPUESTOEXTERNOASIGNADO",
+          "PRESUPUESTOEXTERNO",
+          "GASTONOCONTEMPLADO",
+          "field_39",
+          "field_40",
+          "field_41",
+          "field_42",
+          "Descripci_x00f3_ndelTipodeVincul",
+          "InstrumentoLegaldelaContraparte",
+          "field_43",
+          "field_44",
+          "OData__x00bf_Elproyectosearticulaconal",
+          "num_comunidad_1m",
+          "num_comunidad_1f",
+          "num_comunidad_2m",
+          "num_comunidad_2f",
+          "beneficiarios_directos_masculino",
+          "beneficiarios_indirectos_masculi",
+          "beneficiarios_directos_femeninos",
+          "beneficiarios_indirectos_femenin",
+          "personas_alcanzadas_masculinos",
+          "personas_alcanzadas_femeninos",
+          "MapeodeActoresyresponsabilidades",
+          "Detalledelc_x00e1_lculodelacomun",
+          "OG_Resultados",
+          "OG_Indicadores",
+          "OG_Fuentes",
+          "OG_Avance",
+          "OG_SUPUESTOS",
+          "OE_Resultados",
+          "OE_Indicadores",
+          "OE_Fuentes",
+          "OE_Avance",
+          "OE_Supuestos",
+          "R_Resultados",
+          "R_Indicadores",
+          "R_Responsable",
+          "R_Etapa",
+          "R_Fuentes",
+          "R_Supuestos",
+          "A_Resultados",
+          "A_Indicadores",
+          "A_Fuentes",
+          "A_Supuestos",
+          "IMPACTOSOCIAL",
+          "IMPACTOECON_x00d3_MICO",
+          "IMPACTOCIENT_x00cd_FICO_x002d_AC",
+          "IMPACTOAMBIENTAL",
+          "IMPACTOPOL_x00cd_TICO",
+          "OTRO_IMPACTO",
+          "RESULTADOSDEAPRENDIZAJE",
+          "TipoPropiedadIntelectual",
+          "PROPIEDADINTELECTUAL",
+          "ASESOR_x00cd_A",
+          "Modified",
+          "Editor",
+          "Author"
+        ],
+        "propertiesTabularDisplayOrder": [
+          "Title",
+          "field_1",
+          "field_9",
+          "ID",
+          "ESTADO_INFORME",
+          "field_2",
+          "OData__x00c1_mbitodelProyecto",
+          "field_14",
+          "field_15",
+          "field_16",
+          "CODIGO_PROGRAMA",
+          "field_3",
+          "field_4",
+          "field_5",
+          "EjedeVinculaci_x00f3_n",
+          "ORIGENDELPROYECTO",
+          "field_6",
+          "field_7",
+          "field_8",
+          "field_10",
+          "DETALLE_INTERDISCIPLINARIEDAD",
+          "field_11",
+          "field_12",
+          "field_13",
+          "DETALLE_POSGRADOS",
+          "COMPONENTEDEINTERCULTURALIDAD",
+          "DETALLE_INTERCULTURALIDAD",
+          "Ubicaci_x00f3_n_x002f_esdelaComu",
+          "field_28",
+          "field_31",
+          "field_17",
+          "Carrera",
+          "field_18",
+          "field_19",
+          "field_20",
+          "IDENTIFICACION",
+          "field_21",
+          "field_22",
+          "GRUPODEINVESTIGACI_x00d3_N",
+          "PROYECTOINVESTIGACI_x00d3_N",
+          "field_23",
+          "field_24",
+          "field_25",
+          "field_26",
+          "REDACAD_x00c9_MICAARTICULADA",
+          "field_27",
+          "field_29",
+          "Resumen",
+          "CRITERIOSDESELECCI_x00d3_NDEBENE",
+          "DIAGN_x00d3_STICO_x002c_PROBLEMA",
+          "PROBLEMAENELQUEINTERVIENELACONTR",
+          "field_30",
+          "field_32",
+          "N_x00da_MERODEESTUDIANTESVINCULA",
+          "field_33",
+          "N_x00da_MERODEDOCENTESVINCULADOS",
+          "field_34",
+          "field_35",
+          "field_36",
+          "field_37",
+          "field_38",
+          "PRESUPUESTOEXTERNOASIGNADO",
+          "PRESUPUESTOEXTERNO",
+          "GASTONOCONTEMPLADO",
+          "field_39",
+          "field_40",
+          "field_41",
+          "field_42",
+          "Descripci_x00f3_ndelTipodeVincul",
+          "InstrumentoLegaldelaContraparte",
+          "field_43",
+          "field_44",
+          "OData__x00bf_Elproyectosearticulaconal",
+          "num_comunidad_1m",
+          "num_comunidad_1f",
+          "num_comunidad_2m",
+          "num_comunidad_2f",
+          "beneficiarios_directos_masculino",
+          "beneficiarios_indirectos_masculi",
+          "beneficiarios_directos_femeninos",
+          "beneficiarios_indirectos_femenin",
+          "personas_alcanzadas_masculinos",
+          "personas_alcanzadas_femeninos",
+          "MapeodeActoresyresponsabilidades",
+          "Detalledelc_x00e1_lculodelacomun",
+          "OG_Resultados",
+          "OG_Indicadores",
+          "OG_Fuentes",
+          "OG_Avance",
+          "OG_SUPUESTOS",
+          "OE_Resultados",
+          "OE_Indicadores",
+          "OE_Fuentes",
+          "OE_Avance",
+          "OE_Supuestos",
+          "R_Resultados",
+          "R_Indicadores",
+          "R_Responsable",
+          "R_Etapa",
+          "R_Fuentes",
+          "R_Supuestos",
+          "A_Resultados",
+          "A_Indicadores",
+          "A_Fuentes",
+          "A_Supuestos",
+          "IMPACTOSOCIAL",
+          "IMPACTOECON_x00d3_MICO",
+          "IMPACTOCIENT_x00cd_FICO_x002d_AC",
+          "IMPACTOAMBIENTAL",
+          "IMPACTOPOL_x00cd_TICO",
+          "OTRO_IMPACTO",
+          "RESULTADOSDEAPRENDIZAJE",
+          "TipoPropiedadIntelectual",
+          "PROPIEDADINTELECTUAL",
+          "ASESOR_x00cd_A",
+          "Modified",
+          "Editor",
+          "Author"
+        ]
+      }
+    }
+  },
+  "referencedEntities": {
+    "field_9": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_9",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "field_2": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_2",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "OData__x00c1_mbitodelProyecto": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/OData__x00c1_mbitodelProyecto",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "field_4": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_4",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "field_5": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_5",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "EjedeVinculaci_x00f3_n": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/EjedeVinculaci_x00f3_n",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "ORIGENDELPROYECTO": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/ORIGENDELPROYECTO",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "field_6": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_6",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "field_7": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_7",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "field_8": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_8",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "field_10": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_10",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "field_11": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_11",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "field_12": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_12",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "field_13": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_13",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "DETALLE_POSGRADOS": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/DETALLE_POSGRADOS",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "field_17": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_17",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "GRUPODEINVESTIGACI_x00d3_N": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/GRUPODEINVESTIGACI_x00d3_N",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "PROYECTOINVESTIGACI_x00d3_N": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/PROYECTOINVESTIGACI_x00d3_N",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "field_26": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_26",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "REDACAD_x00c9_MICAARTICULADA": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/REDACAD_x00c9_MICAARTICULADA",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "field_29": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_29",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "field_39": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_39",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "field_40": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_40",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "field_41": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_41",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "field_42": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_42",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "InstrumentoLegaldelaContraparte": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/InstrumentoLegaldelaContraparte",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "field_44": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/field_44",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "TipoPropiedadIntelectual": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/TipoPropiedadIntelectual",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "ASESOR_x00cd_A": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/ASESOR_x00cd_A",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "Editor": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/Editor",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "Author": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/Author",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    },
+    "4651e8f2-38c9-4ad0-8def-41f743f76f30": {
+      "lookupEndpoint": {
+        "path": "/tables/74c87365-285d-432d-b13c-b5cbec6e1574/entities/%257bContentType%257d",
+        "capabilities": {
+          "searchable": true,
+          "requiresSearch": false
+        }
+      }
+    }
+  },
+  "webUrl": "https://puceeduec.sharepoint.com/sites/Proyecto-Ceropapeles/Lists/Proyectos_Vinculacion/AllItems.aspx",
+  "x-ms-connection-version": ""
+}

@@ -10,17 +10,17 @@
   "localAppUrl": "http://localhost:3000",
   "logoPath": "Default",
   "connectionReferences": {
-    "ded7c52f-bec2-423a-b9de-e2cf93cc7e4a": {
+    "466d4291-4b33-4278-b7d7-32bf3c741a83": {
       "id": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
       "displayName": "SharePoint",
       "dataSources": [
-        "enprueba_proyectosvinculacion"
+        "proyectos_vinculacion"
       ],
       "dataSets": {
-        "https://puceeduec-my.sharepoint.com/personal/dinvtramites_puce_edu_ec": {
+        "https://puceeduec.sharepoint.com/sites/Proyecto-Ceropapeles": {
           "dataSources": {
-            "enprueba_proyectosvinculacion": {
-              "tableName": "En Prueba: ProyectosVinculacion"
+            "proyectos_vinculacion": {
+              "tableName": "Proyectos_Vinculacion"
             }
           }
         }

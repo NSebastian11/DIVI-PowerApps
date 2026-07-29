@@ -103,34 +103,23 @@ export default function App() {
     formData: Record<string, unknown>,
     mode: 'draft' | 'submitted',
   ) => {
-    const optimisticProject: Project = {
-      id: `temp-${Date.now()}`,
-      title: String(formData.nombreProyecto ?? 'Proyecto sin nombre'),
-      code: String(formData.codigoProyecto ?? ''),
-      responsable: String(formData.coordinadorResponsable ?? ''),
-      area: String(formData.unidadResponsable ?? ''),
-      year: new Date().getFullYear(),
-      status: 'asignado',
-    };
-
-    setProjects((prev) => [optimisticProject, ...prev]);
-    setView('list');
-
     try {
       const project = await createProject({
-        title: optimisticProject.title,
-        code: optimisticProject.code,
-        responsable: optimisticProject.responsable,
+        title: String(formData.nombreProyecto ?? 'Proyecto sin nombre'),
+        code: String(formData.codigoProyecto ?? ''),
+        responsable: String(formData.coordinadorResponsable ?? ''),
         email: String(formData.correoCoordinador ?? ''),
         unidadResponsable: String(formData.unidadResponsable ?? ''),
         status: 'asignado',
         formData: { ...formData, saveMode: mode },
       });
 
-      setProjects((prev) => [project, ...prev.filter((item) => item.id !== optimisticProject.id)]);
+      setProjects((prev) => [project, ...prev]);
       setDataError(null);
+      setView('list');
     } catch (error) {
       setDataError(error instanceof Error ? error.message : 'No se pudo guardar la propuesta en SharePoint.');
+      throw error;
     }
   };
 

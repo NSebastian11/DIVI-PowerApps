@@ -1,6 +1,6 @@
 {
-  "name": "En Prueba: ProyectosVinculacion",
-  "title": "En Prueba: ProyectosVinculacion",
+  "name": "Proyectos_Vinculacion",
+  "title": "Proyectos_Vinculacion",
   "x-ms-permission": "read-write",
   "x-ms-capabilities": {
     "sortRestrictions": {

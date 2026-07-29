@@ -5,7 +5,7 @@
 
 // Models
 export * as CommonModels from './models/CommonModels';
-export * as EnPrueba_ProyectosVinculacionModel from './models/EnPrueba_ProyectosVinculacionModel';
+export * as Proyectos_VinculacionModel from './models/Proyectos_VinculacionModel';
 
 // Services
-export * from './services/EnPrueba_ProyectosVinculacionService';
+export * from './services/Proyectos_VinculacionService';
