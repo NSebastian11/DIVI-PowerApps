@@ -1,6 +1,7 @@
 import { useState, useRef, useMemo, useEffect } from 'react';
 import { Save, Send, FileText, CheckCircle2, AlertTriangle, X, Search, ChevronDown } from 'lucide-react';
 import { generateNextProjectCode } from '../lib/projectCode';
+import { getProjectChoiceCatalogs, type ProjectChoiceCatalogs, type ProjectChoiceKey } from '../services/sharepointService';
 
 /* ───────── Tipos ───────── */
 type FieldType = 'text' | 'email' | 'tel' | 'textarea' | 'number' | 'date' | 'select' | 'multiselect' | 'file' | 'readonly';
@@ -10,6 +11,10 @@ interface FieldConfig {
   label: string;
   type: FieldType;
   required?: boolean;
+  /** Mantiene estos valores como texto para no perder ceros iniciales al enviarlos a SharePoint. */
+  numericOnly?: boolean;
+  minLength?: number;
+  maxLength?: number;
   help?: string;
   options?: string[];
   colSpan?: 1 | 2;
@@ -280,7 +285,7 @@ const SECTIONS: SectionConfig[] = [
     fields: [
       { key: 'coordinadorResponsable', label: 'COORDINADOR / RESPONSABLE', type: 'text', required: true },
       { key: 'correoCoordinador', label: 'CORREO ELECTRÓNICO COORDINADOR', type: 'email', required: true },
-      { key: 'telefonoCoordinador', label: 'TELÉFONO COORDINADOR', type: 'tel' },
+      { key: 'telefonoCoordinador', label: 'TELÉFONO COORDINADOR', type: 'tel', numericOnly: true, minLength: 7, maxLength: 15 },
       { key: 'carreraQueCoordina', label: 'CARRERA QUE COORDINA', type: 'text', required: true },
       { key: 'grupoInvestigacion', label: 'GRUPO DE INVESTIGACIÓN', type: 'select', required: true, options: OPCIONES_GRUPO_INV },
       { key: 'lineaInvestigacion', label: 'LÍNEA DE INVESTIGACIÓN', type: 'select', required: true, options: OPCIONES_LINEA_INV },
@@ -288,7 +293,7 @@ const SECTIONS: SectionConfig[] = [
       { key: 'proyectoInvestigacion', label: 'PROYECTO INVESTIGACIÓN', type: 'text', help: '¿El proyecto de vinculación surge a partir del desarrollo de un proyecto de investigación previo?' },
       { key: 'articulaInvestigacionPuce', label: '¿El proyecto se articula con alguna investigación PUCE?', type: 'text' },
       { key: 'redAcademicaArticulada', label: 'RED ACADÉMICA ARTICULADA', type: 'multiselect', options: OPCIONES_RED_ACADEMICA, colSpan: 2 },
-      { key: 'identificacion', label: 'IDENTIFICACION', type: 'text', required: true, help: 'Número de cédula, pasaporte, etc.' },
+      { key: 'identificacion', label: 'IDENTIFICACIÓN', type: 'text', required: true, numericOnly: true, minLength: 10, maxLength: 10, help: 'Ingrese los 10 dígitos de la cédula, sin guiones ni espacios.' },
     ],
   },
   {
@@ -345,7 +350,7 @@ const SECTIONS: SectionConfig[] = [
       { key: 'componenteInternacionalizacion', label: 'COMPONENTE DE INTERNACIONALIZACIÓN', type: 'select', required: true, options: OPCIONES_SI_NO },
       { key: 'detalleInternacionalizacion', label: 'DETALLE — INTERNACIONALIZACIÓN', type: 'text', showIf: (d) => d.componenteInternacionalizacion === 'SI' },
       { key: 'componentePosgrados', label: 'COMPONENTE DE POSGRADOS', type: 'select', required: true, options: OPCIONES_SI_NO },
-      { key: 'detallePosgrados', label: 'DETALLE — POSGRADOS', type: 'text', showIf: (d) => d.componentePosgrados === 'SI' },
+      { key: 'detallePosgrados', label: 'DETALLE — POSGRADOS', type: 'select', required: true, showIf: (d) => d.componentePosgrados === 'SI' },
       { key: 'componenteIntersedes', label: 'COMPONENTE INTERSEDES', type: 'select', required: true, options: OPCIONES_SI_NO },
       { key: 'detalleIntersedes', label: 'DETALLE — INTERSEDES', type: 'text', showIf: (d) => d.componenteIntersedes === 'SI' },
     ],
@@ -510,11 +515,12 @@ function MultiSelectField({ options, selected, onChange, showError }: {
 }
 
 /* ───────── Renderizador genérico de campos ───────── */
-function FieldRenderer({ field, value, onChange, showError }: {
+function FieldRenderer({ field, value, onChange, showError, errorMessage }: {
   field: FieldConfig;
   value: any;
   onChange: (v: any) => void;
   showError: boolean;
+  errorMessage?: string;
 }) {
   const isWide = field.type === 'textarea' || field.type === 'file' || field.type === 'multiselect' || field.colSpan === 2;
   const inputCls = `w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] ${
@@ -560,10 +566,20 @@ function FieldRenderer({ field, value, onChange, showError }: {
         <input
           type={field.type}
           value={value ?? ''}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => {
+            const nextValue = e.target.value;
+            if (field.numericOnly && !/^\d*$/.test(nextValue)) return;
+            onChange(nextValue);
+          }}
+          inputMode={field.numericOnly ? 'numeric' : undefined}
+          pattern={field.numericOnly ? '\\d*' : undefined}
+          minLength={field.minLength}
+          maxLength={field.maxLength}
+          aria-invalid={showError || Boolean(errorMessage)}
           className={inputCls}
         />
       )}
+      {errorMessage && <p className="text-xs text-[#D92D20] mt-1">{errorMessage}</p>}
     </div>
   );
 }
@@ -685,6 +701,9 @@ export default function NewProjectProposal({ onBack, onSave, existingProjectCode
   const [showSummary, setShowSummary] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [choiceCatalogs, setChoiceCatalogs] = useState<Partial<ProjectChoiceCatalogs>>({});
+  const [catalogStatus, setCatalogStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [catalogError, setCatalogError] = useState<string | null>(null);
 
   /* ── Marco Lógico sub-navigation ── */
   const [mlSubView, setMLSubView] = useState<MLSubView>('main');
@@ -702,10 +721,77 @@ export default function NewProjectProposal({ onBack, onSave, existingProjectCode
 
   const updateField = (key: string, value: any) => setFormData((prev) => ({ ...prev, [key]: value }));
 
+  useEffect(() => {
+    let isCurrent = true;
+
+    void getProjectChoiceCatalogs()
+      .then((catalogs) => {
+        if (!isCurrent) return;
+        setChoiceCatalogs(catalogs);
+        setCatalogStatus('ready');
+      })
+      .catch((error: unknown) => {
+        if (!isCurrent) return;
+        setCatalogStatus('error');
+        setCatalogError(error instanceof Error ? error.message : 'No fue posible cargar los catálogos de SharePoint.');
+      });
+
+    return () => { isCurrent = false; };
+  }, []);
+
+  const getChoiceOptions = (key: string, fallback: string[] = []): string[] => {
+    if (key in choiceCatalogs) return choiceCatalogs[key as ProjectChoiceKey] ?? [];
+
+    const managedChoices: ProjectChoiceKey[] = [
+      'ambitoProyecto',
+      'dominioAcademico',
+      'ejeVinculacion',
+      'origenProyecto',
+      'componenteIntersedes',
+      'componentePosgrados',
+      'detallePosgrados',
+      'articulacionFuncionesSustantivas',
+    ];
+
+    return managedChoices.includes(key as ProjectChoiceKey) ? [] : fallback;
+  };
+
+  const hasMeaningfulValue = (value: unknown): boolean => {
+    if (value === null || value === undefined) return false;
+    if (typeof value === 'string') return value.trim().length > 0;
+    if (typeof value === 'number') return Number.isFinite(value);
+    if (Array.isArray(value)) return value.some((item) => hasMeaningfulValue(item));
+    return true;
+  };
+
   const missingKeys = useMemo(
-    () => ALL_REQUIRED_FIELDS.filter((f) => !formData[f.key]).map((f) => f.key),
+    () => ALL_REQUIRED_FIELDS
+      .filter((f) => {
+        if (f.showIf && !f.showIf(formData)) return false;
+        return !hasMeaningfulValue(formData[f.key]);
+      })
+      .map((f) => f.key),
     [formData]
   );
+
+  const validationErrors = useMemo(() => {
+    const errors: Record<string, string> = {};
+    const email = String(formData.correoCoordinador ?? '').trim();
+    const telefono = String(formData.telefonoCoordinador ?? '').trim();
+    const identificacion = String(formData.identificacion ?? '').trim();
+
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errors.correoCoordinador = 'Ingrese un correo electrónico válido.';
+    }
+    if (telefono && !/^\d{7,15}$/.test(telefono)) {
+      errors.telefonoCoordinador = 'El teléfono debe contener entre 7 y 15 dígitos.';
+    }
+    if (identificacion && !/^\d{10}$/.test(identificacion)) {
+      errors.identificacion = 'La cédula debe contener exactamente 10 dígitos.';
+    }
+    return errors;
+  }, [formData]);
+  const hasValidationErrors = Object.keys(validationErrors).length > 0;
 
   const carreraPrincipal: string = (formData.carrerasInvolucradas || [])[0] || '';
   const cineInfo = CINE_POR_CARRERA[carreraPrincipal];
@@ -732,10 +818,19 @@ export default function NewProjectProposal({ onBack, onSave, existingProjectCode
   };
 
   const handleSubmitClick = () => {
-    if (missingKeys.length > 0 || hasCustomErrors) {
+    if (catalogStatus !== 'ready') {
+      setSaveError(
+        catalogStatus === 'error'
+          ? catalogError ?? 'No fue posible validar los catálogos de SharePoint.'
+          : 'Estamos cargando los catálogos vigentes de SharePoint. Inténtelo nuevamente en unos segundos.',
+      );
+      return;
+    }
+
+    if (missingKeys.length > 0 || hasCustomErrors || hasValidationErrors) {
       setShowErrors(true);
       const firstErrorSection = SECTIONS.find(
-        (s) => s.fields.some((f) => missingKeys.includes(f.key)) || customErrors[s.id]
+        (s) => s.fields.some((f) => missingKeys.includes(f.key) || validationErrors[f.key]) || customErrors[s.id]
       );
       if (firstErrorSection) scrollToSection(firstErrorSection.id);
       return;
@@ -745,6 +840,9 @@ export default function NewProjectProposal({ onBack, onSave, existingProjectCode
 
   const saveProposal = async (mode: 'draft' | 'submitted') => {
     try {
+      if (catalogStatus !== 'ready') {
+        throw new Error(catalogError ?? 'No fue posible validar los catálogos de SharePoint.');
+      }
       setIsSaving(true);
       setSaveError(null);
       await onSave?.({ ...formData, codigoProyecto }, mode);
@@ -761,10 +859,11 @@ export default function NewProjectProposal({ onBack, onSave, existingProjectCode
       {section.fields.filter((f) => !f.showIf || f.showIf(formData)).map((field) => (
         <FieldRenderer
           key={field.key}
-          field={field}
+          field={{ ...field, options: getChoiceOptions(field.key, field.options) }}
           value={getFieldValue(field)}
           onChange={(v) => updateField(field.key, v)}
-          showError={showErrors && missingKeys.includes(field.key)}
+          showError={showErrors && (missingKeys.includes(field.key) || Boolean(validationErrors[field.key]))}
+          errorMessage={showErrors ? validationErrors[field.key] : undefined}
         />
       ))}
     </div>
@@ -1225,16 +1324,20 @@ export default function NewProjectProposal({ onBack, onSave, existingProjectCode
                   }`}
                 >
                   <option value="">Seleccionar...</option>
-                  {OPCIONES_SI_NO.map((o) => <option key={o} value={o}>{o}</option>)}
+                  {getChoiceOptions(item.main, OPCIONES_SI_NO).map((o) => <option key={o} value={o}>{o}</option>)}
                 </select>
               </div>
               {showDetail && (
                 <div className="mt-3 pl-3 border-l-2 border-[#0056B3]">
                   <FieldRenderer
-                    field={detailField}
+                    field={{
+                      ...detailField,
+                      options: getChoiceOptions(item.detail, detailField.options),
+                      required: item.detail === 'detallePosgrados' ? true : detailField.required,
+                    }}
                     value={formData[item.detail]}
                     onChange={(v) => updateField(item.detail, v)}
-                    showError={false}
+                    showError={showErrors && missingKeys.includes(item.detail)}
                   />
                 </div>
               )}

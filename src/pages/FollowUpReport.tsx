@@ -65,9 +65,74 @@ interface FollowUpReportProps {
   onSave?: (tipoInforme: 'avance' | 'cierre' | null) => void;
   mode?: 'create' | 'edit';
   isDivi?: boolean;
+  /** Datos ya registrados en la propuesta y recuperados desde SharePoint. */
+  initialData?: Record<string, unknown>;
 }
 
 type SiNo = 'si' | 'no';
+
+interface GeneralProjectData {
+  proyecto: string;
+  estado: string;
+  unidadResponsable: string;
+  carrera: string;
+  docenteResponsable: string;
+  correo: string;
+  telefono: string;
+  anioEjecucion: string;
+  fechaInicio: string;
+  fechaCierre: string;
+  fechaInforme: string;
+  programa: string;
+}
+
+type DiagnosticField = 'descripcionProblema' | 'actoresInvolucrados' | 'resumenProblema' | 'impactosProyecto';
+type SignatureRole = 'elaborado' | 'revisado' | 'aprobado';
+
+const initialText = (value: unknown): string =>
+  typeof value === 'string' || typeof value === 'number' ? String(value) : '';
+
+const reportStatusFromSharePoint = (value: unknown): string => {
+  switch (initialText(value).trim().toUpperCase()) {
+    case 'CIERRE':
+    case 'EN CIERRE':
+      return 'Cierre';
+    case 'SUSPENDIDO':
+      return 'Suspendido';
+    default:
+      return 'En ejecución';
+  }
+};
+
+const firstRegisteredCareer = (value: unknown): string => {
+  if (Array.isArray(value)) return initialText(value[0]);
+  return initialText(value).split(/\s*\|\s*|;|,/)[0]?.trim() ?? '';
+};
+
+const yearFromProjectCode = (value: unknown): string =>
+  initialText(value).match(/PSC-(\d{4})-/i)?.[1] ?? '';
+
+const reportGeneralData = (data: Record<string, unknown>): GeneralProjectData => ({
+  proyecto: initialText(data.nombreProyecto),
+  estado: reportStatusFromSharePoint(data._estadoInforme),
+  unidadResponsable: initialText(data.unidadResponsable),
+  carrera: initialText(data.carreraQueCoordina) || firstRegisteredCareer(data.carrerasInvolucradas),
+  docenteResponsable: initialText(data.coordinadorResponsable),
+  correo: initialText(data.correoCoordinador),
+  telefono: initialText(data.telefonoCoordinador),
+  anioEjecucion: initialText(data.anioPresupuesto) || yearFromProjectCode(data.codigoProyecto),
+  fechaInicio: initialText(data.fechaInicio),
+  fechaCierre: initialText(data.fechaFinPlaneado),
+  fechaInforme: '',
+  programa: initialText(data.programa) || initialText(data.detallePosgrados),
+});
+
+const sharePointYesNo = (value: unknown): SiNo | null => {
+  const text = initialText(value).trim().toUpperCase();
+  if (text === 'SI' || text === 'SÍ' || text === 'YES' || text === 'TRUE') return 'si';
+  if (text === 'NO' || text === 'FALSE') return 'no';
+  return null;
+};
 
 /* ───────── Datos estáticos ───────── */
 const GRUPOS_PRIORITARIOS = [
@@ -145,6 +210,16 @@ const COORDINADORES_POSGRADO = [
   'Dr. Fernando Mera',
   'Dra. Lucía Paredes',
 ];
+
+const QUANTITATIVE_VARIABLES = [
+  { id: 'v1', label: 'Población total afectada', unidad: 'personas', rango: false },
+  { id: 'v2', label: 'N° de familias beneficiarias', unidad: 'familias', rango: false },
+  { id: 'v3', label: 'Índice de pobreza (NBI)', unidad: '%', rango: true },
+  { id: 'v4', label: 'Tasa de desempleo local', unidad: '%', rango: true },
+  { id: 'v5', label: 'N° de organizaciones comunitarias', unidad: '', rango: false },
+  { id: 'v6', label: 'Cobertura servicios básicos', unidad: '%', rango: true },
+  { id: 'v7', label: 'Tasa de escolaridad', unidad: '%', rango: true },
+] as const;
 
 const APORTES_OPCIONES = [
   'Materiales',
@@ -280,15 +355,174 @@ function GrupoSearchable({
   );
 }
 
+function RadioSiNo({ value, onChange, label }: { value: SiNo | null; onChange: (v: SiNo) => void; label?: string }) {
+  return (
+    <div className="flex items-center gap-4">
+      {label && <span className="text-sm text-[#344054] mr-2">{label}</span>}
+      {(['si', 'no'] as SiNo[]).map((opt) => (
+        <label key={opt} className="flex items-center gap-2 cursor-pointer">
+          <input type="radio" checked={value === opt} onChange={() => onChange(opt)} className="w-4 h-4 text-[#003366] focus:ring-[#003366]" />
+          <span className="text-sm text-[#344054]">{opt === 'si' ? 'Sí' : 'No'}</span>
+        </label>
+      ))}
+    </div>
+  );
+}
+
+function SelectField({ label, value, onChange, options, placeholder, required }: {
+  label: string; value: string; onChange: (v: string) => void;
+  options: string[]; placeholder?: string; required?: boolean;
+}) {
+  return (
+    <div>
+      <label className="block text-[#344054] font-medium mb-2 text-sm">{label} {required && <span className="text-red-500">*</span>}</label>
+      <select value={value} onChange={(e) => onChange(e.target.value)} className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] bg-white">
+        <option value="">{placeholder || `Seleccionar ${label.toLowerCase()}...`}</option>
+        {options.map((option) => <option key={option} value={option}>{option}</option>)}
+      </select>
+    </div>
+  );
+}
+
+function ComboboxField({ label, value, onChange, options, placeholder, required }: {
+  label: string; value: string; onChange: (v: string) => void;
+  options: string[]; placeholder?: string; required?: boolean;
+}) {
+  const listId = `list-${label.replace(/\s+/g, '-').toLowerCase()}`;
+  return (
+    <div>
+      <label className="block text-[#344054] font-medium mb-2 text-sm">{label} {required && <span className="text-red-500">*</span>}</label>
+      <input type="text" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder || `Escribir o seleccionar ${label.toLowerCase()}...`} list={listId}
+        className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+      <datalist id={listId}>{options.map((option) => <option key={option} value={option} />)}</datalist>
+    </div>
+  );
+}
+
+function InputField({ label, value, onChange, type, placeholder, required, className, error }: {
+  label: string; value: string | number; onChange: (v: any) => void;
+  type?: string; placeholder?: string; required?: boolean; className?: string; error?: string;
+}) {
+  return (
+    <div className={className}>
+      <label className="block text-[#344054] font-medium mb-2 text-sm">{label} {required && <span className="text-red-500">*</span>}</label>
+      <input type={type || 'text'} value={value} onChange={(e) => onChange(type === 'number' ? Number(e.target.value) : e.target.value)} placeholder={placeholder}
+        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] ${error ? 'border-red-400 bg-red-50' : 'border-[#D0D5DD]'}`} />
+      {error && <p className="text-xs text-[#D92D20] mt-1">{error}</p>}
+    </div>
+  );
+}
+
+function TextAreaField({ label, value, onChange, rows, required, className, placeholder, error }: {
+  label: string; value: string; onChange: (v: string) => void;
+  rows?: number; required?: boolean; className?: string; placeholder?: string; error?: string;
+}) {
+  return (
+    <div className={className}>
+      <label className="block text-[#344054] font-medium mb-2 text-sm">{label} {required && <span className="text-red-500">*</span>}</label>
+      <textarea value={value} onChange={(e) => onChange(e.target.value)} rows={rows || 3} placeholder={placeholder}
+        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] resize-none ${error ? 'border-red-400 bg-red-50' : 'border-[#D0D5DD]'}`} />
+      {error && <p className="text-xs text-[#D92D20] mt-1">{error}</p>}
+    </div>
+  );
+}
+
 /* ============================================================ */
 /*  COMPONENTE PRINCIPAL                                         */
 /* ============================================================ */
-export default function FollowUpReport({ onBack, onSave, mode = 'create', isDivi = false }: FollowUpReportProps) {
+export default function FollowUpReport({ onBack, onSave, mode = 'create', isDivi = false, initialData = {} }: FollowUpReportProps) {
   const [activeSection, setActiveSection] = useState(isDivi ? 'notificaciones' : 'datos');
-  const [codigoProyecto, setCodigoProyecto] = useState('');
-  const [formErrors] = useState<Record<string, string>>({});
+  const [codigoProyecto, setCodigoProyecto] = useState(() => initialText(initialData.codigoProyecto));
+  const [generalData, setGeneralData] = useState<GeneralProjectData>(() => reportGeneralData(initialData));
+  const hasLoadedInitialData = useRef(false);
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+
+  const applyInitialData = (data: Record<string, unknown>) => {
+    setCodigoProyecto(initialText(data.codigoProyecto));
+    setGeneralData(reportGeneralData(data));
+
+    const interdisc = sharePointYesNo(data.componenteInterdisciplinariedad);
+    if (interdisc) setInterdisciplinariedad(interdisc);
+
+    const intersedes = sharePointYesNo(data.componenteIntersedes);
+    if (intersedes) setIntersedes(intersedes);
+
+    const internacional = sharePointYesNo(data.componenteInternacionalizacion);
+    if (internacional) setInternacionalizacion(internacional);
+
+    const posgrados = sharePointYesNo(data.componentePosgrados);
+    if (posgrados) setPosgrados(posgrados);
+
+    if (data.sede) setSedePUCE(initialText(data.sede));
+    if (data.carrerasInvolucradas) setCarrerasIntersedes(firstRegisteredCareer(data.carrerasInvolucradas));
+    if (data.detallePosgrados) setProgramaPosgrado(initialText(data.detallePosgrados));
+    if (data.coordinadorResponsable) setCoordPosgrado(initialText(data.coordinadorResponsable));
+    if (data.lineaInvestigacion) setLineaF(initialText(data.lineaInvestigacion));
+    if (data.redAcademicaArticulada) setRedF(initialText(data.redAcademicaArticulada));
+    if (data.grupoInvestigacion) setGrupoF(initialText(data.grupoInvestigacion));
+    if (data.nombreComunidadAlcanzada) setAlcanceData((prev) => ({ ...prev, comunidadAlcanzada: initialText(data.nombreComunidadAlcanzada) }));
+    if (data.criteriosSeleccionBeneficiarios) setAlcanceData((prev) => ({ ...prev, tipoActores: initialText(data.criteriosSeleccionBeneficiarios) }));
+    if (data.detalleCalculoComunidad) setAlcanceData((prev) => ({ ...prev, beneficiarios: initialText(data.detalleCalculoComunidad) }));
+    if (data.ubicacionComunidad) setAlcanceData((prev) => ({ ...prev, beneficiariosDirectos: initialText(data.ubicacionComunidad) }));
+  };
+
+  // El usuario puede avanzar antes de que termine la lectura de SharePoint.
+  // En ese caso se hidrata una sola vez, sin sobrescribir cambios posteriores.
+  useEffect(() => {
+    if (hasLoadedInitialData.current || Object.keys(initialData).length === 0) return;
+    applyInitialData(initialData as Record<string, unknown>);
+    hasLoadedInitialData.current = true;
+  }, [initialData]);
 
   const getError = (field: string) => formErrors[field];
+
+  const validateRequiredFields = () => {
+    const errors: Record<string, string> = {};
+    if (!codigoProyecto.trim()) errors.codigo = 'Ingrese el código del proyecto.';
+    if (!generalData.proyecto.trim()) errors.proyecto = 'El nombre del proyecto es obligatorio.';
+    if (!generalData.estado.trim()) errors.estado = 'Seleccione el estado del proyecto.';
+    if (!generalData.unidadResponsable.trim()) errors.unidadResponsable = 'Seleccione la unidad responsable.';
+    if (!generalData.carrera.trim()) errors.carrera = 'Ingrese la carrera.';
+    if (!generalData.docenteResponsable.trim()) errors.docenteResponsable = 'Ingrese el docente responsable.';
+    if (!generalData.correo.trim()) errors.correo = 'Ingrese un correo válido.';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(generalData.correo)) errors.correo = 'Ingrese un correo válido.';
+    if (!generalData.telefono.trim()) errors.telefono = 'Ingrese un teléfono.';
+    else if (!/^\d{7,15}$/.test(generalData.telefono)) errors.telefono = 'El teléfono debe contener entre 7 y 15 dígitos.';
+    if (!/^\d{4}$/.test(generalData.anioEjecucion)) errors.anioEjecucion = 'El año de ejecución debe tener 4 dígitos.';
+    if (!generalData.fechaInicio.trim()) errors.fechaInicio = 'Ingrese la fecha de inicio.';
+    if (!generalData.fechaCierre.trim()) errors.fechaCierre = 'Ingrese la fecha de cierre.';
+    if (!generalData.fechaInforme.trim()) errors.fechaInforme = 'Ingrese la fecha del informe.';
+    if (generalData.fechaInicio && generalData.fechaCierre && generalData.fechaCierre < generalData.fechaInicio) {
+      errors.fechaCierre = 'La fecha de cierre no puede ser anterior a la fecha de inicio.';
+    }
+    if (generalData.fechaInicio && generalData.fechaInforme && generalData.fechaInforme < generalData.fechaInicio) {
+      errors.fechaInforme = 'La fecha del informe no puede ser anterior a la fecha de inicio.';
+    }
+    if (!generalData.programa.trim()) errors.programa = 'Ingrese el programa.';
+
+    QUANTITATIVE_VARIABLES.forEach((variable) => {
+      const rawValue = quantitativeVariables[variable.id];
+      const numericValue = Number(rawValue);
+      if (rawValue === undefined || rawValue === '') {
+        errors[`cuantitativa-${variable.id}`] = 'Ingrese un valor.';
+      } else if (!Number.isFinite(numericValue) || numericValue < 0 || (variable.rango && numericValue > 100)) {
+        errors[`cuantitativa-${variable.id}`] = variable.rango
+          ? 'Ingrese un porcentaje entre 0 y 100.'
+          : 'Ingrese un número igual o mayor a 0.';
+      }
+    });
+
+    contrapartes.forEach((contraparte) => {
+      if (contraparte.ruc && !/^\d{13}$/.test(contraparte.ruc)) {
+        errors[`ruc-${contraparte.id}`] = 'El RUC debe contener 13 dígitos.';
+      }
+      if (contraparte.telefono && !/^\d{7,15}$/.test(contraparte.telefono)) {
+        errors[`telefono-${contraparte.id}`] = 'El teléfono debe contener entre 7 y 15 dígitos.';
+      }
+    });
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const [participants, setParticipants] = useState<Participant[]>([
     { id: '1', tipo: '', nacionalidad: '', horas: '', fechaInicio: '', fechaFin: '', tipoDoc: '', numeroDoc: '', nombres: '', carrera: '', firma: '' },
@@ -343,12 +577,27 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create', isDivi
   const [diviEstado, setDiviEstado] = useState<'pendiente' | 'aprobado' | 'rechazado'>('pendiente');
   const [diviFechaRevision, setDiviFechaRevision] = useState('');
 
-  /* ── Sección 2: Grupos prioritarios ── */
+  /* ── Sección 2: Grupos prioritarios y alcance ── */
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
+  const [alcanceData, setAlcanceData] = useState({
+    comunidadAlcanzada: '',
+    tipoActores: '',
+    beneficiarios: '',
+    beneficiariosDirectos: '',
+  });
   const [hombres, setHombres] = useState<number>(0);
   const [mujeres, setMujeres] = useState<number>(0);
   const [totalReal, setTotalReal] = useState<number>(0);
   const totalEstimado = hombres + mujeres;
+
+  /* ── Sección 5: Diagnóstico e indicadores ── */
+  const [diagnosticData, setDiagnosticData] = useState<Record<DiagnosticField, string>>({
+    descripcionProblema: '',
+    actoresInvolucrados: '',
+    resumenProblema: '',
+    impactosProyecto: '',
+  });
+  const [quantitativeVariables, setQuantitativeVariables] = useState<Record<string, string>>({});
 
   /* ── Sección 2b: Presupuesto ── */
   const [estadoPresupuestario, setEstadoPresupuestario] = useState<EstadoPresupuestario>('estimado');
@@ -458,6 +707,12 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create', isDivi
     participantes: [],
     firmas: [],
   });
+  const [signatures, setSignatures] = useState<Record<SignatureRole, { nombre: string; fecha: string }>>({
+    elaborado: { nombre: '', fecha: '' },
+    revisado: { nombre: '', fecha: '' },
+    aprobado: { nombre: '', fecha: '' },
+  });
+  const [selectedAttachments, setSelectedAttachments] = useState<Record<string, boolean>>({});
 
   const addFile = (section: SectionKey, file: File) => {
     setSectionFiles((prev) => ({
@@ -543,6 +798,14 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create', isDivi
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  const handleSave = (tipoInforme: 'avance' | 'cierre' | null) => {
+    if (!validateRequiredFields()) {
+      scrollToSection('datos');
+      return;
+    }
+    onSave?.(tipoInforme);
+  };
+
   const addParticipant = (tipo?: string) => {
     const defaultTipo = tipo || (activeParticipantTab !== 'todos' ? activeParticipantTab : 'Docente');
     setParticipants([...participants, {
@@ -559,103 +822,6 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create', isDivi
   const updateParticipant = (id: string, field: keyof Omit<Participant, 'id'>, value: string) => {
     setParticipants(participants.map((p) => p.id === id ? { ...p, [field]: value } : p));
   };
-
-  const RadioSiNo = ({ value, onChange, label }: { value: SiNo | null; onChange: (v: SiNo) => void; label?: string }) => (
-    <div className="flex items-center gap-4">
-      {label && <span className="text-sm text-[#344054] mr-2">{label}</span>}
-      {(['si', 'no'] as SiNo[]).map((opt) => (
-        <label key={opt} className="flex items-center gap-2 cursor-pointer">
-          <input
-            type="radio"
-            checked={value === opt}
-            onChange={() => onChange(opt)}
-            className="w-4 h-4 text-[#003366] focus:ring-[#003366]"
-          />
-          <span className="text-sm text-[#344054]">{opt === 'si' ? 'Sí' : 'No'}</span>
-        </label>
-      ))}
-    </div>
-  );
-
-  const SelectField = ({ label, value, onChange, options, placeholder, required }: {
-    label: string; value: string; onChange: (v: string) => void;
-    options: string[]; placeholder?: string; required?: boolean;
-  }) => (
-    <div>
-      <label className="block text-[#344054] font-medium mb-2 text-sm">
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] bg-white"
-      >
-        <option value="">{placeholder || `Seleccionar ${label.toLowerCase()}...`}</option>
-        {options.map((o) => <option key={o} value={o}>{o}</option>)}
-      </select>
-    </div>
-  );
-
-  const ComboboxField = ({ label, value, onChange, options, placeholder, required }: {
-    label: string; value: string; onChange: (v: string) => void;
-    options: string[]; placeholder?: string; required?: boolean;
-  }) => {
-    const listId = `list-${label.replace(/\s+/g, '-').toLowerCase()}`;
-    return (
-      <div>
-        <label className="block text-[#344054] font-medium mb-2 text-sm">
-          {label} {required && <span className="text-red-500">*</span>}
-        </label>
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder || `Escribir o seleccionar ${label.toLowerCase()}...`}
-          list={listId}
-          className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]"
-        />
-        <datalist id={listId}>
-          {options.map((o) => <option key={o} value={o} />)}
-        </datalist>
-      </div>
-    );
-  };
-
-  const InputField = ({ label, value, onChange, type, placeholder, required, className }: {
-    label: string; value: string | number; onChange: (v: any) => void;
-    type?: string; placeholder?: string; required?: boolean; className?: string;
-  }) => (
-    <div className={className}>
-      <label className="block text-[#344054] font-medium mb-2 text-sm">
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
-      <input
-        type={type || 'text'}
-        value={value}
-        onChange={(e) => onChange(type === 'number' ? Number(e.target.value) : e.target.value)}
-        placeholder={placeholder}
-        className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]"
-      />
-    </div>
-  );
-
-  const TextAreaField = ({ label, value, onChange, rows, required, className, placeholder }: {
-    label: string; value: string; onChange: (v: string) => void;
-    rows?: number; required?: boolean; className?: string; placeholder?: string;
-  }) => (
-    <div className={className}>
-      <label className="block text-[#344054] font-medium mb-2 text-sm">
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
-      <textarea
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        rows={rows || 3}
-        placeholder={placeholder}
-        className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] resize-none"
-      />
-    </div>
-  );
 
   /* ═══════════════════════════════════════════════════ */
   /*  RENDER                                              */
@@ -807,15 +973,23 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create', isDivi
           {/* ═══════════════ SECCIÓN 1 — DATOS GENERALES ═══════════════ */}
           <section id="datos" className="bg-white rounded-lg border border-[#E1E4E8] p-8 shadow-sm">
             <h2 className="text-[#003366] text-xl font-semibold mb-6 flex items-center gap-2">📋 DATOS GENERALES</h2>
+            {(codigoProyecto || generalData.proyecto) && (
+              <p className="mb-6 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-[#003366]">
+                Los datos de la propuesta registrada se han cargado desde SharePoint. Puede completar la información propia del informe.
+              </p>
+            )}
             <div className="grid md:grid-cols-2 gap-6">
               <div className="md:col-span-2">
                 <label className="block text-[#344054] font-medium mb-2 text-sm">Proyecto <span className="text-red-500">*</span></label>
-                <input type="text" className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                <input type="text" value={generalData.proyecto} onChange={(e) => setGeneralData((prev) => ({ ...prev, proyecto: e.target.value }))}
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] ${getError('proyecto') ? 'border-red-400 bg-red-50' : 'border-[#D0D5DD]'}`} />
+                {getError('proyecto') && <p className="text-xs text-[#D92D20] mt-1">{getError('proyecto')}</p>}
               </div>
 
               <div>
                 <label className="block text-[#344054] font-medium mb-2 text-sm">Estado <span className="text-red-500">*</span></label>
-                <select className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] bg-white">
+                <select value={generalData.estado} onChange={(e) => setGeneralData((prev) => ({ ...prev, estado: e.target.value }))}
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] bg-white ${getError('estado') ? 'border-red-400 bg-red-50' : 'border-[#D0D5DD]'}`}>
                   <option value="">Seleccionar estado</option>
                   <option>En ejecución</option>
                   <option>Cierre</option>
@@ -825,56 +999,74 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create', isDivi
 
               <div>
                 <label className="block text-[#344054] font-medium mb-2 text-sm">Unidad responsable <span className="text-red-500">*</span></label>
-                <select className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] bg-white">
+                <select value={generalData.unidadResponsable} onChange={(e) => setGeneralData((prev) => ({ ...prev, unidadResponsable: e.target.value }))}
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] bg-white ${getError('unidadResponsable') ? 'border-red-400 bg-red-50' : 'border-[#D0D5DD]'}`}>
                   <option value="">Seleccionar unidad...</option>
+                  {generalData.unidadResponsable && !UNIDADES_PUCE.includes(generalData.unidadResponsable) && (
+                    <option value={generalData.unidadResponsable}>{generalData.unidadResponsable}</option>
+                  )}
                   {UNIDADES_PUCE.map((u) => <option key={u} value={u}>{u}</option>)}
                 </select>
               </div>
 
               <div>
                 <label className="block text-[#344054] font-medium mb-2 text-sm">Carrera <span className="text-red-500">*</span></label>
-                <input type="text" className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                <input type="text" value={generalData.carrera} onChange={(e) => setGeneralData((prev) => ({ ...prev, carrera: e.target.value }))}
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] ${getError('carrera') ? 'border-red-400 bg-red-50' : 'border-[#D0D5DD]'}`} />
+                {getError('carrera') && <p className="text-xs text-[#D92D20] mt-1">{getError('carrera')}</p>}
               </div>
 
               <div>
                 <label className="block text-[#344054] font-medium mb-2 text-sm">Docente responsable <span className="text-red-500">*</span></label>
-                <input type="text" className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                <input type="text" value={generalData.docenteResponsable} onChange={(e) => setGeneralData((prev) => ({ ...prev, docenteResponsable: e.target.value }))}
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] ${getError('docenteResponsable') ? 'border-red-400 bg-red-50' : 'border-[#D0D5DD]'}`} />
+                {getError('docenteResponsable') && <p className="text-xs text-[#D92D20] mt-1">{getError('docenteResponsable')}</p>}
               </div>
 
               <div>
                 <label className="block text-[#344054] font-medium mb-2 text-sm">Correo <span className="text-red-500">*</span></label>
-                <input type="email" className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="correo@ejemplo.com" />
+                <input type="email" value={generalData.correo} onChange={(e) => setGeneralData((prev) => ({ ...prev, correo: e.target.value }))}
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] ${getError('correo') ? 'border-red-400 bg-red-50' : 'border-[#D0D5DD]'}`} placeholder="correo@ejemplo.com" />
                 {getError('correo') && <p className="text-xs text-[#D92D20] mt-1">{getError('correo')}</p>}
               </div>
 
               <div>
                 <label className="block text-[#344054] font-medium mb-2 text-sm">Teléfono <span className="text-red-500">*</span></label>
-                <input type="tel" className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" placeholder="0999999999" />
+                <input type="tel" inputMode="numeric" pattern="\d*" maxLength={15} value={generalData.telefono} onChange={(e) => setGeneralData((prev) => ({ ...prev, telefono: e.target.value.replace(/\D/g, '') }))}
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] ${getError('telefono') ? 'border-red-400 bg-red-50' : 'border-[#D0D5DD]'}`} placeholder="0999999999" />
                 {getError('telefono') && <p className="text-xs text-[#D92D20] mt-1">{getError('telefono')}</p>}
               </div>
 
               <div>
                 <label className="block text-[#344054] font-medium mb-2 text-sm">Año de ejecución <span className="text-red-500">*</span></label>
-                <input type="text" className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                <input type="text" inputMode="numeric" pattern="\d*" maxLength={4} value={generalData.anioEjecucion} onChange={(e) => setGeneralData((prev) => ({ ...prev, anioEjecucion: e.target.value.replace(/\D/g, '') }))}
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] ${getError('anioEjecucion') ? 'border-red-400 bg-red-50' : 'border-[#D0D5DD]'}`} />
+                {getError('anioEjecucion') && <p className="text-xs text-[#D92D20] mt-1">{getError('anioEjecucion')}</p>}
               </div>
 
               <div>
                 <label className="block text-[#344054] font-medium mb-2 text-sm">Fecha de inicio <span className="text-red-500">*</span></label>
-                <input type="date" className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                <input type="date" value={generalData.fechaInicio} onChange={(e) => setGeneralData((prev) => ({ ...prev, fechaInicio: e.target.value }))}
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] ${getError('fechaInicio') ? 'border-red-400 bg-red-50' : 'border-[#D0D5DD]'}`} />
+                {getError('fechaInicio') && <p className="text-xs text-[#D92D20] mt-1">{getError('fechaInicio')}</p>}
               </div>
 
               <div>
                 <label className="block text-[#344054] font-medium mb-2 text-sm">Fecha de cierre <span className="text-red-500">*</span></label>
-                <input type="date" className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                <input type="date" value={generalData.fechaCierre} onChange={(e) => setGeneralData((prev) => ({ ...prev, fechaCierre: e.target.value }))}
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] ${getError('fechaCierre') ? 'border-red-400 bg-red-50' : 'border-[#D0D5DD]'}`} />
+                {getError('fechaCierre') && <p className="text-xs text-[#D92D20] mt-1">{getError('fechaCierre')}</p>}
               </div>
 
               <div>
                 <label className="block text-[#344054] font-medium mb-2 text-sm">Fecha del informe <span className="text-red-500">*</span></label>
-                <input type="date" className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                <input type="date" value={generalData.fechaInforme} onChange={(e) => setGeneralData((prev) => ({ ...prev, fechaInforme: e.target.value }))}
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] ${getError('fechaInforme') ? 'border-red-400 bg-red-50' : 'border-[#D0D5DD]'}`} />
+                {getError('fechaInforme') && <p className="text-xs text-[#D92D20] mt-1">{getError('fechaInforme')}</p>}
               </div>
 
               <div className="md:col-span-2">
-                <InputField label="Programa" value="" onChange={() => {}} placeholder="Describa el programa..." />
+                <InputField label="Programa" value={generalData.programa} onChange={(value) => setGeneralData((prev) => ({ ...prev, programa: String(value) }))} placeholder="Describa el programa..." required error={getError('programa')} />
               </div>
             </div>
           </section>
@@ -883,11 +1075,26 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create', isDivi
           <section id="alcance" className="bg-white rounded-lg border border-[#E1E4E8] p-8 shadow-sm">
             <h2 className="text-[#003366] text-xl font-semibold mb-6 flex items-center gap-2">🎯 ALCANCE, GRUPOS PRIORITARIOS Y PRESUPUESTO</h2>
             <div className="space-y-6">
-              <InputField label="Comunidad alcanzada" value="" onChange={() => {}} required />
+              <InputField
+                label="Comunidad alcanzada"
+                value={alcanceData.comunidadAlcanzada}
+                onChange={(value) => setAlcanceData((prev) => ({ ...prev, comunidadAlcanzada: String(value) }))}
+                required
+              />
 
               <div className="grid md:grid-cols-2 gap-6">
-                <InputField label="Tipo de actores" value="" onChange={() => {}} required />
-                <InputField label="Beneficiarios" value="" onChange={() => {}} required />
+                <InputField
+                  label="Tipo de actores"
+                  value={alcanceData.tipoActores}
+                  onChange={(value) => setAlcanceData((prev) => ({ ...prev, tipoActores: String(value) }))}
+                  required
+                />
+                <InputField
+                  label="Beneficiarios"
+                  value={alcanceData.beneficiarios}
+                  onChange={(value) => setAlcanceData((prev) => ({ ...prev, beneficiarios: String(value) }))}
+                  required
+                />
               </div>
 
               {/* Grupos de atención prioritaria */}
@@ -924,7 +1131,13 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create', isDivi
                 </div>
               </div>
 
-              <InputField label="Beneficiarios directos" value="" onChange={() => {}} required placeholder="Describa los beneficiarios..." />
+              <InputField
+                label="Beneficiarios directos"
+                value={alcanceData.beneficiariosDirectos}
+                onChange={(value) => setAlcanceData((prev) => ({ ...prev, beneficiariosDirectos: String(value) }))}
+                required
+                placeholder="Describa los beneficiarios..."
+              />
 
               {/* Presupuesto — Sistema de 3 estados */}
               <div className="bg-[#F5F7FA] rounded-lg p-6 border border-[#D0D5DD]">
@@ -1263,34 +1476,30 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create', isDivi
             <div className="space-y-6">
 
               {/* Descripción del problema (obligatorio, ≥50 caracteres) */}
-              <TextAreaField label="Descripción del problema" value="" onChange={() => {}} rows={4} required placeholder="Describa detalladamente el problema que aborda el proyecto (mín. 50 caracteres)..." />
+              <TextAreaField label="Descripción del problema" value={diagnosticData.descripcionProblema} onChange={(value) => setDiagnosticData((prev) => ({ ...prev, descripcionProblema: value }))} rows={4} required placeholder="Describa detalladamente el problema que aborda el proyecto (mín. 50 caracteres)..." />
 
               {/* Actores involucrados (obligatorio, ≥50 caracteres) */}
-              <TextAreaField label="Actores involucrados" value="" onChange={() => {}} rows={4} required placeholder="Identifique los actores involucrados en el proyecto (mín. 50 caracteres)..." />
+              <TextAreaField label="Actores involucrados" value={diagnosticData.actoresInvolucrados} onChange={(value) => setDiagnosticData((prev) => ({ ...prev, actoresInvolucrados: value }))} rows={4} required placeholder="Identifique los actores involucrados en el proyecto (mín. 50 caracteres)..." />
 
               {/* Variables cuantitativas — fijas (7 obligatorias) */}
               <div className="bg-[#F5F7FA] rounded-lg p-5 border border-[#D0D5DD]">
                 <h3 className="text-[#003366] font-semibold mb-4 flex items-center gap-2 text-sm">📊 VARIABLES CUANTITATIVAS (7) — obligatorias</h3>
                 <div className="grid md:grid-cols-2 gap-x-6 gap-y-4">
-                  {[
-                    { id: 'v1', label: 'Población total afectada', unidad: 'personas', rango: false },
-                    { id: 'v2', label: 'N° de familias beneficiarias', unidad: 'familias', rango: false },
-                    { id: 'v3', label: 'Índice de pobreza (NBI)', unidad: '%', rango: true },
-                    { id: 'v4', label: 'Tasa de desempleo local', unidad: '%', rango: true },
-                    { id: 'v5', label: 'N° de organizaciones comunitarias', unidad: '', rango: false },
-                    { id: 'v6', label: 'Cobertura servicios básicos', unidad: '%', rango: true },
-                    { id: 'v7', label: 'Tasa de escolaridad', unidad: '%', rango: true },
-                  ].map((v) => (
+                  {QUANTITATIVE_VARIABLES.map((v) => (
                     <div key={v.id} className="flex items-center gap-3 bg-white rounded-lg border border-[#D0D5DD] p-3">
                       <span className="text-xs font-medium text-[#344054] flex-1">{v.label}:</span>
                       <input
                         type="number"
                         min={0}
                         max={v.rango ? 100 : undefined}
+                        step="any"
+                        value={quantitativeVariables[v.id] ?? ''}
+                        onChange={(e) => setQuantitativeVariables((prev) => ({ ...prev, [v.id]: e.target.value }))}
                         placeholder="0"
                         className="w-24 px-3 py-2 border border-[#D0D5DD] rounded focus:outline-none focus:ring-2 focus:ring-[#003366] text-sm text-right"
                       />
                       {v.unidad && <span className="text-xs text-[#344054] w-14">{v.unidad}</span>}
+                      {getError(`cuantitativa-${v.id}`) && <p className="w-full text-xs text-[#D92D20]">{getError(`cuantitativa-${v.id}`)}</p>}
                     </div>
                   ))}
                 </div>
@@ -1298,7 +1507,7 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create', isDivi
               </div>
 
               {/* Resumen del problema */}
-              <TextAreaField label="Resumen del problema" value="" onChange={() => {}} rows={3} placeholder="Sintetice el problema central del proyecto..." />
+              <TextAreaField label="Resumen del problema" value={diagnosticData.resumenProblema} onChange={(value) => setDiagnosticData((prev) => ({ ...prev, resumenProblema: value }))} rows={3} placeholder="Sintetice el problema central del proyecto..." />
             </div>
           </section>
 
@@ -1413,7 +1622,7 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create', isDivi
                 )}
               </div>
 
-              <TextAreaField label="Impactos del proyecto" value="" onChange={() => {}} rows={5} placeholder="Describa los impactos generados por el proyecto..." />
+              <TextAreaField label="Impactos del proyecto" value={diagnosticData.impactosProyecto} onChange={(value) => setDiagnosticData((prev) => ({ ...prev, impactosProyecto: value }))} rows={5} placeholder="Describa los impactos generados por el proyecto..." />
 
               <FileUploadBtn section="estudiantes" label="📎 Adjuntar reporte banner de estudiantes" />
             </div>
@@ -1635,17 +1844,19 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create', isDivi
             <h2 className="text-[#003366] text-xl font-semibold mb-6 flex items-center gap-2">✍️ FIRMAS</h2>
             <div className="grid md:grid-cols-3 gap-6">
               {[
-                { title: 'ELABORADO POR', subtitle: 'Docente Líder del Proyecto' },
-                { title: 'REVISADO POR', subtitle: 'Decano de Unidad' },
-                { title: 'APROBADO POR', subtitle: 'Dirección de Vinculación' },
+                { id: 'elaborado' as const, title: 'ELABORADO POR', subtitle: 'Docente Líder del Proyecto' },
+                { id: 'revisado' as const, title: 'REVISADO POR', subtitle: 'Decano de Unidad' },
+                { id: 'aprobado' as const, title: 'APROBADO POR', subtitle: 'Dirección de Vinculación' },
               ].map((block) => (
                 <div key={block.title} className="border border-[#D0D5DD] rounded-lg p-6">
                   <h3 className="font-semibold text-[#003366] mb-4">{block.title}</h3>
                   <p className="text-sm text-[#344054] mb-3">{block.subtitle}</p>
-                  <input type="text" className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] mb-3" placeholder="Nombre" />
+                  <input type="text" value={signatures[block.id].nombre} onChange={(e) => setSignatures((prev) => ({ ...prev, [block.id]: { ...prev[block.id], nombre: e.target.value } }))}
+                    className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366] mb-3" placeholder="Nombre" />
                   <div>
                     <label className="block text-[#344054] text-sm mb-2">Fecha</label>
-                    <input type="date" className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
+                    <input type="date" value={signatures[block.id].fecha} onChange={(e) => setSignatures((prev) => ({ ...prev, [block.id]: { ...prev[block.id], fecha: e.target.value } }))}
+                      className="w-full px-4 py-3 border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#003366]" />
                   </div>
                 </div>
               ))}
@@ -1679,6 +1890,8 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create', isDivi
                 }`}>
                   <input
                     type="checkbox"
+                    checked={selectedAttachments[doc.id] ?? false}
+                    onChange={(e) => setSelectedAttachments((prev) => ({ ...prev, [doc.id]: e.target.checked }))}
                     className="w-5 h-5 text-[#003366] rounded focus:ring-[#003366]"
                   />
                   <span className="flex-1 text-sm text-[#344054]">
@@ -1712,10 +1925,10 @@ export default function FollowUpReport({ onBack, onSave, mode = 'create', isDivi
               Volver
             </button>
             <div className="flex gap-3">
-              <button onClick={() => onSave?.(tipoInforme)} className="flex items-center gap-2 px-6 py-3 bg-[#F5F7FA] text-[#344054] border border-[#D0D5DD] rounded-lg font-semibold hover:bg-[#E1E4E8] transition-colors">
+              <button onClick={() => handleSave(null)} className="flex items-center gap-2 px-6 py-3 bg-[#F5F7FA] text-[#344054] border border-[#D0D5DD] rounded-lg font-semibold hover:bg-[#E1E4E8] transition-colors">
                 <Save size={20} /> Guardar borrador
               </button>
-              <button onClick={() => onSave?.(tipoInforme)} className="flex items-center gap-2 px-6 py-3 bg-[#12B76A] text-white rounded-lg font-semibold hover:bg-[#0F9C5A] transition-colors">
+              <button onClick={() => handleSave('avance')} className="flex items-center gap-2 px-6 py-3 bg-[#12B76A] text-white rounded-lg font-semibold hover:bg-[#0F9C5A] transition-colors">
                 <Send size={20} /> Enviar informe
               </button>
             </div>

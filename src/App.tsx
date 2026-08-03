@@ -4,12 +4,13 @@ import WelcomeScreen from './pages/WelcomeScreen';
 import FollowUpReport from './pages/FollowUpReport';
 import NewProjectProposal from './pages/NewProjectProposal';
 import { initialProjects, type Project } from './data/projects';
-import { createProject, getProjects, updateProjectStatus } from './services/sharepointService';
+import { createProject, getProjectFormData, getProjects, updateProjectStatus } from './services/sharepointService';
 
 type AppView = 'list' | 'welcome' | 'report' | 'propose';
 type ReportMode = 'create' | 'edit';
 
-const STORAGE_KEY = 'divi-projects-v1';
+// v3: sección lista según field_9 vacío vs con valor.
+const STORAGE_KEY = 'divi-projects-v3';
 
 const readStoredProjects = (): Project[] => {
   if (typeof window === 'undefined') return initialProjects;
@@ -35,6 +36,7 @@ export default function App() {
   const [reportMode, setReportMode] = useState<ReportMode>('create');
   const [projects, setProjects] = useState<Project[]>(() => readStoredProjects());
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
+  const [reportInitialData, setReportInitialData] = useState<Record<string, unknown>>({});
   const [dataError, setDataError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -67,16 +69,40 @@ export default function App() {
     return () => { active = false; };
   }, []);
 
-  const startReport = (id: string) => {
+  const startReport = async (id: string) => {
     setActiveProjectId(id);
+    setReportInitialData({});
     setReportMode('create');
     setView('welcome');
+
+    try {
+      const [updatedProject, savedFormData] = await Promise.all([
+        updateProjectStatus(id, 'en-progreso'),
+        getProjectFormData<Record<string, unknown>>(id),
+      ]);
+      setProjects((prev) => prev.map((project) => (
+        project.id === updatedProject.id ? updatedProject : project
+      )));
+      setReportInitialData(savedFormData ?? {});
+      setDataError(null);
+    } catch (error) {
+      setDataError(error instanceof Error ? error.message : 'No se pudo actualizar el estado del proyecto.');
+    }
   };
 
-  const modifyReport = (id: string) => {
+  const modifyReport = async (id: string) => {
     setActiveProjectId(id);
+    setReportInitialData({});
     setReportMode('edit');
     setView('welcome');
+
+    try {
+      const savedFormData = await getProjectFormData<Record<string, unknown>>(id);
+      setReportInitialData(savedFormData ?? {});
+      setDataError(null);
+    } catch (error) {
+      setDataError(error instanceof Error ? error.message : 'No se pudieron cargar los datos del proyecto.');
+    }
   };
 
   const handleReportSave = async (tipoInforme: 'avance' | 'cierre' | null) => {
@@ -139,6 +165,7 @@ export default function App() {
     return (
       <FollowUpReport
         mode={reportMode}
+        initialData={reportInitialData}
         onBack={() => (reportMode === 'create' ? setView('welcome') : setView('list'))}
         onSave={handleReportSave}
       />

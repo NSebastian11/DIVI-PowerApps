@@ -1,0 +1,130 @@
+﻿ID	ID	integer
+Title	CÓDIGO DEL PROYECTO	string
+field_1	NOMBRE DEL PROYECTO	string
+field_9	ESTADO	object
+ESTADO_INFORME	ESTADO_INFORME	string
+field_2	TIPO	object
+OData__x00c1_mbitodelProyecto	Ámbito del Proyecto	object
+field_14	FECHA INICIO	string
+field_15	FECHA DE FIN PLANEADO	string
+field_16	FECHA DE FIN REAL	string
+CODIGO_PROGRAMA	CODIGO_PROGRAMA	string
+field_3	PROGRAMA	string
+field_4	LÍNEA ESTRATÉGICA	object
+field_5	DOMINIO ACADÉMICO	object
+EjedeVinculaci_x00f3_n	Eje de Vinculación	object
+ORIGENDELPROYECTO	ORIGEN DEL PROYECTO	object
+field_6	LÍNEA DE INVESTIGACIÓN	object
+field_7	OBJETIVO	object
+field_8	ODS	object
+field_10	COMPONENTE DE INTERDISCIPLINARIEDAD	object
+DETALLE_INTERDISCIPLINARIEDAD	DETALLE_INTERDISCIPLINARIEDAD	string
+field_11	COMPONENTE INTERSEDES	object
+field_12	COMPONENTE DE INTERNACIONALIZACIÓN	object
+field_13	COMPONENTE DE POSGRADOS	object
+DETALLE_POSGRADOS	DETALLE_POSGRADOS	object
+COMPONENTEDEINTERCULTURALIDAD	COMPONENTE DE INTERCULTURALIDAD	string
+DETALLE_INTERCULTURALIDAD	DETALLE_INTERCULTURALIDAD	string
+Ubicaci_x00f3_n_x002f_esdelaComu	Ubicación/es de la Comunidad/es o Grupo/s Alcanzado/s	string
+field_28	NOMBRE DE COMUNIDAD ALCANZADA	string
+field_31	NÚMERO DE PERSONAS ALCANZADAS	number
+field_17	UNIDAD RESPONSABLE	object
+Carrera	Carrera	string
+field_18	CARRERA QUE COORDINA	string
+field_19	NÚMERO DE CARRERAS INVOLUCRADAS EN EL PROYECTO	number
+field_20	COORDINADOR / RESPONSABLE	string
+IDENTIFICACION	IDENTIFICACION	string
+field_21	CORREO ELECTRÓNICO COORDINADOR	string
+field_22	TELÉFONO COORDINADOR	string
+GRUPODEINVESTIGACI_x00d3_N	GRUPO DE INVESTIGACIÓN	object
+PROYECTOINVESTIGACI_x00d3_N	PROYECTO INVESTIGACIÓN	object
+field_23	CAMPO AMPLIO	string
+field_24	CAMPO ESPECÍFICO	string
+field_25	CAMPO DETALLADO	string
+field_26	ALCANCE TERRITORIAL	object
+REDACAD_x00c9_MICAARTICULADA	RED ACADÉMICA ARTICULADA	object
+field_27	TIPO DE ACTORES SOCIALES	string
+field_29	CONVENIO	object
+Resumen	Resumen	string
+CRITERIOSDESELECCI_x00d3_NDEBENE	CRITERIOS DE SELECCIÓN DE BENEFICIARIOS ENTRE LA POBLACIÓN OBJETIVO	string
+DIAGN_x00d3_STICO_x002c_PROBLEMA	DIAGNÓSTICO, PROBLEMA Y ACTORES INVOLUCRADOS	string
+PROBLEMAENELQUEINTERVIENELACONTR	PROBLEMA EN EL QUE INTERVIENE LA CONTRAPARTE	string
+field_30	NOMBRE DE CONTRAPARTE	string
+field_32	NÚMERO DE ESTUDIANTES VINCULADOS	number
+N_x00da_MERODEESTUDIANTESVINCULA	NÚMERO DE ESTUDIANTES VINCULADOS 2DO SEMESTRE	number
+field_33	NÚMERO DE DOCENTES VINCULADOS	number
+N_x00da_MERODEDOCENTESVINCULADOS	NÚMERO DE DOCENTES VINCULADOS 2DO SEMESTRE	number
+field_34	NÚMERO DE ADMINISTRATIVOS VINCULADOS	number
+field_35	NÚMERO DE ALUMNI VINCULADOS	number
+field_36	AÑO DE PRESUPUESTO	number
+field_37	PRESUPUESTO PLANIFICADO	number
+field_38	PRESUPUESTO EJECUTADO	number
+PRESUPUESTOEXTERNOASIGNADO	PRESUPUESTO EXTERNO ASIGNADO	number
+PRESUPUESTOEXTERNO	PRESUPUESTO EXTERNO	number
+GASTONOCONTEMPLADO	GASTO NO CONTEMPLADO	number
+field_39	FUENTE DE FINANCIAMIENTO	object
+field_40	PARÁMETRO DE CUMPLIMIENTO	object
+field_41	IMPACTOS DEL PROYECTO	object
+field_42	ARTICULACIÓN DE FUNCIONES SUSTANTIVAS	object
+Descripci_x00f3_ndelTipodeVincul	Descripción del Tipo de Vinculación	string
+InstrumentoLegaldelaContraparte	Instrumento Legal de la Contraparte	object
+field_43	EVIDENCIA	string
+field_44	SEDE	object
+OData__x00bf_Elproyectosearticulaconal	¿El proyecto se articula con alguna investigación PUCE?	string
+num_comunidad_1m	num_comunidad_1m	number
+num_comunidad_1f	num_comunidad_1f	number
+num_comunidad_2m	num_comunidad_2m	number
+num_comunidad_2f	num_comunidad_2f	number
+beneficiarios_directos_masculino	beneficiarios_directos_masculinos	number
+beneficiarios_indirectos_masculi	beneficiarios_indirectos_masculinos	number
+beneficiarios_directos_femeninos	beneficiarios_directos_femeninos	number
+beneficiarios_indirectos_femenin	beneficiarios_indirectos_femeninos	number
+personas_alcanzadas_masculinos	personas_alcanzadas_masculinos	number
+personas_alcanzadas_femeninos	personas_alcanzadas_femeninos	number
+MapeodeActoresyresponsabilidades	Mapeo de Actores y responsabilidades	string
+Detalledelc_x00e1_lculodelacomun	Detalle del cálculo de la comunidad participante	string
+OG_Resultados	OG_Resultados	string
+OG_Indicadores	OG_Indicadores	string
+OG_Fuentes	OG_Fuentes	string
+OG_Avance	OG_Avance	string
+OG_SUPUESTOS	OG_SUPUESTOS	string
+OE_Resultados	OE_Resultados	string
+OE_Indicadores	OE_Indicadores	string
+OE_Fuentes	OE_Fuentes	string
+OE_Avance	OE_Avance	string
+OE_Supuestos	OE_Supuestos	string
+R_Resultados	R_Resultados	string
+R_Indicadores	R_Indicadores	string
+R_Responsable	R_Responsable	string
+R_Etapa	R_Etapa	string
+R_Fuentes	R_Fuentes	string
+R_Supuestos	R_Supuestos	string
+A_Resultados	A_Resultados	string
+A_Indicadores	A_Indicadores	string
+A_Fuentes	A_Fuentes	string
+A_Supuestos	A_Supuestos	string
+IMPACTOSOCIAL	IMPACTO SOCIAL	string
+IMPACTOECON_x00d3_MICO	IMPACTO ECONÓMICO	string
+IMPACTOCIENT_x00cd_FICO_x002d_AC	IMPACTO CIENTÍFICO-ACADÉMICO	string
+IMPACTOAMBIENTAL	IMPACTO AMBIENTAL	string
+IMPACTOPOL_x00cd_TICO	IMPACTO POLÍTICO	string
+OTRO_IMPACTO	OTRO_IMPACTO	string
+RESULTADOSDEAPRENDIZAJE	RESULTADOS DE APRENDIZAJE	string
+TipoPropiedadIntelectual	Tipo Propiedad Intelectual	array
+PROPIEDADINTELECTUAL	PROPIEDAD INTELECTUAL	string
+ASESOR_x00cd_A	ASESORÍA	object
+Modified	Modificado	string
+Editor	Modificado por	object
+Author	Creado por	object
+OData__ColorTag	Etiqueta de color	string
+ComplianceAssetId	Id. de activo de cumplimiento normativo	string
+Created	Creado	string
+node : Total columns: 121
+En C:\Users\nay\AppData\Local\Temp\ps-script-afccd873-eda0-4f81-8b91-615afd9c6de4.ps1: 91 
+Carácter: 1
++ node scripts/audit-sp-fields.mjs 2>&1 | Out-File -Encoding utf8 scrip ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Total columns: 121:String) [], RemoteExcepti 
+   on
+    + FullyQualifiedErrorId : NativeCommandError
+ 
