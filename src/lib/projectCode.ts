@@ -21,3 +21,15 @@ export function generateNextProjectCode(existingCodes: string[], year: number = 
 
   return `${prefix}${String(next).padStart(3, '0')}`;
 }
+
+/*
+ * Genera el título que se guarda para una propuesta: PSC-AAAA-PQ-NNN.
+ * NNN es el consecutivo de propuestas del año indicado; por ejemplo, después
+ * de PSC-2026-PQ-083 se generará PSC-2026-PQ-084.
+ */
+export function generateNextProposalTitle(
+  existingValues: string[] = [],
+  year: number = new Date().getFullYear(),
+): string {
+  return generateNextProjectCode(existingValues, year);
+}

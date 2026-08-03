@@ -1,7 +1,6 @@
 import { useState, useRef, useMemo, useEffect } from 'react';
 import { Save, Send, FileText, CheckCircle2, AlertTriangle, X, Search, ChevronDown } from 'lucide-react';
 import { generateNextProjectCode } from '../lib/projectCode';
-import { existingProjectCodes } from '../data/existingProjects';
 
 /* ───────── Tipos ───────── */
 type FieldType = 'text' | 'email' | 'tel' | 'textarea' | 'number' | 'date' | 'select' | 'multiselect' | 'file' | 'readonly';
@@ -23,9 +22,11 @@ interface SectionConfig {
   title: string;
   fields: FieldConfig[];
 }
-
+//en esta parte se definen las propiedades que recibe el componente NewProjectProposal, incluyendo funciones de callback y datos existentes.
 interface NewProjectProposalProps {
   onBack?: () => void;
+  /** Códigos ya existentes, obtenidos de SharePoint por la aplicación. */
+  existingProjectCodes?: string[];
   onSave?: (
     formData: Record<string, unknown>,
     mode: 'draft' | 'submitted',
@@ -674,7 +675,9 @@ function SearchableSelect({ value, onChange, placeholder = 'Buscar...', groups, 
 /* ============================================================ */
 /*  COMPONENTE PRINCIPAL                                         */
 /* ============================================================ */
-export default function NewProjectProposal({ onBack, onSave }: NewProjectProposalProps) {
+export default function NewProjectProposal({ onBack, onSave, existingProjectCodes = [] }: NewProjectProposalProps) {
+  // Se calcula una vez al abrir el formulario para mantener el código visible
+  // durante toda la edición. El arreglo proviene de los proyectos de SharePoint.
   const [codigoProyecto] = useState(() => generateNextProjectCode(existingProjectCodes));
   const [activeSection, setActiveSection] = useState(SECTIONS[0].id);
   const [formData, setFormData] = useState<Record<string, any>>({});
@@ -1564,7 +1567,7 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
             </div>
             <div className="flex flex-col items-end">
               <label className="text-white/80 text-sm mb-1">Título (automático)</label>
-              <div className="px-4 py-2 rounded-lg border-2 border-white/20 bg-white/10 text-white font-mono w-48 text-center">
+              <div className="px-4 py-2 rounded-lg border-2 border-white/20 bg-white/10 text-white font-semibold w-56 text-center">
                 {codigoProyecto}
               </div>
             </div>
@@ -1664,9 +1667,9 @@ export default function NewProjectProposal({ onBack, onSave }: NewProjectProposa
               <h3 className="text-lg font-bold text-[#003366]">Propuesta lista para enviar</h3>
             </div>
             <div className="space-y-2 text-sm text-[#344054] mb-6">
-              <p><span className="font-semibold">Título:</span> {codigoProyecto}</p>
+              <p><span className="font-semibold">Título / código:</span> {codigoProyecto}</p>
               <p><span className="font-semibold">Nombre del proyecto:</span> {formData.nombreProyecto || '(sin nombre)'}</p>
-              <p><span className="font-semibold">Estado:</span> Propuesta</p>
+              <p><span className="font-semibold">Estado al enviar:</span> Propuesta pendiente de revisión</p>
               <p><span className="font-semibold">Unidad responsable:</span> {formData.unidadResponsable || '-'}</p>
             </div>
             <p className="text-xs text-[#6B7280] mb-6">La propuesta se guardará en la lista ProyectosVinculacion de SharePoint.</p>

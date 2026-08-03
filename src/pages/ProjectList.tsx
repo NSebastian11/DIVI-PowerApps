@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FileText, FilePlus2, Lock } from 'lucide-react';
+import { Clock3, FileText, FilePlus2, Lock } from 'lucide-react';
 import type { Project } from '../data/projects';
 
 const START_YEAR = 2024;
@@ -22,6 +22,7 @@ export default function ProjectList({ projects, onStartReport, onModifyReport, o
 
   const byYear = (p: Project) => yearFilter === 'todos' || p.year === yearFilter;
 
+  const pendientes = projects.filter((p) => p.status === 'propuesta-pendiente' && byYear(p));
   const asignados = projects.filter((p) => (p.status === 'asignado' || p.status === 'en-progreso') && byYear(p));
   const cierre = projects.filter((p) => (p.status === 'cierre' || p.status === 'finalizado') && byYear(p));
 
@@ -63,6 +64,32 @@ export default function ProjectList({ projects, onStartReport, onModifyReport, o
             ))}
           </select>
         </div>
+
+        {/* ── Propuestas pendientes de revisión ── */}
+        <section className="rounded-xl border border-[#FDE68A] bg-[#FFFBEB] p-5">
+          <div className="flex items-center gap-3 mb-4">
+            <Clock3 className="text-[#B54708]" size={20} />
+            <h2 className="text-[#92400E] text-lg font-bold uppercase tracking-wide">Propuestas pendientes de revisión</h2>
+            <span className="bg-[#FEF3C7] text-[#92400E] text-xs font-bold px-2 py-0.5 rounded-full">{pendientes.length}</span>
+          </div>
+          {pendientes.length === 0 ? (
+            <p className="text-sm text-[#92400E]">No hay propuestas pendientes de revisión para el año seleccionado.</p>
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2">
+              {pendientes.map((project) => (
+                <div key={project.id} className="bg-white rounded-lg border border-[#FDE68A] p-5 shadow-sm">
+                  <h3 className="text-[#003366] font-bold text-sm leading-snug mb-2">{project.title}</h3>
+                  <p className="text-[#0056B3] text-sm font-medium">{project.code}</p>
+                  <p className="text-[#6B7280] text-sm">{project.responsable}</p>
+                  <div className="mt-4 flex items-center justify-between">
+                    <span className="text-[#92400E] text-xs font-bold uppercase tracking-wide">Propuesta pendiente</span>
+                    <span className="text-[#6B7280] text-xs">En revisión</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
 
         {/* ── Proyectos asignados ── */}
         <section>

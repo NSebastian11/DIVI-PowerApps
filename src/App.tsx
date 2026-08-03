@@ -110,7 +110,9 @@ export default function App() {
         responsable: String(formData.coordinadorResponsable ?? ''),
         email: String(formData.correoCoordinador ?? ''),
         unidadResponsable: String(formData.unidadResponsable ?? ''),
-        status: 'asignado',
+        // Un borrador conserva el comportamiento anterior. Al enviar, la
+        // propuesta queda visible en la etapa intermedia de revisión.
+        status: mode === 'submitted' ? 'propuesta-pendiente' : 'asignado',
         formData: { ...formData, saveMode: mode },
       });
 
@@ -147,6 +149,7 @@ export default function App() {
     return (
       <NewProjectProposal
         onBack={() => setView('list')}
+        existingProjectCodes={projects.map((project) => project.code).filter(Boolean)}
         onSave={handleProposalSave}
       />
     );

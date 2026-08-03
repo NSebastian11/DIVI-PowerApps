@@ -2,12 +2,13 @@ import type { ReactNode } from 'react';
 
 /**
  * Estados del ciclo de vida de un proyecto:
+ *  propuesta-pendiente -> propuesta enviada, a la espera de revisión
  *  asignado     -> sin informe creado todavía            (sección "Proyectos asignados", botón "Iniciar informe")
  *  en-progreso  -> informe creado, último tipo = Avance   (sigue en "Proyectos asignados", botón "Modificar informe")
  *  cierre       -> informe creado, último tipo = Cierre   (pasa a sección "Cierre", botón "Modificar informe")
  *  finalizado   -> el administrador bloqueó el proyecto   (sección "Cierre", solo lectura)
  */
-export type ProjectStatus = 'asignado' | 'en-progreso' | 'cierre' | 'finalizado';
+export type ProjectStatus = 'propuesta-pendiente' | 'asignado' | 'en-progreso' | 'cierre' | 'finalizado';
 
 export interface Project {
   unidadResponsable: ReactNode;

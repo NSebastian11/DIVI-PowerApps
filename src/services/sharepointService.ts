@@ -17,6 +17,10 @@ export interface ProjectSaveData {
 
 const statusFromSharePoint = (status?: string): ProjectStatus => {
   switch (status?.trim().toUpperCase()) {
+    case 'PROPUESTA PENDIENTE':
+    case 'EN REVISIÓN':
+    case 'EN REVISION':
+      return 'propuesta-pendiente';
     case 'FINALIZADO':
       return 'finalizado';
     case 'CIERRE':
@@ -32,6 +36,7 @@ const statusFromSharePoint = (status?: string): ProjectStatus => {
 
 const statusToSharePoint = (status: ProjectStatus): string => {
   const values: Record<ProjectStatus, string> = {
+    'propuesta-pendiente': 'PROPUESTA PENDIENTE',
     asignado: 'ASIGNADO',
     'en-progreso': 'EN EJECUCI\u00d3N',
     cierre: 'CIERRE',
